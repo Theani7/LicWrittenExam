@@ -62,40 +62,40 @@ export const QuestionReviewItem: React.FC<QuestionReviewItemProps> = ({
       }`}
     >
       {/* Header: Question Number, Category, Status Badge, Bookmark */}
-      <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
+      <div className="flex items-center justify-between gap-3 mb-3.5 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-zinc-100 dark:bg-navy-950 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-navy-800">
+          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-navy-950 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-navy-800">
             Q{displayNum}
           </span>
           {categoryName && (
-            <span className="font-mono text-[11px] px-2 py-0.5 rounded bg-navy-50 dark:bg-navy-950/60 text-navy-700 dark:text-navy-300 border border-navy-200/60 dark:border-navy-900/60">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-navy-50 dark:bg-navy-950/60 text-navy-700 dark:text-navy-300 border border-navy-200/60 dark:border-navy-900/60">
               {categoryName}
             </span>
           )}
           {isCorrect && (
             <span
               data-testid="status-badge-correct"
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
             >
-              <CheckCircle2 className="w-3 h-3" />
+              <CheckCircle2 className="w-3.5 h-3.5" />
               <span>CORRECT</span>
             </span>
           )}
           {isIncorrect && (
             <span
               data-testid="status-badge-incorrect"
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-crimson-50 dark:bg-crimson-950/60 text-crimson-700 dark:text-crimson-300 border border-crimson-200 dark:border-crimson-800"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs font-bold bg-crimson-50 dark:bg-crimson-950/60 text-crimson-700 dark:text-crimson-300 border border-crimson-200 dark:border-crimson-800"
             >
-              <XCircle className="w-3 h-3" />
+              <XCircle className="w-3.5 h-3.5" />
               <span>INCORRECT</span>
             </span>
           )}
           {isUnanswered && (
             <span
               data-testid="status-badge-unanswered"
-              className="inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-zinc-100 dark:bg-navy-950 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-navy-800"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs font-bold bg-zinc-100 dark:bg-navy-950 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-navy-800"
             >
-              <HelpCircle className="w-3 h-3" />
+              <HelpCircle className="w-3.5 h-3.5" />
               <span>UNANSWERED</span>
             </span>
           )}
@@ -106,32 +106,32 @@ export const QuestionReviewItem: React.FC<QuestionReviewItemProps> = ({
           onClick={handleToggleBookmark}
           data-testid={`bookmark-btn-${question.id}`}
           aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark question'}
-          className={`p-1.5 rounded border transition-all ${
+          className={`p-2 rounded-md border transition-all ${
             isBookmarked
               ? 'bg-crimson-50 dark:bg-crimson-950/50 border-crimson-300 dark:border-crimson-800 text-crimson-600 dark:text-crimson-400'
               : 'bg-zinc-50 dark:bg-navy-950/40 border-zinc-200 dark:border-navy-900 text-zinc-400 hover:text-crimson-600'
           }`}
         >
-          <Bookmark className={`w-3.5 h-3.5 ${isBookmarked ? 'fill-current' : ''}`} />
+          <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
         </button>
       </div>
 
       {/* Question Text */}
-      <h3 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100 leading-snug tracking-tight mb-3">
+      <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-snug tracking-tight mb-4">
         {question.question}
       </h3>
 
       {/* Sign Image if present */}
       {question.image && (
-        <div className="mb-3">
+        <div className="mb-4">
           <div
             onClick={() => setIsImageZoomed(true)}
-            className="inline-block relative group cursor-zoom-in rounded border border-zinc-200 dark:border-navy-900 bg-white dark:bg-navy-950"
+            className="inline-block relative group cursor-zoom-in rounded-lg border border-zinc-200 dark:border-navy-900 bg-white dark:bg-navy-950 overflow-hidden"
           >
             <img
               src={question.image}
               alt={`Traffic sign for question ${question.id}`}
-              className="h-24 sm:h-32 object-contain p-2 transition-transform duration-150 group-hover:scale-105"
+              className="h-28 sm:h-36 object-contain p-2.5 transition-transform duration-150 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
               <ZoomIn className="w-4 h-4" />
@@ -141,7 +141,7 @@ export const QuestionReviewItem: React.FC<QuestionReviewItemProps> = ({
       )}
 
       {/* Options List */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {question.options.map((opt) => {
           const isUserChoice = userAnswer === opt.key;
           const isCorrectChoice = question.correctAnswer === opt.key;
@@ -153,48 +153,48 @@ export const QuestionReviewItem: React.FC<QuestionReviewItemProps> = ({
 
           if (isUserChoice && isCorrectChoice) {
             optionStyle =
-              'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-500 dark:border-emerald-600 text-emerald-950 dark:text-emerald-200 font-medium';
+              'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-500 dark:border-emerald-600 text-emerald-950 dark:text-emerald-200 font-semibold';
             badgeText = 'Your Answer (Correct)';
             badgeStyle =
-              'bg-emerald-600 text-white font-mono text-[10px] font-bold';
+              'bg-emerald-600 text-white font-mono text-xs font-bold';
           } else if (isUserChoice && !isCorrectChoice) {
             optionStyle =
-              'bg-crimson-50/60 dark:bg-crimson-950/30 border-crimson-500 dark:border-crimson-600 text-crimson-950 dark:text-crimson-200 font-medium';
+              'bg-crimson-50/70 dark:bg-crimson-950/30 border-crimson-500 dark:border-crimson-600 text-crimson-950 dark:text-crimson-200 font-semibold';
             badgeText = 'Your Answer';
-            badgeStyle = 'bg-crimson-600 text-white font-mono text-[10px] font-bold';
+            badgeStyle = 'bg-crimson-600 text-white font-mono text-xs font-bold';
           } else if (!isUserChoice && isCorrectChoice) {
             optionStyle =
-              'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-400 dark:border-emerald-600 text-emerald-900 dark:text-emerald-200 font-medium';
+              'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-400 dark:border-emerald-600 text-emerald-900 dark:text-emerald-200 font-semibold';
             badgeText = 'Correct Answer';
             badgeStyle =
-              'bg-emerald-100 dark:bg-emerald-900/80 text-emerald-800 dark:text-emerald-200 font-mono text-[10px] font-semibold border border-emerald-300 dark:border-emerald-700';
+              'bg-emerald-100 dark:bg-emerald-900/80 text-emerald-800 dark:text-emerald-200 font-mono text-xs font-bold border border-emerald-300 dark:border-emerald-700';
           }
 
           return (
             <div
               key={opt.key}
               data-testid={`review-option-${opt.key}`}
-              className={`flex items-center justify-between p-2.5 sm:p-3 rounded-md border text-xs sm:text-sm transition-all ${optionStyle}`}
+              className={`flex items-center justify-between p-3.5 sm:p-4 rounded-lg border text-sm sm:text-base leading-relaxed transition-all ${optionStyle}`}
             >
-              <div className="flex items-center gap-2.5 min-w-0 pr-2">
+              <div className="flex items-center gap-3 min-w-0 pr-2">
                 <span
-                  className={`w-5 h-5 rounded shrink-0 flex items-center justify-center font-mono text-[11px] font-semibold border ${
+                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md shrink-0 flex items-center justify-center font-mono font-bold text-xs sm:text-sm border ${
                     isCorrectChoice
-                      ? 'bg-emerald-600 border-emerald-600 text-white'
+                      ? 'bg-emerald-600 border-emerald-600 text-white shadow-xs'
                       : isUserChoice
-                      ? 'bg-crimson-600 border-crimson-600 text-white'
-                      : 'bg-white dark:bg-navy-900 border-zinc-300 dark:border-navy-800 text-zinc-600 dark:text-zinc-400'
+                      ? 'bg-crimson-600 border-crimson-600 text-white shadow-xs'
+                      : 'bg-white dark:bg-navy-900 border-zinc-300 dark:border-navy-800 text-zinc-700 dark:text-zinc-300'
                   }`}
                 >
                   {opt.key}
                 </span>
-                <span className="break-words leading-snug">{opt.text}</span>
+                <span className="break-words font-medium">{opt.text}</span>
               </div>
 
               {badgeText && (
                 <span
                   data-testid={isCorrectChoice ? 'correct-badge' : 'user-badge'}
-                  className={`shrink-0 ml-2 px-2 py-0.5 rounded whitespace-nowrap ${badgeStyle}`}
+                  className={`shrink-0 ml-2 px-2.5 py-1 rounded whitespace-nowrap ${badgeStyle}`}
                 >
                   {badgeText}
                 </span>

@@ -50,24 +50,24 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-3 cursor-pointer group select-none"
           >
             {/* Minimalist Geometric Nepal Pennant Icon */}
-            <div className="w-7 h-7 rounded border border-navy-700/20 dark:border-navy-700/40 bg-crimson-600 flex items-center justify-center text-white font-mono text-[11px] font-bold tracking-tighter shrink-0 shadow-xs ring-1 ring-navy-700/30">
+            <div className="w-8 h-8 rounded-md border border-navy-700/30 dark:border-navy-500/40 bg-crimson-600 flex items-center justify-center text-white font-bold tracking-tighter shrink-0 shadow-xs ring-1 ring-navy-700/40">
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white" aria-hidden="true">
                 {/* Clean stylized double triangle flag */}
                 <path d="M4 2v20h2v-5.5l9-5.5-7.5-3 8-6z" />
               </svg>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm tracking-tight">
+            <div className="flex items-center gap-2.5">
+              <span className="font-bold text-zinc-900 dark:text-zinc-50 text-base sm:text-lg tracking-tight">
                 Nepal License Prep
               </span>
-              <span className="hidden sm:inline-block font-mono text-[10px] text-crimson-700 dark:text-crimson-300 bg-crimson-50 dark:bg-crimson-950/60 px-1.5 py-0.5 rounded border border-crimson-200/80 dark:border-crimson-900/60 font-medium">
+              <span className="hidden sm:inline-block font-mono text-xs text-crimson-700 dark:text-crimson-300 bg-crimson-50 dark:bg-crimson-950/70 px-2 py-0.5 rounded border border-crimson-200 dark:border-crimson-900 font-semibold">
                 Cat A &amp; K 2082/83
               </span>
             </div>
           </div>
 
           {/* Desktop Navigation Segmented Bar */}
-          <nav aria-label="Main Navigation" className="hidden md:flex items-center p-0.5 rounded-lg border border-zinc-200/80 dark:border-navy-900 bg-zinc-100/60 dark:bg-navy-950/60">
+          <nav aria-label="Main Navigation" className="hidden md:flex items-center p-1 rounded-lg border border-zinc-200/90 dark:border-navy-900 bg-zinc-100/70 dark:bg-navy-950/80">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -77,18 +77,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   onClick={() => handleTabClick(item.id)}
                   data-testid={`nav-tab-${item.id}`}
-                  className={`relative flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                  className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-md text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-blue-50 bg-white dark:bg-navy-900 text-navy-700 dark:text-white shadow-2xs border border-zinc-200/70 dark:border-navy-700/70 font-semibold'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-200'
+                      ? 'bg-blue-50 bg-white dark:bg-navy-900 text-navy-700 dark:text-white shadow-2xs border border-zinc-200/80 dark:border-navy-700/80'
+                      : 'text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-crimson-600 dark:text-crimson-400' : 'text-zinc-400 dark:text-zinc-500'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-crimson-600 dark:text-crimson-400' : 'text-zinc-400 dark:text-zinc-400'}`} />
                   <span>{item.label}</span>
                   {item.id === 'bookmarks' && bookmarkCount > 0 && (
                     <span
                       data-testid="nav-bookmark-count"
-                      className="font-mono text-[10px] font-semibold px-1.5 py-0.2 rounded bg-crimson-100 dark:bg-crimson-950 text-crimson-700 dark:text-crimson-300"
+                      className="font-mono text-xs font-bold px-1.5 py-0.2 rounded bg-crimson-100 dark:bg-crimson-950 text-crimson-700 dark:text-crimson-300"
                     >
                       {bookmarkCount}
                     </span>
@@ -99,14 +99,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
 
           {/* Right Action Tools: Guidelines & Theme Toggle */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2.5">
             <button
               type="button"
               onClick={onOpenGuidelines}
               data-testid="guidelines-button"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-navy-700 dark:hover:text-white rounded-md border border-zinc-200 dark:border-navy-900 hover:bg-zinc-100 dark:hover:bg-navy-900 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold text-zinc-700 dark:text-zinc-200 hover:text-navy-700 dark:hover:text-white rounded-md border border-zinc-200 dark:border-navy-900 hover:bg-zinc-100 dark:hover:bg-navy-900 transition-colors"
             >
-              <FileText className="w-3.5 h-3.5 text-navy-600 dark:text-navy-400" />
+              <FileText className="w-4 h-4 text-navy-700 dark:text-navy-300" />
               <span>Guidelines</span>
             </button>
 
@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={toggleTheme}
               data-testid="theme-toggle-btn"
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="p-1.5 rounded-md border border-zinc-200 dark:border-navy-900 text-zinc-500 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-navy-900 transition-colors"
+              className="p-2 rounded-md border border-zinc-200 dark:border-navy-900 text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-navy-900 transition-colors"
             >
               {theme === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-300" />

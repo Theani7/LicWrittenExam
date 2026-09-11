@@ -204,45 +204,45 @@ export const LearnView: React.FC<LearnViewProps> = ({
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 space-y-5">
       {/* Top Bar: Title, Stats, and Mode Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200 dark:border-navy-900/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-zinc-200 dark:border-navy-900/80">
         <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight">
               Learn Mode
             </h2>
-            <span className="font-mono text-[11px] text-zinc-400 dark:text-zinc-500">
+            <span className="font-mono text-xs font-bold text-crimson-700 dark:text-crimson-400 bg-crimson-50 dark:bg-crimson-950/70 px-2 py-0.5 rounded border border-crimson-200 dark:border-crimson-900">
               500 POOL
             </span>
           </div>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 mt-1">
             Official Nepal Department of Transport Management (DoTM) examination question bank.
           </p>
         </div>
 
         {/* List vs Flashcard Mode Toggle */}
-        <div className="inline-flex p-0.5 bg-zinc-100 dark:bg-navy-950 rounded-lg border border-zinc-200 dark:border-navy-900 self-start sm:self-auto">
+        <div className="inline-flex p-1 bg-zinc-100 dark:bg-navy-950 rounded-lg border border-zinc-200 dark:border-navy-900 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setStudyMode('list')}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all ${
               studyMode === 'list'
-                ? 'bg-white dark:bg-navy-900 text-zinc-900 dark:text-white shadow-2xs font-semibold'
-                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                ? 'bg-white dark:bg-navy-900 text-zinc-950 dark:text-white shadow-2xs'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
             }`}
           >
-            <List className="w-3.5 h-3.5" />
+            <List className="w-4 h-4" />
             <span>List View</span>
           </button>
           <button
             type="button"
             onClick={() => setStudyMode('flashcard')}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all ${
               studyMode === 'flashcard'
-                ? 'bg-white dark:bg-navy-900 text-zinc-900 dark:text-white shadow-2xs font-semibold'
-                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
+                ? 'bg-white dark:bg-navy-900 text-zinc-950 dark:text-white shadow-2xs'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
             }`}
           >
-            <Layers className="w-3.5 h-3.5" />
+            <Layers className="w-4 h-4" />
             <span>Flashcards</span>
           </button>
         </div>
@@ -270,19 +270,19 @@ export const LearnView: React.FC<LearnViewProps> = ({
       />
 
       {/* Stats Summary Bar */}
-      <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-zinc-400 bg-white dark:bg-[#0c1424] px-3.5 py-2 rounded-md border border-zinc-200/80 dark:border-navy-900/80 flex-wrap">
-        <div className="flex items-center gap-3 font-mono text-[11px]">
+      <div className="flex items-center justify-between gap-3 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 bg-white dark:bg-[#0c1424] px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-navy-900 flex-wrap shadow-2xs">
+        <div className="flex items-center gap-4 font-mono text-xs sm:text-sm">
           <span>
             MATCHED:{' '}
-            <strong className="text-zinc-900 dark:text-zinc-100 font-semibold">
+            <strong className="text-zinc-950 dark:text-zinc-50 font-bold">
               {filteredQuestions.length}
             </strong>{' '}
             / {questions.length}
           </span>
-          <span className="text-zinc-300 dark:text-zinc-700">/</span>
-          <span className="inline-flex items-center gap-1">
-            <Bookmark className="w-3 h-3 text-crimson-600 fill-current" />
-            <strong className="text-zinc-900 dark:text-zinc-100 font-semibold">
+          <span className="text-zinc-300 dark:text-zinc-700">|</span>
+          <span className="inline-flex items-center gap-1.5">
+            <Bookmark className="w-3.5 h-3.5 text-crimson-600 fill-current" />
+            <strong className="text-zinc-950 dark:text-zinc-50 font-bold">
               {bookmarks.length}
             </strong>{' '}
             SAVED
@@ -290,8 +290,8 @@ export const LearnView: React.FC<LearnViewProps> = ({
         </div>
 
         {totalAnsweredCount > 0 && (
-          <div className="inline-flex items-center gap-1.5 font-mono text-[11px] text-zinc-600 dark:text-zinc-300">
-            <Sparkles className="w-3 h-3 text-crimson-600" />
+          <div className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm text-zinc-700 dark:text-zinc-200">
+            <Sparkles className="w-3.5 h-3.5 text-crimson-600" />
             <span>
               SESSION: {totalAnsweredCount} ATTEMPTS ({correctCount} CORRECT)
             </span>

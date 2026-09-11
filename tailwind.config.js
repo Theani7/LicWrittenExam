@@ -9,31 +9,35 @@ export default {
     extend: {
       colors: {
         crimson: {
-          50: '#fef2f3',
-          100: '#fde2e4',
-          200: '#fcc9cd',
-          500: '#e01a3c',
-          600: '#c8102e', // Official Nepal Crimson (Rhododendron)
-          700: '#a50d26',
-          800: '#870e22',
-          900: '#701121',
-          950: '#40040e',
+          50: '#fff1f2',
+          100: '#ffe4e6',
+          200: '#fecdd3',
+          300: '#fda4af',
+          400: '#fb7185',
+          500: '#f43f5e',
+          600: '#dc143c', // Vibrant Nepal Crimson from Flag
+          700: '#c8102e', // Deep Rhododendron Red
+          800: '#9f1239',
+          900: '#881337',
+          950: '#4c0519',
         },
         navy: {
-          50: '#eff5ff',
-          100: '#dbe7fe',
-          200: '#bfd5fe',
-          500: '#1d55b0',
-          600: '#0f4499',
-          700: '#003893', // Official Nepal Flag Border Blue
-          800: '#062c70',
-          900: '#0c2656',
-          950: '#061226',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          200: '#bfdbfe',
+          300: '#93c5fd',
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#1d4ed8',
+          700: '#003893', // Vibrant Royal Blue Flag Border
+          800: '#002b70',
+          900: '#061a40',
+          950: '#040d21',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
     },
   },

@@ -155,93 +155,93 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
         <div className="p-6 overflow-y-auto space-y-6">
           {/* Key Exam Rules Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-md p-3 text-center">
-              <div className="flex items-center justify-center text-navy-600 dark:text-navy-300 mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider">
-                <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-lg p-3.5 text-center">
+              <div className="flex items-center justify-center text-navy-600 dark:text-navy-300 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
+                <CheckCircle2 className="w-4 h-4 mr-1.5" />
                 <span>Questions</span>
               </div>
-              <div className="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-100">25 Qs</div>
-              <div className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 mt-0.5">4 Marks Each</div>
+              <div className="font-mono text-2xl font-extrabold text-zinc-900 dark:text-zinc-100">25 Qs</div>
+              <div className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-0.5">4 Marks Each</div>
             </div>
 
-            <div className="bg-crimson-50/50 dark:bg-crimson-950/20 border border-crimson-200 dark:border-crimson-900/50 rounded-md p-3 text-center">
-              <div className="flex items-center justify-center text-crimson-600 dark:text-crimson-400 mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider">
-                <Award className="w-3.5 h-3.5 mr-1" />
+            <div className="bg-crimson-50/50 dark:bg-crimson-950/20 border border-crimson-200 dark:border-crimson-900/50 rounded-lg p-3.5 text-center">
+              <div className="flex items-center justify-center text-crimson-600 dark:text-crimson-400 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
+                <Award className="w-4 h-4 mr-1.5" />
                 <span>Pass Mark</span>
               </div>
-              <div className="font-mono text-xl font-bold text-crimson-600 dark:text-crimson-400">60 / 100</div>
-              <div className="font-mono text-[10px] text-crimson-600 dark:text-crimson-400 font-medium mt-0.5">Min 15 Correct</div>
+              <div className="font-mono text-2xl font-extrabold text-crimson-600 dark:text-crimson-400">60 / 100</div>
+              <div className="font-mono text-xs text-crimson-600 dark:text-crimson-400 font-bold mt-0.5">Min 15 Correct</div>
             </div>
 
-            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-md p-3 text-center">
-              <div className="flex items-center justify-center text-amber-600 dark:text-amber-400 mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider">
-                <Clock className="w-3.5 h-3.5 mr-1" />
+            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-lg p-3.5 text-center">
+              <div className="flex items-center justify-center text-amber-600 dark:text-amber-400 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
+                <Clock className="w-4 h-4 mr-1.5" />
                 <span>Time Limit</span>
               </div>
-              <div className="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-100">30 Mins</div>
-              <div className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 mt-0.5">72s per question</div>
+              <div className="font-mono text-2xl font-extrabold text-zinc-900 dark:text-zinc-100">30 Mins</div>
+              <div className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-0.5">72s per question</div>
             </div>
 
-            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-md p-3 text-center">
-              <div className="flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-1 font-mono text-[10px] font-semibold uppercase tracking-wider">
-                <ShieldCheck className="w-3.5 h-3.5 mr-1" />
+            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-lg p-3.5 text-center">
+              <div className="flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4 mr-1.5" />
                 <span>Marking</span>
               </div>
-              <div className="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-100">No Penalty</div>
-              <div className="font-mono text-[10px] text-zinc-500 dark:text-zinc-400 mt-0.5">Attempt all 25</div>
+              <div className="font-mono text-2xl font-extrabold text-zinc-900 dark:text-zinc-100">No Penalty</div>
+              <div className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-0.5">Attempt all 25</div>
             </div>
           </div>
 
           {/* Category Breakdown Table */}
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm flex items-center space-x-2">
+              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base flex items-center space-x-2">
                 <FileText className="w-4 h-4 text-crimson-600 dark:text-crimson-400" />
                 <span>Official Category Weightage (Syllabus Breakdown)</span>
               </h3>
-              <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400">Total: 500 Question Bank</span>
+              <span className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400">Total: 500 Question Bank</span>
             </div>
 
-            <div className="border border-zinc-200 dark:border-navy-900 rounded-md overflow-hidden">
+            <div className="border border-zinc-200 dark:border-navy-900 rounded-lg overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="bg-zinc-100/70 dark:bg-navy-900/80 border-b border-zinc-200 dark:border-navy-900 text-zinc-600 dark:text-zinc-400 font-mono uppercase text-[10px] tracking-wider">
+                  <thead className="bg-zinc-100/70 dark:bg-navy-900/80 border-b border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 font-mono uppercase text-xs font-bold tracking-wider">
                     <tr>
-                      <th className="py-2.5 px-3.5 text-center w-12">#</th>
-                      <th className="py-2.5 px-3.5">Subject Category</th>
-                      <th className="py-2.5 px-3.5 text-center">Question Pool</th>
-                      <th className="py-2.5 px-3.5 text-center">Exam Questions</th>
-                      <th className="py-2.5 px-3.5 text-right pr-4">Total Marks</th>
+                      <th className="py-3 px-3.5 text-center w-12">#</th>
+                      <th className="py-3 px-3.5">Subject Category</th>
+                      <th className="py-3 px-3.5 text-center">Question Pool</th>
+                      <th className="py-3 px-3.5 text-center">Exam Questions</th>
+                      <th className="py-3 px-3.5 text-right pr-4">Total Marks</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-200 dark:divide-navy-900/60 text-zinc-700 dark:text-zinc-300">
                     {CATEGORY_BREAKDOWN.map((cat) => (
                       <tr key={cat.id} className="hover:bg-zinc-50/60 dark:hover:bg-navy-900/40 transition-colors">
-                        <td className="py-2.5 px-3.5 text-center font-mono font-medium text-zinc-400 dark:text-zinc-500">
+                        <td className="py-3 px-3.5 text-center font-mono font-bold text-zinc-400 dark:text-zinc-500">
                           {cat.id}
                         </td>
-                        <td className="py-2.5 px-3.5">
-                          <div className="font-medium text-zinc-900 dark:text-zinc-100">{cat.nameNepali}</div>
-                          <div className="text-[11px] text-zinc-500 dark:text-zinc-400">{cat.name}</div>
+                        <td className="py-3 px-3.5">
+                          <div className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base">{cat.nameNepali}</div>
+                          <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{cat.name}</div>
                         </td>
-                        <td className="py-2.5 px-3.5 text-center font-mono text-zinc-600 dark:text-zinc-400">
+                        <td className="py-3 px-3.5 text-center font-mono font-medium text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
                           {cat.poolCount}
                         </td>
-                        <td className="py-2.5 px-3.5 text-center font-mono font-semibold text-crimson-600 dark:text-crimson-400">
+                        <td className="py-3 px-3.5 text-center font-mono font-bold text-xs sm:text-sm text-crimson-600 dark:text-crimson-400">
                           {cat.examQuestions}
                         </td>
-                        <td className="py-2.5 px-3.5 text-right pr-4 font-mono font-semibold text-zinc-900 dark:text-zinc-100">
+                        <td className="py-3 px-3.5 text-right pr-4 font-mono font-bold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100">
                           {cat.marks}
                         </td>
                       </tr>
                     ))}
-                    <tr className="bg-zinc-100/60 dark:bg-navy-900/60 font-mono font-bold text-zinc-900 dark:text-zinc-100 border-t-2 border-zinc-200 dark:border-navy-800 text-xs">
-                      <td colSpan={2} className="py-2.5 px-3.5 text-right font-bold">
+                    <tr className="bg-zinc-100/60 dark:bg-navy-900/60 font-mono font-bold text-zinc-900 dark:text-zinc-100 border-t-2 border-zinc-200 dark:border-navy-800 text-sm">
+                      <td colSpan={2} className="py-3 px-3.5 text-right font-black">
                         Grand Total:
                       </td>
-                      <td className="py-2.5 px-3.5 text-center">500</td>
-                      <td className="py-2.5 px-3.5 text-center text-crimson-600 dark:text-crimson-400">25</td>
-                      <td className="py-2.5 px-3.5 text-right pr-4">100</td>
+                      <td className="py-3 px-3.5 text-center font-bold">500</td>
+                      <td className="py-3 px-3.5 text-center font-bold text-crimson-600 dark:text-crimson-400">25</td>
+                      <td className="py-3 px-3.5 text-right pr-4 font-bold">100</td>
                     </tr>
                   </tbody>
                 </table>
@@ -251,14 +251,14 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
 
           {/* Exam Tips & Official Note */}
           <div className="space-y-3">
-            <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm flex items-center space-x-2">
+            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 text-amber-500" />
               <span>Exam Tips &amp; Strategic Advice</span>
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-600 dark:text-zinc-300">
-              <div className="p-3 bg-zinc-50/60 dark:bg-navy-900/30 rounded-md border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
+              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
+                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
                   Focus on High-Yield Sections
                 </span>
                 <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
@@ -266,9 +266,9 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
                 </p>
               </div>
 
-              <div className="p-3 bg-zinc-50/60 dark:bg-navy-900/30 rounded-md border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
+              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
+                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
                   Never Leave Blank Answers
                 </span>
                 <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
@@ -276,9 +276,9 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
                 </p>
               </div>
 
-              <div className="p-3 bg-zinc-50/60 dark:bg-navy-900/30 rounded-md border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
+              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
+                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
                   Pacing and Flagging
                 </span>
                 <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
@@ -286,9 +286,9 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
                 </p>
               </div>
 
-              <div className="p-3 bg-zinc-50/60 dark:bg-navy-900/30 rounded-md border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-semibold text-zinc-900 dark:text-zinc-100 flex items-center">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
+              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
+                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
+                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
                   Official Source
                 </span>
                 <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
@@ -300,15 +300,15 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-t border-zinc-200 dark:border-navy-900 bg-zinc-50/70 dark:bg-navy-900/40">
-          <div className="font-mono text-xs text-zinc-500 dark:text-zinc-400 flex items-center space-x-1.5">
-            <HelpCircle className="w-3.5 h-3.5" />
+        <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-200 dark:border-navy-900 bg-zinc-50/70 dark:bg-navy-900/40">
+          <div className="font-mono text-xs sm:text-sm font-semibold text-zinc-500 dark:text-zinc-400 flex items-center space-x-1.5">
+            <HelpCircle className="w-4 h-4 text-navy-600 dark:text-navy-400" />
             <span>Pass standard: 15 / 25 questions correct (60%)</span>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-1.5 bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-semibold rounded-md shadow-sm transition-colors"
+            className="px-5 py-2 bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs sm:text-sm font-bold rounded-lg shadow-sm transition-colors"
           >
             Got It
           </button>

@@ -128,14 +128,14 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Top Header & Progress */}
-      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-4 space-y-2.5">
+      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-4 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           {/* Progress label */}
-          <div className="flex items-center gap-2 font-mono text-xs">
-            <span className="font-semibold text-zinc-900 dark:text-white">
+          <div className="flex items-center gap-2 font-mono text-sm sm:text-base">
+            <span className="font-bold text-zinc-900 dark:text-white">
               Flashcard {currentIndex + 1}
             </span>
-            <span className="text-zinc-400 dark:text-zinc-500">
+            <span className="text-zinc-500 dark:text-zinc-400 font-medium">
               of {displayQuestions.length} ({progressPercent}%)
             </span>
           </div>
@@ -145,19 +145,19 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
             type="button"
             onClick={handleToggleShuffle}
             aria-label="Toggle shuffle mode"
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-medium transition-all border ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs sm:text-sm font-mono font-semibold transition-all border ${
               isShuffled
                 ? 'bg-crimson-50 dark:bg-crimson-950/60 border-crimson-300 dark:border-crimson-800 text-crimson-700 dark:text-crimson-300'
-                : 'bg-white dark:bg-navy-900/60 border-zinc-200 dark:border-navy-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-navy-900'
+                : 'bg-white dark:bg-navy-900/60 border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900'
             }`}
           >
-            <Shuffle className="w-3 h-3" />
+            <Shuffle className="w-3.5 h-3.5" />
             <span>Shuffle {isShuffled ? 'ON' : 'OFF'}</span>
           </button>
         </div>
 
         {/* Progress Bar in Nepal Crimson */}
-        <div className="w-full bg-zinc-100 dark:bg-navy-950 h-1.5 rounded-full overflow-hidden">
+        <div className="w-full bg-zinc-100 dark:bg-navy-950 h-2 rounded-full overflow-hidden">
           <div
             className="bg-crimson-600 h-full rounded-full transition-all duration-150"
             style={{ width: `${progressPercent}%` }}
@@ -165,21 +165,21 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
         </div>
 
         {/* Keyboard shortcut hint */}
-        <div className="hidden sm:flex items-center justify-center gap-4 text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
+        <div className="hidden sm:flex items-center justify-center gap-5 text-xs font-mono text-zinc-500 dark:text-zinc-400">
           <span>
-            <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800">
+            <kbd className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800 font-bold">
               ←
             </kbd>{' '}
             PREV
           </span>
           <span>
-            <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800">
+            <kbd className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800 font-bold">
               →
             </kbd>{' '}
             NEXT
           </span>
           <span>
-            <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800">
+            <kbd className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800 font-bold">
               SPACE
             </kbd>{' '}
             REVEAL
@@ -206,7 +206,7 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
           type="button"
           onClick={handlePrev}
           aria-label="Previous question"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900 text-xs font-medium transition-all"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-navy-900 text-sm font-semibold transition-all shadow-2xs"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Previous</span>
@@ -216,20 +216,20 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
           type="button"
           onClick={handleToggleReveal}
           aria-label="Toggle answer reveal"
-          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-md font-medium text-xs transition-all border ${
+          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm transition-all border shadow-2xs ${
             revealed
-              ? 'bg-zinc-100 dark:bg-navy-900 border-zinc-300 dark:border-navy-800 text-zinc-800 dark:text-zinc-200'
-              : 'bg-crimson-600 border-crimson-600 text-white hover:bg-crimson-700 shadow-2xs'
+              ? 'bg-zinc-100 dark:bg-navy-900 border-zinc-300 dark:border-navy-800 text-zinc-900 dark:text-zinc-100'
+              : 'bg-crimson-600 border-crimson-600 text-white hover:bg-crimson-700'
           }`}
         >
           {revealed ? (
             <>
-              <EyeOff className="w-3.5 h-3.5" />
+              <EyeOff className="w-4 h-4" />
               <span>Hide Answer</span>
             </>
           ) : (
             <>
-              <Eye className="w-3.5 h-3.5" />
+              <Eye className="w-4 h-4" />
               <span>Reveal Answer</span>
             </>
           )}
@@ -239,7 +239,7 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
           type="button"
           onClick={handleNext}
           aria-label="Next question"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900 text-xs font-medium transition-all"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-navy-900 text-sm font-semibold transition-all shadow-2xs"
         >
           <span>Next</span>
           <ChevronRight className="w-4 h-4" />

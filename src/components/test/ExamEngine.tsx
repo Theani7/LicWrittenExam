@@ -180,27 +180,27 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
               </button>
             )}
             <div>
-              <h1 className="text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate max-w-[180px] sm:max-w-xs md:max-w-md tracking-tight">
+              <h1 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-50 truncate max-w-[180px] sm:max-w-xs md:max-w-md tracking-tight">
                 {title}
               </h1>
-              <p className="font-mono text-[10px] text-zinc-400 dark:text-zinc-500 hidden sm:block">
+              <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400 hidden sm:block font-semibold">
                 QUESTION {currentIndex + 1} OF {totalQuestions}
               </p>
             </div>
           </div>
 
           {/* Center/Right Timer & Buttons */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             {/* Timer Countdown */}
             <div
               data-testid="exam-timer"
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded font-mono text-xs font-semibold tabular-nums border ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md font-mono text-sm sm:text-base font-bold tabular-nums border ${
                 isTimeCritical
                   ? 'bg-crimson-50 dark:bg-crimson-950/60 border-crimson-300 dark:border-crimson-800 text-crimson-600 text-rose-600 dark:text-crimson-400 animate-pulse'
-                  : 'bg-zinc-100 dark:bg-navy-950 border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-200'
+                  : 'bg-zinc-100 dark:bg-navy-950 border-zinc-200 dark:border-navy-900 text-zinc-900 dark:text-zinc-100'
               }`}
             >
-              <Clock className="w-3.5 h-3.5 text-crimson-600" />
+              <Clock className="w-4 h-4 text-crimson-600" />
               <span>{formatTime(remainingSeconds)}</span>
             </div>
 
@@ -208,10 +208,10 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             <button
               type="button"
               onClick={() => setShowMobileNavigator(true)}
-              className="lg:hidden px-2.5 py-1 text-xs font-mono rounded bg-zinc-100 dark:bg-navy-950 border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 flex items-center gap-1"
+              className="lg:hidden px-3 py-1.5 text-xs font-mono font-bold rounded-md bg-zinc-100 dark:bg-navy-950 border border-zinc-200 dark:border-navy-900 text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5"
               aria-label="Open navigator"
             >
-              <Menu className="w-3.5 h-3.5" />
+              <Menu className="w-4 h-4" />
               <span className="hidden sm:inline">GRID</span>
             </button>
 
@@ -220,7 +220,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
               type="button"
               data-testid="submit-exam-button"
               onClick={() => setShowSubmitModal(true)}
-              className="px-3 py-1 bg-crimson-600 hover:bg-crimson-700 text-white text-xs font-medium rounded shadow-2xs transition"
+              className="px-3.5 py-1.5 bg-crimson-600 hover:bg-crimson-700 text-white text-xs sm:text-sm font-bold rounded-md shadow-xs transition"
             >
               Submit Exam
             </button>
@@ -228,22 +228,22 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
         </div>
 
         {/* Progress bar line */}
-        <div className="w-full bg-zinc-200 dark:bg-navy-950 h-0.5">
+        <div className="w-full bg-zinc-200 dark:bg-navy-950 h-1">
           <div
-            className="bg-crimson-600 h-0.5 transition-all duration-200"
+            className="bg-crimson-600 h-1 transition-all duration-200"
             style={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
           />
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Question Pane (Cols 1-8) */}
         <section className="lg:col-span-8 flex flex-col space-y-3">
-          <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/90 p-4 sm:p-6 shadow-2xs">
+          <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-5 sm:p-7 shadow-xs">
             {/* Question Header */}
-            <div className="flex items-center justify-between gap-2 mb-3 pb-2.5 border-b border-zinc-100 dark:border-navy-900">
-              <span className="font-mono text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
+            <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-zinc-100 dark:border-navy-900">
+              <span className="font-mono text-xs sm:text-sm font-bold text-zinc-600 dark:text-zinc-300">
                 QUESTION {currentIndex + 1} / {totalQuestions}
               </span>
 
@@ -252,14 +252,14 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                 type="button"
                 data-testid="mark-review-button"
                 onClick={handleToggleFlag}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono transition border ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs sm:text-sm font-mono font-semibold transition border ${
                   isCurrentFlagged
-                    ? 'bg-crimson-50 dark:bg-crimson-950/60 text-crimson-700 dark:text-crimson-300 border-crimson-300 dark:border-crimson-800'
-                    : 'bg-zinc-50 dark:bg-navy-950/60 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-navy-900 hover:bg-zinc-100'
+                    ? 'bg-crimson-50 dark:bg-crimson-950/70 text-crimson-700 dark:text-crimson-300 border-crimson-300 dark:border-crimson-800'
+                    : 'bg-zinc-50 dark:bg-navy-950/60 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:bg-zinc-100'
                 }`}
               >
                 <Flag
-                  className={`w-3 h-3 ${
+                  className={`w-3.5 h-3.5 ${
                     isCurrentFlagged ? 'fill-current text-crimson-600' : 'text-zinc-400'
                   }`}
                 />
@@ -268,7 +268,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             </div>
 
             {/* Question Text */}
-            <h2 className="text-sm sm:text-base font-semibold text-zinc-900 dark:text-zinc-100 leading-snug tracking-tight mb-4">
+            <h2 className="text-base sm:text-lg font-bold text-zinc-950 dark:text-zinc-50 leading-relaxed tracking-tight mb-5">
               {currentQuestion.question}
             </h2>
 
@@ -276,17 +276,17 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             {currentQuestion.image && (
               <div className="mb-5 flex flex-col items-center">
                 <div
-                  className="relative group cursor-pointer border border-zinc-200 dark:border-navy-900 rounded-md overflow-hidden bg-zinc-50 dark:bg-navy-950 p-2 max-w-xs"
+                  className="relative group cursor-pointer border border-zinc-200 dark:border-navy-900 rounded-lg overflow-hidden bg-zinc-50 dark:bg-navy-950 p-2.5 max-w-sm"
                   onClick={() => setIsImageModalOpen(true)}
                 >
                   <img
                     src={currentQuestion.image}
                     alt={`Question ${currentQuestion.id} illustration`}
-                    className="max-h-44 w-auto object-contain rounded"
+                    className="max-h-48 w-auto object-contain rounded"
                   />
                   <div className="absolute inset-0 bg-zinc-900/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded">
-                    <span className="text-white font-mono text-[10px] flex items-center gap-1 bg-zinc-900/80 px-2 py-0.5 rounded">
-                      <ZoomIn className="w-3 h-3" />
+                    <span className="text-white font-mono text-xs flex items-center gap-1.5 bg-zinc-900/90 px-2.5 py-1 rounded">
+                      <ZoomIn className="w-3.5 h-3.5" />
                       <span>ZOOM</span>
                     </span>
                   </div>
@@ -295,7 +295,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             )}
 
             {/* 4 Options (A, B, C, D) without immediate feedback */}
-            <div className="space-y-2 mb-5" role="radiogroup" aria-label="Question options">
+            <div className="space-y-3 mb-6" role="radiogroup" aria-label="Question options">
               {currentQuestion.options.map((option) => {
                 const isSelected = selectedForCurrent === option.key;
 
@@ -307,22 +307,22 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                     aria-checked={isSelected}
                     data-testid={`option-${option.key}`}
                     onClick={() => handleSelectOption(option.key)}
-                    className={`w-full text-left p-3 rounded-md border transition-all flex items-start gap-3 ${
+                    className={`w-full text-left p-3.5 sm:p-4 rounded-lg border transition-all flex items-start gap-3.5 ${
                       isSelected
-                        ? 'border-navy-700 bg-navy-50/60 dark:bg-navy-950/60 text-navy-950 dark:text-navy-100 ring-1 ring-navy-700/40'
-                        : 'border-zinc-200 dark:border-navy-900 hover:border-zinc-300 dark:hover:border-navy-700 bg-white dark:bg-[#0c1424] text-zinc-800 dark:text-zinc-200'
+                        ? 'border-navy-700 bg-navy-50/70 dark:bg-navy-950/80 text-navy-950 dark:text-navy-100 ring-2 ring-navy-700/50 font-semibold'
+                        : 'border-zinc-200 dark:border-navy-900 hover:border-zinc-300 dark:hover:border-navy-700 bg-white dark:bg-[#0c1424] text-zinc-900 dark:text-zinc-100'
                     }`}
                   >
                     <span
-                      className={`inline-flex items-center justify-center w-5 h-5 rounded font-mono text-[11px] font-semibold shrink-0 transition-colors border ${
+                      className={`inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-md font-mono text-xs sm:text-sm font-bold shrink-0 transition-colors border ${
                         isSelected
-                          ? 'bg-navy-700 text-white border-navy-700'
-                          : 'bg-zinc-100 dark:bg-navy-900 text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-navy-800'
+                          ? 'bg-navy-700 text-white border-navy-700 shadow-2xs'
+                          : 'bg-zinc-100 dark:bg-navy-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-800'
                       }`}
                     >
                       {option.key}
                     </span>
-                    <span className="text-xs sm:text-sm font-medium leading-snug pt-0.5">
+                    <span className="text-sm sm:text-base font-medium leading-relaxed pt-0.5">
                       {option.text}
                     </span>
                   </button>
@@ -331,15 +331,15 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             </div>
 
             {/* Footer Navigation & Clear Button */}
-            <div className="flex items-center justify-between pt-3 border-t border-zinc-100 dark:border-navy-900">
+            <div className="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-navy-900">
               <button
                 type="button"
                 data-testid="prev-question-button"
                 disabled={currentIndex === 0}
                 onClick={handlePrevious}
-                className="px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1 border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-navy-900 transition"
+                className="px-4 py-2 rounded-md text-xs sm:text-sm font-semibold flex items-center gap-1.5 border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-navy-900 transition"
               >
-                <ChevronLeft className="w-3.5 h-3.5" />
+                <ChevronLeft className="w-4 h-4" />
                 <span>Previous</span>
               </button>
 
@@ -348,9 +348,9 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                   type="button"
                   data-testid="clear-selection-button"
                   onClick={handleClearAnswer}
-                  className="font-mono text-[11px] text-zinc-400 hover:text-crimson-600 flex items-center gap-1 transition-colors"
+                  className="font-mono text-xs font-semibold text-zinc-500 hover:text-crimson-600 flex items-center gap-1.5 transition-colors"
                 >
-                  <RotateCcw className="w-3 h-3" />
+                  <RotateCcw className="w-3.5 h-3.5" />
                   <span>CLEAR</span>
                 </button>
               )}
@@ -360,10 +360,10 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                 data-testid="next-question-button"
                 disabled={currentIndex === totalQuestions - 1}
                 onClick={handleNext}
-                className="px-3 py-1.5 rounded-md text-xs font-medium flex items-center gap-1 bg-navy-700 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-navy-800 transition"
+                className="px-4 py-2 rounded-md text-xs sm:text-sm font-semibold flex items-center gap-1.5 bg-navy-700 text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-navy-800 transition shadow-2xs"
               >
                 <span>Next</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -413,23 +413,23 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2.5">
                 <div
-                  className={`w-8 h-8 rounded flex items-center justify-center shrink-0 font-mono text-xs ${
+                  className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 font-mono text-xs ${
                     unansweredCount > 0
                       ? 'bg-crimson-100 dark:bg-crimson-950/60 text-crimson-700'
                       : 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700'
                   }`}
                 >
                   {unansweredCount > 0 ? (
-                    <AlertTriangle className="w-4 h-4" />
+                    <AlertTriangle className="w-5 h-5" />
                   ) : (
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className="w-5 h-5" />
                   )}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+                  <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
                     Submit Examination?
                   </h3>
-                  <p className="font-mono text-[10px] text-zinc-400">
+                  <p className="font-mono text-xs text-zinc-400">
                     REVIEW PROGRESS BEFORE FINISHING
                   </p>
                 </div>
@@ -440,7 +440,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                 className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-1"
                 aria-label="Close dialog"
               >
-                <X className="w-4 h-4" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
@@ -448,7 +448,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             {unansweredCount > 0 && (
               <div
                 data-testid="unanswered-warning"
-                className="p-2.5 bg-crimson-50 dark:bg-crimson-950/40 border border-crimson-200 dark:border-crimson-900 text-xs text-crimson-800 dark:text-crimson-300 rounded"
+                className="p-3 bg-crimson-50 dark:bg-crimson-950/40 border border-crimson-200 dark:border-crimson-900 text-xs sm:text-sm text-crimson-800 dark:text-crimson-300 rounded-md"
               >
                 <strong>Warning:</strong> You have{' '}
                 <span className="font-bold underline">{unansweredCount} unanswered</span> questions.
@@ -457,34 +457,34 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
             )}
 
             {/* Breakdown card */}
-            <div className="grid grid-cols-3 gap-2 p-2.5 bg-zinc-50 dark:bg-navy-950/50 rounded border border-zinc-200 dark:border-navy-900 text-center font-mono">
+            <div className="grid grid-cols-3 gap-2 p-3 bg-zinc-50 dark:bg-navy-950/50 rounded-lg border border-zinc-200 dark:border-navy-900 text-center font-mono">
               <div>
-                <div className="text-[10px] text-zinc-400">ANSWERED</div>
-                <div className="text-base font-bold text-navy-700 dark:text-navy-300">
+                <div className="text-xs font-semibold text-zinc-400">ANSWERED</div>
+                <div className="text-lg font-extrabold text-navy-700 dark:text-navy-300">
                   {answeredCount}
                 </div>
               </div>
               <div>
-                <div className="text-[10px] text-zinc-400">LEFT</div>
-                <div className="text-base font-bold text-zinc-700 dark:text-zinc-300">
+                <div className="text-xs font-semibold text-zinc-400">LEFT</div>
+                <div className="text-lg font-extrabold text-zinc-700 dark:text-zinc-300">
                   {unansweredCount}
                 </div>
               </div>
               <div>
-                <div className="text-[10px] text-zinc-400">FLAGGED</div>
-                <div className="text-base font-bold text-crimson-600">
+                <div className="text-xs font-semibold text-zinc-400">FLAGGED</div>
+                <div className="text-lg font-extrabold text-crimson-600">
                   {flaggedCount}
                 </div>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end gap-2 pt-1">
+            <div className="flex items-center justify-end gap-2.5 pt-1">
               <button
                 type="button"
                 data-testid="cancel-submit-button"
                 onClick={() => setShowSubmitModal(false)}
-                className="px-3 py-1.5 text-xs font-medium rounded border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900 transition"
+                className="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900 transition"
               >
                 Keep Working
               </button>
@@ -492,7 +492,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                 type="button"
                 data-testid="confirm-submit-button"
                 onClick={handleFinalSubmit}
-                className="px-3.5 py-1.5 text-xs font-medium rounded bg-crimson-600 hover:bg-crimson-700 text-white shadow-2xs transition"
+                className="px-4 py-2 text-xs sm:text-sm font-bold rounded-lg bg-crimson-600 hover:bg-crimson-700 text-white shadow-2xs transition"
               >
                 Confirm &amp; Submit
               </button>
@@ -504,16 +504,16 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
       {/* Exit Exam Modal */}
       {showExitModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 max-w-xs w-full p-5 shadow-xl space-y-3">
-            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">Exit Exam?</h3>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+          <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 max-w-sm w-full p-5 shadow-xl space-y-3">
+            <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">Exit Exam?</h3>
+            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
               Your exam progress will not be submitted or saved. Are you sure?
             </p>
-            <div className="flex items-center justify-end gap-2 pt-1">
+            <div className="flex items-center justify-end gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => setShowExitModal(false)}
-                className="px-3 py-1.5 text-xs font-medium rounded border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300"
+                className="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900 transition"
               >
                 Continue Exam
               </button>
@@ -523,7 +523,7 @@ export const ExamEngine: React.FC<ExamEngineProps> = ({
                   setShowExitModal(false);
                   onExit?.();
                 }}
-                className="px-3 py-1.5 text-xs font-medium rounded bg-crimson-600 text-white hover:bg-crimson-700"
+                className="px-4 py-2 text-xs sm:text-sm font-bold rounded-lg bg-crimson-600 text-white hover:bg-crimson-700 transition"
               >
                 Exit
               </button>
