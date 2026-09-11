@@ -10,11 +10,13 @@ import {
 } from 'lucide-react';
 import type { Question, OptionKey } from '../../types';
 
+import { getCategoryTheme } from '../../utils/categoryColors';
+
 export interface QuestionCardProps {
   question: Question;
   categoryName?: string;
-  isBookmarked: boolean;
-  onToggleBookmark: (id: number) => void;
+  isBookmarked?: boolean;
+  onToggleBookmark: (questionId: number) => void;
   initialSelectedOption?: OptionKey | null;
   initialShowAnswer?: boolean;
   onAnswerSelected?: (questionId: number, optionKey: OptionKey, isCorrect: boolean) => void;
@@ -25,7 +27,7 @@ export interface QuestionCardProps {
 export const QuestionCard: React.FC<QuestionCardProps> = ({
   question,
   categoryName,
-  isBookmarked,
+  isBookmarked = false,
   onToggleBookmark,
   initialSelectedOption = null,
   initialShowAnswer = false,
@@ -37,18 +39,16 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [showAnswer, setShowAnswer] = useState<boolean>(initialShowAnswer);
   const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    setShowAnswer(initialShowAnswer);
-  }, [initialShowAnswer]);
-
+  // Sync state if question or initialShowAnswer changes
   useEffect(() => {
     setSelectedOption(initialSelectedOption);
     setShowAnswer(initialShowAnswer);
-  }, [question.id]);
+  }, [question.id, initialSelectedOption, initialShowAnswer]);
 
   const isAnswered = selectedOption !== null;
-  const isCorrect = selectedOption === question.correctAnswer;
-  const isRevealed = showAnswer || initialShowAnswer || isAnswered;
+  const isCorrect = isAnswered && selectedOption === question.correctAnswer;
+  const isRevealed = isAnswered || showAnswer;
+  const catTheme = getCategoryTheme(question.categoryId);
 
   const handleSelectOption = (key: OptionKey) => {
     if (selectedOption === key) return;
@@ -68,19 +68,20 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
   return (
     <div
-      className={`bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/80 shadow-2xs transition-all hover:border-zinc-300 dark:hover:border-navy-800 ${
+      className={`bg-white dark:bg-[#0c1424] rounded-xl border border-zinc-200 dark:border-navy-900/80 shadow-xs transition-all hover:border-navy-300 dark:hover:border-navy-700 hover:shadow-md ${
         compact ? 'p-3 sm:p-4' : 'p-4 sm:p-5'
       }`}
     >
       {/* Card Header: Question Number & Category & Bookmark */}
-      <div className="flex items-center justify-between gap-3 mb-3">
+      <div className="flex items-center justify-between gap-3 mb-3.5">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-xs sm:text-sm font-bold text-crimson-700 dark:text-crimson-400 bg-crimson-50 dark:bg-crimson-950/70 px-2 py-0.5 rounded border border-crimson-200 dark:border-crimson-900">
+          <span className="font-mono text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-navy-700 to-blue-700 px-2.5 py-0.5 rounded-md shadow-xs">
             Q{question.id}
           </span>
           {categoryName && (
-            <span className="text-xs sm:text-sm font-semibold px-2.5 py-0.5 rounded bg-zinc-100 dark:bg-navy-900/80 text-zinc-700 dark:text-zinc-300 truncate max-w-[220px] sm:max-w-md border border-zinc-200 dark:border-navy-800">
-              {categoryName}
+            <span className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-2.5 py-0.5 rounded-md border ${catTheme.badge}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${catTheme.dotBg}`} />
+              <span className="truncate max-w-[220px] sm:max-w-md">{categoryName}</span>
             </span>
           )}
         </div>
@@ -89,10 +90,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           type="button"
           onClick={() => onToggleBookmark(question.id)}
           aria-label={isBookmarked ? `Remove bookmark for question ${question.id}` : `Bookmark question ${question.id}`}
-          className={`p-2 rounded-md border transition-all ${
+          className={`p-2 rounded-lg border transition-all ${
             isBookmarked
-              ? 'bg-crimson-50 dark:bg-crimson-950/60 border-crimson-300 dark:border-crimson-800 text-crimson-600 dark:text-crimson-400'
-              : 'bg-zinc-50 dark:bg-navy-900/40 border-zinc-200 dark:border-navy-900 text-zinc-400 hover:text-crimson-600 hover:border-crimson-200'
+              ? 'bg-crimson-600 border-crimson-600 text-white shadow-sm shadow-crimson-600/30'
+              : 'bg-zinc-50 dark:bg-navy-900/40 border-zinc-200 dark:border-navy-900 text-zinc-400 hover:text-crimson-600 hover:border-crimson-300 hover:bg-crimson-50/50'
           }`}
         >
           <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />

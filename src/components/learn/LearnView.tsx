@@ -270,28 +270,26 @@ export const LearnView: React.FC<LearnViewProps> = ({
       />
 
       {/* Stats Summary Bar */}
-      <div className="flex items-center justify-between gap-3 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 bg-white dark:bg-[#0c1424] px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-navy-900 flex-wrap shadow-2xs">
-        <div className="flex items-center gap-4 font-mono text-xs sm:text-sm">
-          <span>
-            MATCHED:{' '}
-            <strong className="text-zinc-950 dark:text-zinc-50 font-bold">
-              {filteredQuestions.length}
-            </strong>{' '}
-            / {questions.length}
+      <div className="flex items-center justify-between gap-3 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 bg-white dark:bg-[#0c1424] px-4 py-3 rounded-xl border border-zinc-200 dark:border-navy-900 flex-wrap shadow-xs">
+        <div className="flex items-center gap-2.5 font-mono text-xs sm:text-sm flex-wrap">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60 font-semibold">
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+            <span>
+              MATCHED: <strong className="font-extrabold text-blue-900 dark:text-blue-100">{filteredQuestions.length}</strong> / {questions.length}
+            </span>
           </span>
-          <span className="text-zinc-300 dark:text-zinc-700">|</span>
-          <span className="inline-flex items-center gap-1.5">
+
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-crimson-50 dark:bg-crimson-950/60 text-crimson-700 dark:text-crimson-300 border border-crimson-200 dark:border-crimson-900/60 font-semibold">
             <Bookmark className="w-3.5 h-3.5 text-crimson-600 fill-current" />
-            <strong className="text-zinc-950 dark:text-zinc-50 font-bold">
-              {bookmarks.length}
-            </strong>{' '}
-            SAVED
+            <span>
+              <strong className="font-extrabold text-crimson-900 dark:text-crimson-100">{bookmarks.length}</strong> SAVED
+            </span>
           </span>
         </div>
 
         {totalAnsweredCount > 0 && (
-          <div className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm text-zinc-700 dark:text-zinc-200">
-            <Sparkles className="w-3.5 h-3.5 text-crimson-600" />
+          <div className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm px-3 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/60 font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
             <span>
               SESSION: {totalAnsweredCount} ATTEMPTS ({correctCount} CORRECT)
             </span>

@@ -101,10 +101,10 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
       {/* Pass / Fail Banner */}
       <div
         data-testid="result-banner"
-        className={`rounded-lg p-6 sm:p-7 text-center border shadow-2xs relative overflow-hidden ${
+        className={`rounded-2xl p-7 sm:p-8 text-center border-2 shadow-lg relative overflow-hidden ${
           result.passed
-            ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-300 dark:border-emerald-800'
-            : 'bg-crimson-50/40 dark:bg-crimson-950/20 border-crimson-300 dark:border-crimson-800'
+            ? 'bg-gradient-to-b from-emerald-500/20 via-emerald-500/5 to-transparent border-emerald-500/60 dark:border-emerald-600/60 shadow-emerald-500/10'
+            : 'bg-gradient-to-b from-crimson-500/20 via-crimson-500/5 to-transparent border-crimson-500/60 dark:border-crimson-600/60 shadow-crimson-500/10'
         }`}
       >
         <div className="max-w-xl mx-auto space-y-3">
@@ -112,32 +112,32 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
             {result.passed ? (
               <span
                 data-testid="verdict-passed"
-                className="inline-flex items-center gap-1.5 bg-emerald-600 text-white px-3 py-1 rounded font-mono text-xs font-bold shadow-2xs tracking-wider"
+                className="inline-flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-1.5 rounded-lg font-mono text-xs font-extrabold shadow-sm tracking-wider"
               >
-                <Sparkles className="w-3.5 h-3.5" />
+                <Sparkles className="w-4 h-4" />
                 <span>EXAM PASSED</span>
               </span>
             ) : (
               <span
                 data-testid="verdict-failed"
-                className="inline-flex items-center gap-1.5 bg-crimson-600 text-white px-3 py-1 rounded font-mono text-xs font-bold shadow-2xs tracking-wider"
+                className="inline-flex items-center gap-1.5 bg-crimson-600 text-white px-3.5 py-1.5 rounded-lg font-mono text-xs font-extrabold shadow-sm tracking-wider"
               >
-                <XCircle className="w-3.5 h-3.5" />
+                <XCircle className="w-4 h-4" />
                 <span>NOT PASSED</span>
               </span>
             )}
           </div>
 
           <div>
-            <h1 className="text-3xl sm:text-4xl font-black text-zinc-900 dark:text-zinc-50 font-mono tracking-tight">
-              {result.score} <span className="text-xl text-zinc-400 font-normal">/ {result.totalMarks} MARKS</span>
+            <h1 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-50 font-mono tracking-tight">
+              {result.score} <span className="text-2xl text-zinc-400 font-normal">/ {result.totalMarks} MARKS</span>
             </h1>
-            <p className="font-mono text-sm font-semibold text-zinc-600 dark:text-zinc-400 mt-0.5">
+            <p className="font-mono text-sm sm:text-base font-bold text-zinc-700 dark:text-zinc-300 mt-1">
               {percentage}% Score · Pass Threshold: 60%
             </p>
           </div>
 
-          <p className="text-xs text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
             {result.passed
               ? 'Congratulations! You achieved the required pass threshold (>= 60%) for the official Nepal Driving License Written Exam.'
               : 'You did not achieve the required 60% pass mark. Review the missed questions below and attempt another simulation.'}
@@ -150,7 +150,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                 type="button"
                 data-testid="retake-exam-top-btn"
                 onClick={onRetakeExam}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-crimson-600 hover:bg-crimson-700 text-white text-sm font-bold rounded-lg shadow-sm transition"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-crimson-600 to-rose-600 hover:from-crimson-700 hover:to-rose-700 text-white text-sm font-bold rounded-lg shadow-sm transition"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Retake Exam</span>
@@ -162,7 +162,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                 type="button"
                 data-testid="practice-missed-top-btn"
                 onClick={() => onPracticeMissed(missedQuestions)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-navy-700 hover:bg-navy-800 text-white text-sm font-bold rounded-lg shadow-sm transition"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-navy-700 to-blue-700 hover:from-navy-800 hover:to-blue-800 text-white text-sm font-bold rounded-lg shadow-sm transition"
               >
                 <Target className="w-4 h-4" />
                 <span>Practice Missed ({missedQuestions.length})</span>
@@ -187,7 +187,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
       {/* Summary Statistics Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
         {/* Stat 1: Total Score */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-lg border border-zinc-200 dark:border-navy-900 shadow-2xs">
+        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-crimson-600 shadow-xs">
           <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
             <Award className="w-4 h-4 text-crimson-600" />
             <span className="text-xs font-bold tracking-wider">SCORE</span>
@@ -198,9 +198,9 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
         </div>
 
         {/* Stat 2: Accuracy */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-lg border border-zinc-200 dark:border-navy-900 shadow-2xs">
+        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-blue-600 shadow-xs">
           <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
-            <Target className="w-4 h-4 text-navy-600 dark:text-navy-400" />
+            <Target className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span className="text-xs font-bold tracking-wider">ACCURACY</span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
@@ -209,7 +209,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
         </div>
 
         {/* Stat 3: Time Taken */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-lg border border-zinc-200 dark:border-navy-900 shadow-2xs">
+        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-amber-500 shadow-xs">
           <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
             <Clock className="w-4 h-4 text-amber-500" />
             <span className="text-xs font-bold tracking-wider">TIME</span>
@@ -220,7 +220,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
         </div>
 
         {/* Stat 4: Answer Breakdown */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-lg border border-zinc-200 dark:border-navy-900 shadow-2xs">
+        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-emerald-500 shadow-xs">
           <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
             <span className="text-xs font-bold tracking-wider">SUMMARY</span>

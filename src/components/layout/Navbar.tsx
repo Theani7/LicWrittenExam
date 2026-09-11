@@ -41,7 +41,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header className="border-b border-zinc-200 dark:border-navy-900/80 bg-white/85 dark:bg-[#070d19]/85 backdrop-blur-md sticky top-0 z-40 transition-colors">
+    <header className="border-b border-zinc-200 dark:border-navy-900/80 bg-white/90 dark:bg-[#070d19]/90 backdrop-blur-md sticky top-0 z-40 transition-colors">
+      {/* Top flag colored accent ribbon */}
+      <div className="h-1 bg-gradient-to-r from-crimson-600 via-rose-500 to-navy-700 w-full" />
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14">
           {/* Brand Logo with Nepal Pennon Flag Motif */}
@@ -50,7 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="flex items-center gap-3 cursor-pointer group select-none"
           >
             {/* Minimalist Geometric Nepal Pennant Icon */}
-            <div className="w-8 h-8 rounded-md border border-navy-700/30 dark:border-navy-500/40 bg-crimson-600 flex items-center justify-center text-white font-bold tracking-tighter shrink-0 shadow-xs ring-1 ring-navy-700/40">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-crimson-700 via-crimson-600 to-rose-500 flex items-center justify-center text-white font-bold tracking-tighter shrink-0 shadow-sm shadow-crimson-600/30 ring-1 ring-navy-700/30">
               <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white" aria-hidden="true">
                 {/* Clean stylized double triangle flag */}
                 <path d="M4 2v20h2v-5.5l9-5.5-7.5-3 8-6z" />
@@ -60,14 +63,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="font-bold text-zinc-900 dark:text-zinc-50 text-base sm:text-lg tracking-tight">
                 Nepal License Prep
               </span>
-              <span className="hidden sm:inline-block font-mono text-xs text-crimson-700 dark:text-crimson-300 bg-crimson-50 dark:bg-crimson-950/70 px-2 py-0.5 rounded border border-crimson-200 dark:border-crimson-900 font-semibold">
+              <span className="hidden sm:inline-block font-mono text-xs text-crimson-700 dark:text-crimson-300 bg-crimson-50 dark:bg-crimson-950/70 px-2.5 py-0.5 rounded-md border border-crimson-200 dark:border-crimson-900 font-bold">
                 Cat A &amp; K 2082/83
               </span>
             </div>
           </div>
 
           {/* Desktop Navigation Segmented Bar */}
-          <nav aria-label="Main Navigation" className="hidden md:flex items-center p-1 rounded-lg border border-zinc-200/90 dark:border-navy-900 bg-zinc-100/70 dark:bg-navy-950/80">
+          <nav aria-label="Main Navigation" className="hidden md:flex items-center p-1 rounded-lg border border-zinc-200 dark:border-navy-900 bg-zinc-100/80 dark:bg-navy-950/80">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -79,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   data-testid={`nav-tab-${item.id}`}
                   className={`relative flex items-center gap-2 px-3.5 py-1.5 rounded-md text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-blue-50 bg-white dark:bg-navy-900 text-navy-700 dark:text-white shadow-2xs border border-zinc-200/80 dark:border-navy-700/80'
+                      ? 'bg-blue-50 dark:bg-navy-900 text-blue-700 dark:text-blue-300 shadow-xs border border-blue-200 dark:border-navy-700 font-bold'
                       : 'text-zinc-600 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white'
                   }`}
                 >
@@ -88,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {item.id === 'bookmarks' && bookmarkCount > 0 && (
                     <span
                       data-testid="nav-bookmark-count"
-                      className="font-mono text-xs font-bold px-1.5 py-0.2 rounded bg-crimson-100 dark:bg-crimson-950 text-crimson-700 dark:text-crimson-300"
+                      className="font-mono text-xs font-bold px-1.5 py-0.2 rounded bg-crimson-600 text-white shadow-xs"
                     >
                       {bookmarkCount}
                     </span>
@@ -104,9 +107,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               type="button"
               onClick={onOpenGuidelines}
               data-testid="guidelines-button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold text-zinc-700 dark:text-zinc-200 hover:text-navy-700 dark:hover:text-white rounded-md border border-zinc-200 dark:border-navy-900 hover:bg-zinc-100 dark:hover:bg-navy-900 transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold text-navy-700 dark:text-navy-300 bg-blue-50/70 hover:bg-blue-100/70 dark:bg-navy-950 dark:hover:bg-navy-900 rounded-md border border-blue-200 dark:border-navy-800 transition-colors"
             >
-              <FileText className="w-4 h-4 text-navy-700 dark:text-navy-300" />
+              <FileText className="w-4 h-4 text-crimson-600 dark:text-crimson-400" />
               <span>Guidelines</span>
             </button>
 

@@ -110,7 +110,7 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 sm:py-8 space-y-4">
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-[#0c1424] p-5 rounded-lg border border-zinc-200 dark:border-navy-900 shadow-2xs">
+      <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white dark:bg-[#0c1424] p-5 sm:p-6 rounded-xl border border-zinc-200 dark:border-navy-900 border-t-4 border-t-navy-700 shadow-xs overflow-hidden">
         <div>
           <div className="flex items-center gap-2.5">
             <h1 className="text-lg sm:text-xl font-extrabold text-zinc-900 dark:text-white tracking-tight">
@@ -118,7 +118,7 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
             </h1>
             <span
               data-testid="bookmarks-count-badge"
-              className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-crimson-50 dark:bg-crimson-950 text-crimson-700 dark:text-crimson-300 border border-crimson-200 dark:border-crimson-900"
+              className="font-mono text-xs font-bold px-3 py-1 rounded-md bg-crimson-600 text-white shadow-xs"
             >
               {bookmarkedQuestions.length} saved
             </span>
@@ -134,7 +134,7 @@ export const BookmarksView: React.FC<BookmarksViewProps> = ({
             onClick={handlePractice}
             disabled={bookmarkedQuestions.length === 0}
             data-testid="practice-bookmarks-btn"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-navy-700 hover:bg-navy-800 disabled:opacity-50 text-white text-xs sm:text-sm font-bold rounded-lg shadow-sm transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-navy-700 to-blue-700 hover:from-navy-800 hover:to-blue-800 disabled:opacity-50 text-white text-xs sm:text-sm font-bold rounded-lg shadow-md shadow-navy-700/25 transition-colors"
           >
             <Play className="w-4 h-4 fill-white" />
             <span>Practice Bookmarks</span>

@@ -91,20 +91,23 @@ export const TestHome: React.FC<TestHomeProps> = ({
         {/* Card 1: Official DoTM Exam Simulation */}
         <div
           data-testid="official-exam-card"
-          className="relative bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-6 shadow-xs flex flex-col justify-between space-y-6"
+          className="relative bg-white dark:bg-[#0c1424] rounded-xl border-2 border-crimson-500/40 dark:border-crimson-600/40 p-6 sm:p-7 shadow-sm shadow-crimson-600/10 flex flex-col justify-between space-y-6 overflow-hidden"
         >
-          <div className="space-y-4">
+          {/* Subtle colorful top gradient strip */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-crimson-600 via-rose-500 to-crimson-700" />
+
+          <div className="space-y-4 pt-1">
             <div className="flex items-center justify-between">
-              <div className="w-9 h-9 rounded-md bg-crimson-600 text-white flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-lg bg-crimson-600 text-white flex items-center justify-center font-bold shadow-sm shadow-crimson-600/30">
                 <FileCheck className="w-5 h-5" />
               </div>
-              <span className="font-mono text-xs font-bold tracking-wider text-crimson-700 dark:text-crimson-300 bg-crimson-50 dark:bg-crimson-950/70 px-2.5 py-0.5 rounded border border-crimson-200 dark:border-crimson-900">
+              <span className="font-mono text-xs font-bold tracking-wider text-white bg-crimson-600 px-3 py-1 rounded-md shadow-xs">
                 OFFICIAL SIMULATION
               </span>
             </div>
 
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 Official DoTM Exam Simulation
               </h2>
               <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">
@@ -113,22 +116,22 @@ export const TestHome: React.FC<TestHomeProps> = ({
             </div>
 
             {/* Rules badges */}
-            <div className="grid grid-cols-2 gap-2 text-xs pt-1 font-mono">
-              <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200 dark:border-navy-900 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-navy-600 dark:text-navy-400 shrink-0" />
-                <span className="text-zinc-800 dark:text-zinc-200 font-semibold text-xs">25 Qs (4 pts each)</span>
+            <div className="grid grid-cols-2 gap-2.5 text-xs pt-1 font-mono">
+              <div className="p-3 rounded-lg bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 flex items-center gap-2">
+                <HelpCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                <span className="text-blue-950 dark:text-blue-200 font-bold text-xs">25 Qs (4 pts each)</span>
               </div>
-              <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200 dark:border-navy-900 flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <span className="text-zinc-800 dark:text-zinc-200 font-semibold text-xs">Pass: 60 / 100</span>
+                <span className="text-emerald-950 dark:text-emerald-200 font-bold text-xs">Pass: 60 / 100</span>
               </div>
-              <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200 dark:border-navy-900 flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                <span className="text-zinc-800 dark:text-zinc-200 font-semibold text-xs">30 Mins (72s/Q)</span>
+                <span className="text-amber-950 dark:text-amber-200 font-bold text-xs">30 Mins (72s/Q)</span>
               </div>
-              <div className="p-2.5 rounded-md bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200 dark:border-navy-900 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-zinc-500 shrink-0" />
-                <span className="text-zinc-800 dark:text-zinc-200 font-semibold text-xs">No Penalty</span>
+              <div className="p-3 rounded-lg bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/60 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
+                <span className="text-purple-950 dark:text-purple-200 font-bold text-xs">No Penalty</span>
               </div>
             </div>
           </div>
@@ -137,7 +140,7 @@ export const TestHome: React.FC<TestHomeProps> = ({
             type="button"
             data-testid="start-official-exam-btn"
             onClick={onStartOfficialExam}
-            className="w-full py-3 px-5 bg-crimson-600 hover:bg-crimson-700 active:scale-[0.99] text-white font-bold text-sm sm:text-base rounded-md shadow-xs flex items-center justify-center gap-2 transition"
+            className="w-full py-3.5 px-5 bg-gradient-to-r from-crimson-600 via-rose-600 to-crimson-700 hover:from-crimson-700 hover:to-rose-800 active:scale-[0.99] text-white font-bold text-sm sm:text-base rounded-lg shadow-md shadow-crimson-600/30 flex items-center justify-center gap-2 transition"
           >
             <span>Start Official Exam Simulation</span>
             <ChevronRight className="w-5 h-5" />
@@ -147,20 +150,23 @@ export const TestHome: React.FC<TestHomeProps> = ({
         {/* Card 2: Category Practice Drill */}
         <div
           data-testid="category-drill-card"
-          className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-6 shadow-xs flex flex-col justify-between space-y-6"
+          className="relative bg-white dark:bg-[#0c1424] rounded-xl border-2 border-navy-700/40 dark:border-blue-600/40 p-6 sm:p-7 shadow-sm shadow-navy-700/10 flex flex-col justify-between space-y-6 overflow-hidden"
         >
-          <div className="space-y-4">
+          {/* Subtle colorful top gradient strip */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-navy-700 via-blue-600 to-indigo-700" />
+
+          <div className="space-y-4 pt-1">
             <div className="flex items-center justify-between">
-              <div className="w-9 h-9 rounded-md bg-navy-700 text-white flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-lg bg-navy-700 text-white flex items-center justify-center font-bold shadow-sm shadow-navy-700/30">
                 <Target className="w-5 h-5" />
               </div>
-              <span className="font-mono text-xs font-bold tracking-wider text-navy-700 dark:text-navy-300 bg-navy-50 dark:bg-navy-950/70 px-2.5 py-0.5 rounded border border-navy-200 dark:border-navy-900">
+              <span className="font-mono text-xs font-bold tracking-wider text-white bg-navy-700 px-3 py-1 rounded-md shadow-xs">
                 CATEGORY DRILL
               </span>
             </div>
 
             <div>
-              <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 Category Practice Drill
               </h2>
               <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">
@@ -181,7 +187,7 @@ export const TestHome: React.FC<TestHomeProps> = ({
                 data-testid="category-select"
                 value={selectedCatId}
                 onChange={(e) => setSelectedCatId(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-zinc-50 dark:bg-navy-950 border border-zinc-300 dark:border-navy-800 rounded-md text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-navy-600"
+                className="w-full px-3.5 py-3 text-xs sm:text-sm bg-zinc-50 dark:bg-navy-950 border border-zinc-300 dark:border-navy-800 rounded-lg text-zinc-900 dark:text-zinc-100 font-semibold focus:outline-none focus:ring-2 focus:ring-navy-600"
               >
                 {activeCategoryList.map((cat) => (
                   <option key={cat.id} value={cat.id}>
@@ -203,13 +209,13 @@ export const TestHome: React.FC<TestHomeProps> = ({
                     type="button"
                     data-testid={`count-option-${opt}`}
                     onClick={() => setSelectedCount(opt as number | 'all')}
-                    className={`py-2 text-xs sm:text-sm rounded-md border font-bold transition ${
+                    className={`py-2.5 text-xs sm:text-sm rounded-lg border font-bold transition ${
                       selectedCount === opt
-                        ? 'bg-navy-700 text-white border-navy-700 shadow-2xs'
-                        : 'bg-zinc-50 dark:bg-navy-950 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:border-zinc-300'
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-600/20'
+                        : 'bg-zinc-50 dark:bg-navy-950 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:border-blue-300'
                     }`}
                   >
-                    {opt === 'all' ? 'ALL' : `${opt} QS`}
+                    {opt === 'all' ? 'ALL POOL' : `${opt} QUESTIONS`}
                   </button>
                 ))}
               </div>
@@ -220,10 +226,10 @@ export const TestHome: React.FC<TestHomeProps> = ({
             type="button"
             data-testid="start-category-drill-btn"
             onClick={handleStartCategoryDrill}
-            className="w-full py-2.5 px-4 bg-navy-700 hover:bg-navy-800 active:scale-[0.99] text-white font-medium text-xs rounded-md shadow-2xs flex items-center justify-center gap-1.5 transition"
+            className="w-full py-3.5 px-5 bg-gradient-to-r from-navy-700 via-blue-700 to-navy-800 hover:from-navy-800 hover:to-blue-800 active:scale-[0.99] text-white font-bold text-sm sm:text-base rounded-lg shadow-md shadow-navy-700/30 flex items-center justify-center gap-2 transition"
           >
-            <span>Start Category Drill</span>
-            <ChevronRight className="w-4 h-4" />
+            <span>Start Practice Drill</span>
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>

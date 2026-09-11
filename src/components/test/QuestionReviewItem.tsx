@@ -10,6 +10,8 @@ import {
 import type { Question, OptionKey } from '../../types';
 import { useBookmarks } from '../../hooks/useBookmarks';
 
+import { getCategoryTheme } from '../../utils/categoryColors';
+
 export interface QuestionReviewItemProps {
   question: Question;
   userAnswer?: OptionKey | null;
@@ -29,6 +31,7 @@ export const QuestionReviewItem: React.FC<QuestionReviewItemProps> = ({
 }) => {
   const hookBookmarks = useBookmarks();
   const [isImageZoomed, setIsImageZoomed] = useState<boolean>(false);
+  const catTheme = getCategoryTheme(question.categoryId);
 
   const isBookmarked =
     propIsBookmarked !== undefined
@@ -53,23 +56,24 @@ export const QuestionReviewItem: React.FC<QuestionReviewItemProps> = ({
   return (
     <div
       data-testid={`question-review-item-${question.id}`}
-      className={`rounded-lg border p-4 sm:p-5 bg-white dark:bg-[#0c1424] transition-all ${
+      className={`rounded-xl border-2 p-4 sm:p-5 bg-white dark:bg-[#0c1424] transition-all shadow-xs ${
         isCorrect
-          ? 'border-emerald-300/80 dark:border-emerald-900/60 shadow-2xs'
+          ? 'border-emerald-400/80 dark:border-emerald-800/60 bg-emerald-50/10'
           : isIncorrect
-          ? 'border-crimson-300/80 dark:border-crimson-900/60 shadow-2xs'
+          ? 'border-crimson-400/80 dark:border-crimson-800/60 bg-crimson-50/10'
           : 'border-zinc-200 dark:border-navy-900'
       }`}
     >
       {/* Header: Question Number, Category, Status Badge, Bookmark */}
       <div className="flex items-center justify-between gap-3 mb-3.5 flex-wrap">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-navy-950 text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-navy-800">
+          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-gradient-to-r from-navy-700 to-blue-700 text-white shadow-xs">
             Q{displayNum}
           </span>
           {categoryName && (
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-navy-50 dark:bg-navy-950/60 text-navy-700 dark:text-navy-300 border border-navy-200/60 dark:border-navy-900/60">
-              {categoryName}
+            <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border ${catTheme.badge}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${catTheme.dotBg}`} />
+              <span>{categoryName}</span>
             </span>
           )}
           {isCorrect && (

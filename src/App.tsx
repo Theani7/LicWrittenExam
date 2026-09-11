@@ -192,7 +192,14 @@ export function AppContent(): React.JSX.Element {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fcfcfd] dark:bg-[#070d19] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-crimson-100 selection:text-crimson-900 dark:selection:bg-crimson-950 dark:selection:text-crimson-200 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#fcfcfd] dark:bg-[#070d19] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-crimson-100 selection:text-crimson-900 dark:selection:bg-crimson-950 dark:selection:text-crimson-200 font-sans relative">
+      {/* Subtle Ambient Background Gradients */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute -top-32 -left-32 w-80 h-80 rounded-full bg-crimson-500/[0.04] dark:bg-crimson-600/[0.08] blur-3xl" />
+        <div className="absolute top-1/3 -right-32 w-80 h-80 rounded-full bg-navy-600/[0.04] dark:bg-navy-600/[0.08] blur-3xl" />
+        <div className="absolute -bottom-32 left-1/3 w-80 h-80 rounded-full bg-blue-500/[0.03] dark:bg-blue-600/[0.06] blur-3xl" />
+      </div>
+
       {/* Header Navigation */}
       <Navbar
         activeTab={activeTab}
