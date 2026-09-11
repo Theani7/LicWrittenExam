@@ -17,12 +17,9 @@ function getInitialTheme(): Theme {
       if (storedTheme === 'light' || storedTheme === 'dark') {
         return storedTheme;
       }
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        return 'dark';
-      }
     }
   } catch {
-    // Fallback if localStorage or matchMedia is restricted
+    // Fallback if localStorage is restricted
   }
   return 'light';
 }

@@ -44,7 +44,7 @@ describe('ThemeContext', () => {
     expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 
-  it('defaults to dark when localStorage is empty and system prefers dark', () => {
+  it('defaults to light even when system prefers dark', () => {
     window.matchMedia = vi.fn().mockImplementation((query) => ({
       matches: query === '(prefers-color-scheme: dark)',
       media: query,
@@ -62,8 +62,8 @@ describe('ThemeContext', () => {
 
     const { result } = renderHook(() => useTheme(), { wrapper });
 
-    expect(result.current.theme).toBe('dark');
-    expect(document.documentElement.classList.contains('dark')).toBe(true);
+    expect(result.current.theme).toBe('light');
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 
   it('restores stored theme from localStorage', () => {
