@@ -25,34 +25,32 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
     <div
       role="tablist"
       aria-label="Category filters"
-      className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar scroll-smooth"
+      className="no-scrollbar -mx-1 flex items-center gap-2 overflow-x-auto px-1 pb-1 pt-1"
     >
-      {/* "All Questions" Pill */}
       <button
         type="button"
         role="tab"
         aria-selected={selectedCategoryId === null}
         onClick={() => onSelectCategory(null)}
-        className={`group inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-all shrink-0 border ${
+        className={`group inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 text-[13px] font-bold transition-all active:scale-[0.98] ${
           selectedCategoryId === null
-            ? 'bg-crimson-600 border-crimson-600 text-white shadow-md shadow-crimson-600/25'
-            : 'bg-white dark:bg-[#0c1424] border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:border-crimson-400 hover:bg-crimson-50/50 dark:hover:bg-crimson-950/20'
+            ? 'border-transparent bg-zinc-900 text-white shadow-card-hover dark:bg-white dark:text-zinc-900'
+            : 'border-zinc-200 bg-white text-zinc-700 shadow-card hover:-translate-y-px hover:shadow-card-hover dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
         }`}
       >
-        <span className="w-2 h-2 rounded-full bg-crimson-500 ring-2 ring-crimson-300 dark:ring-crimson-800" />
+        <span className={`flex h-2 w-2 rounded-full ${selectedCategoryId === null ? 'bg-crimson-500' : 'bg-zinc-300 dark:bg-zinc-600'}`} />
         <span>All Questions</span>
         <span
-          className={`font-mono text-xs font-bold px-2 py-0.5 rounded-md ${
+          className={`rounded-full px-2 py-0.5 font-mono text-[11px] font-bold ${
             selectedCategoryId === null
-              ? 'bg-crimson-700 text-white'
-              : 'bg-zinc-100 dark:bg-navy-900 text-zinc-600 dark:text-zinc-400'
+              ? 'bg-white/20 text-white dark:bg-zinc-900/10 dark:text-zinc-900'
+              : 'bg-zinc-100 text-zinc-600 dark:bg-white/10 dark:text-zinc-300'
           }`}
         >
           {total}
         </span>
       </button>
 
-      {/* 6 Official Category Pills */}
       {categories.map((category) => {
         const isSelected = selectedCategoryId === category.id;
         const count = categoryCounts?.[category.id] ?? category.poolCount;
@@ -65,21 +63,17 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
             role="tab"
             aria-selected={isSelected}
             onClick={() => onSelectCategory(category.id)}
-            className={`group inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold whitespace-nowrap transition-all shrink-0 border ${
+            className={`inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-2xl border px-4 py-2.5 text-[13px] font-bold transition-all active:scale-[0.98] ${
               isSelected
-                ? theme.pillActive
-                : `${theme.pillBg} ${theme.pillBorder} ${theme.pillText}`
+                ? `${theme.pillActive} border-transparent`
+                : `bg-white shadow-card hover:-translate-y-px hover:shadow-card-hover dark:bg-white/5 ${theme.pillBorder} ${theme.pillText} ${theme.pillBg}`
             }`}
           >
+            <span className={`h-2 w-2 rounded-full ${theme.dotBg} ${isSelected ? 'ring-2 ring-white/50' : ''}`} />
+            <span className="font-mono text-[11px] opacity-70">0{category.id}</span>
+            <span className="max-w-[180px] truncate sm:max-w-none">{category.name}</span>
             <span
-              className={`w-2 h-2 rounded-full ${theme.dotBg} ${
-                isSelected ? 'ring-2 ring-white/60' : ''
-              }`}
-            />
-            <span className="font-mono text-xs opacity-75">0{category.id}</span>
-            <span>{category.name}</span>
-            <span
-              className={`font-mono text-xs font-bold px-2 py-0.5 rounded-md ${
+              className={`rounded-full px-2 py-0.5 font-mono text-[11px] font-bold ${
                 isSelected ? theme.countActive : theme.countInactive
               }`}
             >

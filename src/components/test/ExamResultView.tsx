@@ -10,6 +10,7 @@ import {
   Sparkles,
   BarChart3,
   Target,
+  PartyPopper,
 } from 'lucide-react';
 import type { ExamResult, Question, Category } from '../../types';
 import { QuestionReviewItem } from './QuestionReviewItem';
@@ -25,6 +26,33 @@ export interface ExamResultViewProps {
 
 type FilterType = 'all' | 'incorrect' | 'correct' | 'unanswered';
 
+function ScoreRing({ percentage, passed }: { percentage: number; passed: boolean }) {
+  const R = 52;
+  const C = 2 * Math.PI * R;
+  const [offset, setOffset] = useState(C);
+  useEffect(() => {
+    const t = requestAnimationFrame(() => setOffset(C - (C * Math.min(100, percentage)) / 100));
+    return () => cancelAnimationFrame(t);
+  }, [percentage, C]);
+  return (
+    <div className="relative h-36 w-36">
+      <svg viewBox="0 0 128 128" className="h-full w-full -rotate-90">
+        <circle cx="64" cy="64" r={R} fill="none" strokeWidth="11" className="stroke-zinc-200 dark:stroke-white/10" />
+        <circle
+          cx="64" cy="64" r={R} fill="none" strokeWidth="11" strokeLinecap="round"
+          strokeDasharray={C} strokeDashoffset={offset}
+          className={passed ? 'stroke-emerald-500' : 'stroke-crimson-600'}
+          style={{ transition: 'stroke-dashoffset 1.1s cubic-bezier(0.22,1,0.36,1)' }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="font-mono text-3xl font-extrabold tracking-tight">{percentage}<small className="text-lg font-bold text-zinc-400">%</small></span>
+        <span className="font-mono text-[10px] font-bold tracking-widest text-zinc-500">SCORE</span>
+      </div>
+    </div>
+  );
+}
+
 export const ExamResultView: React.FC<ExamResultViewProps> = ({
   result,
   questions,
@@ -35,38 +63,24 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
 }) => {
   const [filter, setFilter] = useState<FilterType>('all');
 
-  // Confetti explosion on pass
   useEffect(() => {
     if (result.passed) {
       try {
         confetti({
-          particleCount: 80,
-          spread: 60,
+          particleCount: 90,
+          spread: 70,
           origin: { y: 0.6 },
-          colors: ['#c8102e', '#003893', '#ffffff', '#e01a3c'],
+          colors: ['#c8102e', '#003893', '#ffffff', '#f59e0b'],
         });
-      } catch {
-        // Safe fallback in test or headless environments
-      }
+      } catch { /* headless */ }
     }
   }, [result.passed]);
 
-  // Derived counts
-  const unansweredCount = useMemo(() => {
-    return questions.filter((q) => result.answers[q.id] == null).length;
-  }, [questions, result.answers]);
-
-  const incorrectCount = useMemo(() => {
-    return questions.filter(
-      (q) => result.answers[q.id] != null && result.answers[q.id] !== q.correctAnswer
-    ).length;
-  }, [questions, result.answers]);
+  const unansweredCount = useMemo(() => questions.filter((q) => result.answers[q.id] == null).length, [questions, result.answers]);
+  const incorrectCount = useMemo(() => questions.filter((q) => result.answers[q.id] != null && result.answers[q.id] !== q.correctAnswer).length, [questions, result.answers]);
 
   const percentage = Math.round((result.score / result.totalMarks) * 100);
-  const accuracyPercentage =
-    result.totalQuestions > 0
-      ? Math.round((result.correctCount / result.totalQuestions) * 100)
-      : 0;
+  const accuracyPercentage = result.totalQuestions > 0 ? Math.round((result.correctCount / result.totalQuestions) * 100) : 0;
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -74,7 +88,6 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Filtered review questions
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
       const ans = result.answers[q.id];
@@ -85,10 +98,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
     });
   }, [questions, result.answers, filter]);
 
-  // Questions answered incorrectly or left blank for targeted practice
-  const missedQuestions = useMemo(() => {
-    return questions.filter((q) => result.answers[q.id] !== q.correctAnswer);
-  }, [questions, result.answers]);
+  const missedQuestions = useMemo(() => questions.filter((q) => result.answers[q.id] !== q.correctAnswer), [questions, result.answers]);
 
   const categoryNameMap = useMemo(() => {
     const map = new Map<number, string>();
@@ -97,339 +107,168 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
   }, [categories]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
-      {/* Pass / Fail Banner */}
-      <div
+    <div className="mx-auto max-w-4xl px-4 pb-12 sm:px-6">
+      {/* Verdict hero */}
+      <section
         data-testid="result-banner"
-        className={`rounded-2xl p-7 sm:p-8 text-center border-2 shadow-lg relative overflow-hidden ${
+        className={`relative mt-6 overflow-hidden rounded-[28px] border p-7 text-center shadow-float sm:p-9 ${
           result.passed
-            ? 'bg-gradient-to-b from-emerald-500/20 via-emerald-500/5 to-transparent border-emerald-500/60 dark:border-emerald-600/60 shadow-emerald-500/10'
-            : 'bg-gradient-to-b from-crimson-500/20 via-crimson-500/5 to-transparent border-crimson-500/60 dark:border-crimson-600/60 shadow-crimson-500/10'
+            ? 'border-emerald-500/40 bg-gradient-to-b from-emerald-500/15 via-white to-white dark:from-emerald-500/20 dark:via-ink-900 dark:to-ink-900'
+            : 'border-crimson-500/40 bg-gradient-to-b from-crimson-600/10 via-white to-white dark:from-crimson-600/20 dark:via-ink-900 dark:to-ink-900'
         }`}
       >
-        <div className="max-w-xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2">
-            {result.passed ? (
-              <span
-                data-testid="verdict-passed"
-                className="inline-flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-1.5 rounded-lg font-mono text-xs font-extrabold shadow-sm tracking-wider"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>EXAM PASSED</span>
-              </span>
-            ) : (
-              <span
-                data-testid="verdict-failed"
-                className="inline-flex items-center gap-1.5 bg-crimson-600 text-white px-3.5 py-1.5 rounded-lg font-mono text-xs font-extrabold shadow-sm tracking-wider"
-              >
-                <XCircle className="w-4 h-4" />
-                <span>NOT PASSED</span>
-              </span>
-            )}
-          </div>
-
-          <div>
-            <h1 className="text-4xl sm:text-5xl font-black text-zinc-900 dark:text-zinc-50 font-mono tracking-tight">
-              {result.score} <span className="text-2xl text-zinc-400 font-normal">/ {result.totalMarks} MARKS</span>
-            </h1>
-            <p className="font-mono text-sm sm:text-base font-bold text-zinc-700 dark:text-zinc-300 mt-1">
-              {percentage}% Score · Pass Threshold: 60%
-            </p>
-          </div>
-
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
-            {result.passed
-              ? 'Congratulations! You achieved the required pass threshold (>= 60%) for the official Nepal Driving License Written Exam.'
-              : 'You did not achieve the required 60% pass mark. Review the missed questions below and attempt another simulation.'}
-          </p>
-
-          {/* Quick Top Actions */}
-          <div className="pt-2 flex items-center justify-center gap-2.5 flex-wrap">
-            {onRetakeExam && (
-              <button
-                type="button"
-                data-testid="retake-exam-top-btn"
-                onClick={onRetakeExam}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-crimson-600 to-rose-600 hover:from-crimson-700 hover:to-rose-700 text-white text-sm font-bold rounded-lg shadow-sm transition"
-              >
-                <RotateCcw className="w-4 h-4" />
-                <span>Retake Exam</span>
-              </button>
-            )}
-
-            {onPracticeMissed && missedQuestions.length > 0 && (
-              <button
-                type="button"
-                data-testid="practice-missed-top-btn"
-                onClick={() => onPracticeMissed(missedQuestions)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-navy-700 to-blue-700 hover:from-navy-800 hover:to-blue-800 text-white text-sm font-bold rounded-lg shadow-sm transition"
-              >
-                <Target className="w-4 h-4" />
-                <span>Practice Missed ({missedQuestions.length})</span>
-              </button>
-            )}
-
-            {onBackToDashboard && (
-              <button
-                type="button"
-                data-testid="back-dashboard-top-btn"
-                onClick={onBackToDashboard}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-navy-900 border border-zinc-200 dark:border-navy-800 text-zinc-700 dark:text-zinc-200 text-sm font-bold rounded-lg hover:bg-zinc-50 dark:hover:bg-navy-800 transition"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Dashboard</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Summary Statistics Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
-        {/* Stat 1: Total Score */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-crimson-600 shadow-xs">
-          <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
-            <Award className="w-4 h-4 text-crimson-600" />
-            <span className="text-xs font-bold tracking-wider">SCORE</span>
-          </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
-            {result.score} <span className="text-sm font-normal text-zinc-400">/ {result.totalMarks}</span>
-          </div>
-        </div>
-
-        {/* Stat 2: Accuracy */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-blue-600 shadow-xs">
-          <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
-            <Target className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-xs font-bold tracking-wider">ACCURACY</span>
-          </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
-            {accuracyPercentage}%
-          </div>
-        </div>
-
-        {/* Stat 3: Time Taken */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-amber-500 shadow-xs">
-          <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
-            <Clock className="w-4 h-4 text-amber-500" />
-            <span className="text-xs font-bold tracking-wider">TIME</span>
-          </div>
-          <div className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-100">
-            {formatTime(result.timeTakenSeconds)}
-          </div>
-        </div>
-
-        {/* Stat 4: Answer Breakdown */}
-        <div className="bg-white dark:bg-[#0c1424] p-4 rounded-xl border border-zinc-200 dark:border-navy-900 border-l-4 border-l-emerald-500 shadow-xs">
-          <div className="flex items-center gap-1.5 text-zinc-400 mb-1">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-            <span className="text-xs font-bold tracking-wider">SUMMARY</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm sm:text-base font-bold pt-0.5">
-            <span className="text-emerald-600 dark:text-emerald-400" title="Correct">
-              {result.correctCount} ✓
+        <div className="bg-dot-grid-faint absolute inset-0 opacity-60" />
+        <div className="relative mx-auto max-w-xl space-y-5">
+          {result.passed ? (
+            <span data-testid="verdict-passed" className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-1.5 font-mono text-[12px] font-bold tracking-widest text-white shadow-lg shadow-emerald-600/30">
+              <PartyPopper className="h-4 w-4" /> PASSED · LICENSE READY
             </span>
-            <span className="text-zinc-300 dark:text-zinc-700">/</span>
-            <span className="text-crimson-600 dark:text-crimson-400" title="Incorrect">
-              {incorrectCount} ✗
+          ) : (
+            <span data-testid="verdict-failed" className="inline-flex items-center gap-1.5 rounded-full bg-crimson-600 px-4 py-1.5 font-mono text-[12px] font-bold tracking-widest text-white shadow-glow-crimson">
+              <XCircle className="h-4 w-4" /> NOT YET — KEEP PUSHING
             </span>
-            <span className="text-zinc-300 dark:text-zinc-700">/</span>
-            <span className="text-zinc-400" title="Unanswered">
-              {unansweredCount} -
-            </span>
-          </div>
-        </div>
-      </div>
+          )}
 
-      {/* Category Performance Card */}
-      {result.categoryScores && result.categoryScores.length > 0 && (
-        <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-5 shadow-2xs space-y-4">
-          <div className="flex items-center justify-between border-b border-zinc-100 dark:border-navy-900 pb-2.5">
-            <div className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-navy-600 dark:text-navy-400" />
-              <h2 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                Category Performance Breakdown
-              </h2>
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center sm:gap-8">
+            <ScoreRing percentage={percentage} passed={result.passed} />
+            <div className="text-center sm:text-left">
+              <p className="font-mono text-4xl font-extrabold tracking-tight sm:text-5xl">
+                {result.score}<span className="text-xl font-bold text-zinc-400">/{result.totalMarks}</span>
+              </p>
+              <p className="mt-1 font-mono text-[13px] font-bold text-zinc-500">
+                {percentage}% Score · {result.correctCount}/{result.totalQuestions} correct · Pass 60%
+              </p>
+              <p className="mt-2 max-w-sm text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {result.passed
+                  ? 'Badhai chha! You cleared the 60% DoTM threshold. Now repeat it twice more to lock it in.'
+                  : 'You missed the 60% line this time. Drill the red categories below — most students pass within 3 focused retries.'}
+              </p>
             </div>
-            <span className="font-mono text-xs font-bold text-zinc-400">
-              {result.categoryScores.length} SECTIONS
-            </span>
           </div>
 
-          <div className="space-y-3.5 pt-1">
-            {result.categoryScores.map((cat) => {
-              const catAccuracy =
-                cat.totalAsked > 0 ? Math.round((cat.correctCount / cat.totalAsked) * 100) : 0;
-              const catDisplayName =
-                categoryNameMap.get(cat.categoryId) || cat.categoryName;
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {onRetakeExam && (
+              <button type="button" data-testid="retake-exam-top-btn" onClick={onRetakeExam} className="btn-primary">
+                <RotateCcw className="h-4 w-4" /> Retake exam
+              </button>
+            )}
+            {onPracticeMissed && missedQuestions.length > 0 && (
+              <button type="button" data-testid="practice-missed-top-btn" onClick={() => onPracticeMissed(missedQuestions)} className="btn-navy">
+                <Target className="h-4 w-4" /> Drill missed ({missedQuestions.length})
+              </button>
+            )}
+            {onBackToDashboard && (
+              <button type="button" data-testid="back-dashboard-top-btn" onClick={onBackToDashboard} className="btn-ghost">
+                <ArrowLeft className="h-4 w-4" /> Dashboard
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
 
+      {/* Stats */}
+      <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          { icon: Award, label: 'SCORE', value: `${result.score}/${result.totalMarks}`, tint: 'text-crimson-600 bg-crimson-50 dark:bg-crimson-950/40', bar: 'from-crimson-600 to-rose-400' },
+          { icon: Target, label: 'ACCURACY', value: `${accuracyPercentage}%`, tint: 'text-blue-700 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-300', bar: 'from-navy-700 to-blue-500' },
+          { icon: Clock, label: 'TIME', value: formatTime(result.timeTakenSeconds), tint: 'text-amber-600 bg-amber-50 dark:bg-amber-950/40', bar: 'from-amber-500 to-orange-400' },
+          { icon: Sparkles, label: 'VERDICT', value: result.passed ? 'PASS' : 'FAIL', tint: result.passed ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40' : 'text-crimson-600 bg-crimson-50 dark:bg-crimson-950/40', bar: result.passed ? 'from-emerald-500 to-teal-400' : 'from-zinc-400 to-zinc-500' },
+        ].map((s) => (
+          <div key={s.label} className="card-premium card-lift overflow-hidden p-4">
+            <span className={`mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl ${s.tint}`}><s.icon className="h-4 w-4" /></span>
+            <p className="font-mono text-[10px] font-bold tracking-widest text-zinc-400">{s.label}</p>
+            <p className="font-mono text-2xl font-extrabold tracking-tight">{s.value}</p>
+            <div className="mt-2 h-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-white/10"><div className={`h-full rounded-full bg-gradient-to-r ${s.bar}`} style={{ width: s.label === 'ACCURACY' ? `${accuracyPercentage}%` : s.label === 'SCORE' ? `${percentage}%` : '100%' }} /></div>
+          </div>
+        ))}
+        <div className="col-span-2 flex items-center justify-center gap-4 rounded-2xl border border-zinc-200/80 bg-white px-4 py-3 font-mono text-[13px] font-bold shadow-card dark:border-white/10 dark:bg-ink-900 sm:col-span-4">
+          <span className="text-emerald-600">{result.correctCount} ✓ right</span>
+          <span className="text-zinc-300">·</span>
+          <span className="text-crimson-600">{incorrectCount} ✗ wrong</span>
+          <span className="text-zinc-300">·</span>
+          <span className="text-zinc-400">{unansweredCount} — skipped</span>
+        </div>
+      </section>
+
+      {/* Categories */}
+      {result.categoryScores && result.categoryScores.length > 0 && (
+        <section className="card-premium mt-4 p-5 sm:p-6">
+          <div className="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-white/10">
+            <h2 className="flex items-center gap-2 text-[15px] font-extrabold tracking-tight"><BarChart3 className="h-4 w-4 text-navy-700 dark:text-blue-400" /> Category Performance Breakdown</h2>
+            <span className="font-mono text-[11px] font-bold text-zinc-400">{result.categoryScores.length} SECTIONS</span>
+          </div>
+          <div className="space-y-4 pt-4">
+            {result.categoryScores.map((cat) => {
+              const acc = cat.totalAsked > 0 ? Math.round((cat.correctCount / cat.totalAsked) * 100) : 0;
+              const name = categoryNameMap.get(cat.categoryId) || cat.categoryName;
+              const good = acc >= 60;
               return (
                 <div key={cat.categoryId} className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs sm:text-sm font-semibold">
-                    <span className="text-zinc-800 dark:text-zinc-200 truncate max-w-[220px] sm:max-w-md">
-                      {catDisplayName}
-                    </span>
-                    <div className="flex items-center gap-2.5 shrink-0 font-mono text-xs sm:text-sm">
-                      <span className="text-zinc-500 dark:text-zinc-400 font-medium">
-                        {cat.correctCount}/{cat.totalAsked} ({catAccuracy}%)
-                      </span>
-                      <span className="font-bold text-zinc-900 dark:text-zinc-100">
-                        {cat.score}/{cat.maxScore} PTS
-                      </span>
-                    </div>
+                  <div className="flex items-center justify-between gap-3 text-[13px]">
+                    <span className="min-w-0 truncate font-bold">{name}</span>
+                    <span className="shrink-0 font-mono text-[12px] font-bold text-zinc-500">{cat.correctCount}/{cat.totalAsked} · {cat.score}/{cat.maxScore} PTS</span>
                   </div>
-                  <div className="w-full h-2 bg-zinc-100 dark:bg-navy-950 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-300 ${
-                        catAccuracy >= 60 ? 'bg-emerald-500' : 'bg-crimson-600'
-                      }`}
-                      style={{ width: `${catAccuracy}%` }}
-                    />
+                  <div className="h-2.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-white/10">
+                    <div className={`h-full rounded-full transition-all ${good ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : 'bg-gradient-to-r from-crimson-600 to-rose-400'}`} style={{ width: `${acc}%` }} />
                   </div>
                 </div>
               );
             })}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Answer Review Section */}
-      <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      {/* Review */}
+      <section className="mt-6 space-y-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
-              Detailed Question Review
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-              Compare your selected answers with the official DoTM key.
-            </p>
+            <h2 className="text-lg font-extrabold tracking-tight">Answer review</h2>
+            <p className="text-[13px] text-zinc-500">Compare your picks against the official DoTM key.</p>
           </div>
-
-          {/* Filter Tabs */}
-          <div className="flex items-center gap-1.5 bg-zinc-100 dark:bg-navy-950 p-1 rounded-lg border border-zinc-200 dark:border-navy-900 overflow-x-auto font-mono text-xs sm:text-sm">
-            <button
-              type="button"
-              data-testid="filter-all-btn"
-              onClick={() => setFilter('all')}
-              className={`px-3 py-1.5 text-xs sm:text-sm rounded-md transition whitespace-nowrap ${
-                filter === 'all'
-                  ? 'bg-white dark:bg-navy-900 text-zinc-900 dark:text-zinc-100 font-bold shadow-xs'
-                  : 'text-zinc-500 dark:text-zinc-400 font-semibold hover:text-zinc-900'
-              }`}
-            >
-              ALL ({result.totalQuestions})
-            </button>
-            <button
-              type="button"
-              data-testid="filter-incorrect-btn"
-              onClick={() => setFilter('incorrect')}
-              className={`px-3 py-1.5 text-xs sm:text-sm rounded-md transition whitespace-nowrap ${
-                filter === 'incorrect'
-                  ? 'bg-crimson-600 text-white font-bold shadow-xs'
-                  : 'text-zinc-500 dark:text-zinc-400 font-semibold hover:text-crimson-600'
-              }`}
-            >
-              WRONG ({incorrectCount})
-            </button>
-            <button
-              type="button"
-              data-testid="filter-correct-btn"
-              onClick={() => setFilter('correct')}
-              className={`px-3 py-1.5 text-xs sm:text-sm rounded-md transition whitespace-nowrap ${
-                filter === 'correct'
-                  ? 'bg-emerald-600 text-white font-bold shadow-xs'
-                  : 'text-zinc-500 dark:text-zinc-400 font-semibold hover:text-emerald-600'
-              }`}
-            >
-              RIGHT ({result.correctCount})
-            </button>
-            <button
-              type="button"
-              data-testid="filter-unanswered-btn"
-              onClick={() => setFilter('unanswered')}
-              className={`px-3 py-1.5 text-xs sm:text-sm rounded-md transition whitespace-nowrap ${
-                filter === 'unanswered'
-                  ? 'bg-zinc-700 text-white font-bold shadow-xs'
-                  : 'text-zinc-500 dark:text-zinc-400 font-semibold hover:text-zinc-900'
-              }`}
-            >
-              LEFT ({unansweredCount})
-            </button>
+          <div className="flex items-center gap-1 rounded-2xl border border-zinc-200 bg-white p-1 shadow-card dark:border-white/10 dark:bg-ink-900">
+            {([['all', `ALL ${result.totalQuestions}`], ['incorrect', `WRONG ${incorrectCount}`], ['correct', `RIGHT ${result.correctCount}`], ['unanswered', `LEFT ${unansweredCount}`]] as [FilterType, string][]).map(([id, label]) => (
+              <button key={id} type="button" data-testid={`filter-${id}-btn`} onClick={() => setFilter(id)}
+                className={`whitespace-nowrap rounded-xl px-3 py-2 font-mono text-[11px] font-bold transition ${filter === id ? (id === 'incorrect' ? 'bg-crimson-600 text-white' : id === 'correct' ? 'bg-emerald-600 text-white' : 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900') : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'}`}>
+                {label}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Question Review List */}
         {filteredQuestions.length === 0 ? (
-          <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-8 text-center space-y-2">
-            <CheckCircle2 className="w-7 h-7 text-emerald-500 mx-auto" />
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base">
-              No Questions in this Filter
-            </h3>
-            <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-              There are no questions matching this specific filter.
-            </p>
+          <div className="card-premium p-10 text-center">
+            <CheckCircle2 className="mx-auto h-7 w-7 text-emerald-500" />
+            <h3 className="mt-2 font-extrabold">Nothing in this filter</h3>
+            <p className="text-sm text-zinc-500">Try another tab to review different questions.</p>
           </div>
         ) : (
-          <div className="space-y-3.5">
-            {filteredQuestions.map((q, idx) => {
-              const originalIndex = questions.findIndex((orig) => orig.id === q.id);
-              const questionNumber = originalIndex !== -1 ? originalIndex + 1 : idx + 1;
-              const categoryName = categoryNameMap.get(q.categoryId);
-
-              return (
-                <QuestionReviewItem
-                  key={q.id}
-                  question={q}
-                  questionNumber={questionNumber}
-                  categoryName={categoryName}
-                  userAnswer={result.answers[q.id]}
-                />
-              );
-            })}
+          <div className="space-y-4">
+            {filteredQuestions.map((q, idx) => (
+              <QuestionReviewItem key={q.id} question={q} questionNumber={questions.findIndex((o) => o.id === q.id) + 1 || idx + 1} categoryName={categoryNameMap.get(q.categoryId)} userAnswer={result.answers[q.id]} />
+            ))}
           </div>
         )}
-      </div>
+      </section>
 
-      {/* Bottom Action Footer */}
-      <div className="border-t border-zinc-200 dark:border-navy-900/80 pt-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <section className="mt-6 flex flex-col gap-2.5 border-t border-zinc-200 pt-5 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
         {onBackToDashboard && (
-          <button
-            type="button"
-            data-testid="back-dashboard-bottom-btn"
-            onClick={onBackToDashboard}
-            className="w-full sm:w-auto px-5 py-2.5 bg-white dark:bg-navy-950 border border-zinc-200 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900 text-zinc-700 dark:text-zinc-300 text-sm font-bold rounded-lg transition flex items-center justify-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Dashboard</span>
+          <button type="button" data-testid="back-dashboard-bottom-btn" onClick={onBackToDashboard} className="btn-ghost w-full sm:w-auto">
+            <ArrowLeft className="h-4 w-4" /> Dashboard
           </button>
         )}
-
-        <div className="w-full sm:w-auto flex items-center gap-2.5">
+        <div className="flex w-full gap-2.5 sm:w-auto">
           {onPracticeMissed && missedQuestions.length > 0 && (
-            <button
-              type="button"
-              data-testid="practice-missed-bottom-btn"
-              onClick={() => onPracticeMissed(missedQuestions)}
-              className="flex-1 sm:flex-initial px-5 py-2.5 bg-navy-700 hover:bg-navy-800 text-white text-sm font-bold rounded-lg shadow-sm transition flex items-center justify-center gap-2"
-            >
-              <Target className="w-4 h-4" />
-              <span>Practice Missed</span>
+            <button type="button" data-testid="practice-missed-bottom-btn" onClick={() => onPracticeMissed(missedQuestions)} className="btn-navy flex-1 sm:flex-none">
+              <Target className="h-4 w-4" /> Drill missed
             </button>
           )}
-
           {onRetakeExam && (
-            <button
-              type="button"
-              data-testid="retake-exam-bottom-btn"
-              onClick={onRetakeExam}
-              className="flex-1 sm:flex-initial px-5 py-2.5 bg-crimson-600 hover:bg-crimson-700 text-white text-sm font-bold rounded-lg shadow-sm transition flex items-center justify-center gap-2"
-            >
-              <RotateCcw className="w-4 h-4" />
-              <span>Retake Exam</span>
+            <button type="button" data-testid="retake-exam-bottom-btn" onClick={onRetakeExam} className="btn-primary flex-1 sm:flex-none">
+              <RotateCcw className="h-4 w-4" /> Retake
             </button>
           )}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

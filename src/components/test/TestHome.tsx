@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import {
   Award,
   Clock,
-  FileCheck,
+  FileCheck2,
   Target,
   History,
   Trash2,
   ChevronRight,
   HelpCircle,
   CheckCircle2,
-  AlertCircle,
+  ShieldCheck,
+  Zap,
+  TrendingUp,
 } from 'lucide-react';
 import type { Category } from '../../types';
 import { useExamHistory } from '../../hooks/useExamHistory';
@@ -42,10 +44,7 @@ export const TestHome: React.FC<TestHomeProps> = ({
   const currentSelectedCategory = activeCategoryList.find((c) => c.id === selectedCatId);
 
   const handleStartCategoryDrill = () => {
-    const count =
-      selectedCount === 'all'
-        ? currentSelectedCategory?.poolCount || 999
-        : selectedCount;
+    const count = selectedCount === 'all' ? currentSelectedCategory?.poolCount || 999 : selectedCount;
     onStartCategoryExam(selectedCatId, count);
   };
 
@@ -58,257 +57,188 @@ export const TestHome: React.FC<TestHomeProps> = ({
 
   const formatDate = (timestamp: number): string => {
     try {
-      const d = new Date(timestamp);
-      return d.toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    } catch {
-      return 'Recent';
-    }
+      return new Date(timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch { return 'Recent'; }
   };
 
+  const bestScore = history.length ? Math.max(...history.map((h) => Math.round((h.score / h.totalMarks) * 100))) : null;
+  const passRate = history.length ? Math.round((history.filter((h) => h.passed).length / history.length) * 100) : null;
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-      {/* Header Banner */}
-      <div className="text-center max-w-xl mx-auto space-y-2.5">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-crimson-200 dark:border-crimson-900 bg-crimson-50 dark:bg-crimson-950/70 text-crimson-700 dark:text-crimson-300 font-mono text-xs font-bold">
-          <Award className="w-4 h-4" />
-          <span>OFFICIAL DoTM CURRICULUM</span>
+    <div className="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
+      {/* Hero */}
+      <section className="relative mt-6 overflow-hidden rounded-[28px] bg-zinc-950 text-white shadow-float">
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-br from-crimson-700 via-[#1a0b18] to-navy-900" />
+          <div className="bg-diagonal-lines absolute inset-0 opacity-40" />
+          <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-crimson-600/40 blur-[90px]" />
+          <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-blue-600/40 blur-[90px]" />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight">
-          Exam Simulation &amp; Category Drills
-        </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-300">
-          Simulate the timed Nepal driving license written examination under official rules, or practice focused categories.
-        </p>
-      </div>
-
-      {/* Mode Selection Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-        {/* Card 1: Official DoTM Exam Simulation */}
-        <div
-          data-testid="official-exam-card"
-          className="relative bg-white dark:bg-[#0c1424] rounded-xl border-2 border-crimson-500/40 dark:border-crimson-600/40 p-6 sm:p-7 shadow-sm shadow-crimson-600/10 flex flex-col justify-between space-y-6 overflow-hidden"
-        >
-          {/* Subtle colorful top gradient strip */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-crimson-600 via-rose-500 to-crimson-700" />
-
-          <div className="space-y-4 pt-1">
-            <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-lg bg-crimson-600 text-white flex items-center justify-center font-bold shadow-sm shadow-crimson-600/30">
-                <FileCheck className="w-5 h-5" />
-              </div>
-              <span className="font-mono text-xs font-bold tracking-wider text-white bg-crimson-600 px-3 py-1 rounded-md shadow-xs">
-                OFFICIAL SIMULATION
-              </span>
+        <div className="relative grid gap-6 p-6 sm:p-9 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+          <div className="space-y-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 font-mono text-[11px] font-bold tracking-widest text-white ring-1 ring-white/20 backdrop-blur">
+              <Award className="h-3.5 w-3.5 text-amber-300" /> OFFICIAL DOTM FORMAT
+            </span>
+            <h1 className="text-balance text-2xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+              Walk into the likhit exam like you&apos;ve already passed it.
+            </h1>
+            <p className="max-w-lg text-sm leading-relaxed text-white/70 sm:text-[15px]">
+              A true 25-question, 30-minute simulation sampled by official weightage — plus focused drills for signs, laws and mechanics.
+            </p>
+            <div className="flex flex-wrap gap-2 font-mono text-[11px] font-bold">
+              <span className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">25 QS · 4 PTS EACH</span>
+              <span className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">PASS 60/100</span>
+              <span className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">30 MIN · NO NEGATIVE</span>
             </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2.5 lg:grid-cols-1 xl:grid-cols-3">
+            {[
+              { label: 'Attempts', value: String(history.length), icon: History },
+              { label: 'Best score', value: bestScore !== null ? `${bestScore}%` : '—', icon: TrendingUp },
+              { label: 'Pass rate', value: passRate !== null ? `${passRate}%` : '—', icon: Zap },
+            ].map((s) => (
+              <div key={s.label} className="rounded-2xl bg-white/[0.07] p-3.5 text-center ring-1 ring-white/15 backdrop-blur">
+                <s.icon className="mx-auto mb-1.5 h-4 w-4 text-white/60" />
+                <p className="font-mono text-xl font-extrabold">{s.value}</p>
+                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-white/50">{s.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* Mode cards */}
+      <section className="mt-5 grid gap-4 md:grid-cols-2">
+        {/* Official */}
+        <div data-testid="official-exam-card" className="card-premium card-lift relative overflow-hidden p-6 sm:p-7">
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-crimson-700 via-rose-500 to-amber-400" />
+          <div className="bg-dot-grid-faint absolute inset-0 opacity-60 [mask-image:radial-gradient(20rem_10rem_at_100%_0%,black,transparent)]" />
+          <div className="relative space-y-5">
+            <div className="flex items-center justify-between">
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-crimson-700 to-rose-500 text-white shadow-glow-crimson">
+                <FileCheck2 className="h-5 w-5" />
+              </span>
+              <span className="rounded-full bg-crimson-600 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white">OFFICIAL SIM</span>
+            </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                Official DoTM Exam Simulation
-              </h2>
-              <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">
-                25 weighted questions randomly sampled across the 6 official syllabus categories with a 30-minute timer.
+              <h2 className="text-xl font-extrabold tracking-tight">Official DoTM Exam Simulation</h2>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                Weighted sampling across all 6 categories — exactly like the DoTM paper. Timer, navigator, flagging and auto-submit included.
               </p>
             </div>
-
-            {/* Rules badges */}
-            <div className="grid grid-cols-2 gap-2.5 text-xs pt-1 font-mono">
-              <div className="p-3 rounded-lg bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 flex items-center gap-2">
-                <HelpCircle className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                <span className="text-blue-950 dark:text-blue-200 font-bold text-xs">25 Qs (4 pts each)</span>
-              </div>
-              <div className="p-3 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                <span className="text-emerald-950 dark:text-emerald-200 font-bold text-xs">Pass: 60 / 100</span>
-              </div>
-              <div className="p-3 rounded-lg bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                <span className="text-amber-950 dark:text-amber-200 font-bold text-xs">30 Mins (72s/Q)</span>
-              </div>
-              <div className="p-3 rounded-lg bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-900/60 flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0" />
-                <span className="text-purple-950 dark:text-purple-200 font-bold text-xs">No Penalty</span>
-              </div>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { icon: HelpCircle, label: '25 Qs · 100 marks', tint: 'bg-blue-50 text-blue-700 ring-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-900/60' },
+                { icon: CheckCircle2, label: 'Pass at 60', tint: 'bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-900/60' },
+                { icon: Clock, label: '30 min timer', tint: 'bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900/60' },
+                { icon: ShieldCheck, label: 'No negative', tint: 'bg-purple-50 text-purple-700 ring-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:ring-purple-900/60' },
+              ].map((b) => (
+                <div key={b.label} className={`flex items-center gap-2 rounded-xl px-3 py-2.5 font-mono text-[12px] font-bold ring-1 ${b.tint}`}>
+                  <b.icon className="h-4 w-4 shrink-0" /> {b.label}
+                </div>
+              ))}
             </div>
+            <button type="button" data-testid="start-official-exam-btn" onClick={onStartOfficialExam} className="btn-primary w-full !py-4 text-[15px]">
+              Start official simulation <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
-
-          <button
-            type="button"
-            data-testid="start-official-exam-btn"
-            onClick={onStartOfficialExam}
-            className="w-full py-3.5 px-5 bg-gradient-to-r from-crimson-600 via-rose-600 to-crimson-700 hover:from-crimson-700 hover:to-rose-800 active:scale-[0.99] text-white font-bold text-sm sm:text-base rounded-lg shadow-md shadow-crimson-600/30 flex items-center justify-center gap-2 transition"
-          >
-            <span>Start Official Exam Simulation</span>
-            <ChevronRight className="w-5 h-5" />
-          </button>
         </div>
 
-        {/* Card 2: Category Practice Drill */}
-        <div
-          data-testid="category-drill-card"
-          className="relative bg-white dark:bg-[#0c1424] rounded-xl border-2 border-navy-700/40 dark:border-blue-600/40 p-6 sm:p-7 shadow-sm shadow-navy-700/10 flex flex-col justify-between space-y-6 overflow-hidden"
-        >
-          {/* Subtle colorful top gradient strip */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-navy-700 via-blue-600 to-indigo-700" />
-
-          <div className="space-y-4 pt-1">
+        {/* Drill */}
+        <div data-testid="category-drill-card" className="card-premium card-lift relative overflow-hidden p-6 sm:p-7">
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navy-800 via-blue-600 to-cyan-400" />
+          <div className="relative space-y-5">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-lg bg-navy-700 text-white flex items-center justify-center font-bold shadow-sm shadow-navy-700/30">
-                <Target className="w-5 h-5" />
-              </div>
-              <span className="font-mono text-xs font-bold tracking-wider text-white bg-navy-700 px-3 py-1 rounded-md shadow-xs">
-                CATEGORY DRILL
+              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-navy-800 to-blue-600 text-white shadow-glow-navy">
+                <Target className="h-5 w-5" />
               </span>
+              <span className="rounded-full bg-navy-700 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white">FOCUSED DRILL</span>
             </div>
-
             <div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-100 tracking-tight">
-                Category Practice Drill
-              </h2>
-              <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">
-                Focus on high-yield areas like Traffic Signs or Mechanical rules with customizable question count.
+              <h2 className="text-xl font-extrabold tracking-tight">Category Drill</h2>
+              <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                Attack your weakest section — traffic signs alone carry 24 marks.
               </p>
             </div>
-
-            {/* Category Dropdown */}
-            <div className="space-y-2">
-              <label
-                htmlFor="category-select"
-                className="block font-mono text-xs font-bold text-zinc-600 dark:text-zinc-300 tracking-wider"
-              >
-                SELECT CATEGORY
-              </label>
-              <select
-                id="category-select"
-                data-testid="category-select"
-                value={selectedCatId}
-                onChange={(e) => setSelectedCatId(Number(e.target.value))}
-                className="w-full px-3.5 py-3 text-xs sm:text-sm bg-zinc-50 dark:bg-navy-950 border border-zinc-300 dark:border-navy-800 rounded-lg text-zinc-900 dark:text-zinc-100 font-semibold focus:outline-none focus:ring-2 focus:ring-navy-600"
-              >
-                {activeCategoryList.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    Cat 0{cat.id}: {cat.name} ({cat.poolCount} Qs)
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Question Count Selector */}
-            <div className="space-y-2">
-              <span className="block font-mono text-xs font-bold text-zinc-600 dark:text-zinc-300 tracking-wider">
-                QUESTION COUNT
-              </span>
-              <div className="grid grid-cols-3 gap-2 font-mono">
-                {[10, 20, 'all'].map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    data-testid={`count-option-${opt}`}
-                    onClick={() => setSelectedCount(opt as number | 'all')}
-                    className={`py-2.5 text-xs sm:text-sm rounded-lg border font-bold transition ${
-                      selectedCount === opt
-                        ? 'bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-600/20'
-                        : 'bg-zinc-50 dark:bg-navy-950 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:border-blue-300'
-                    }`}
-                  >
-                    {opt === 'all' ? 'ALL POOL' : `${opt} QUESTIONS`}
-                  </button>
-                ))}
+            <div className="space-y-3">
+              <div>
+                <label htmlFor="category-select" className="mb-1.5 block font-mono text-[11px] font-bold tracking-widest text-zinc-500">CATEGORY</label>
+                <select
+                  id="category-select"
+                  data-testid="category-select"
+                  value={selectedCatId}
+                  onChange={(e) => setSelectedCatId(Number(e.target.value))}
+                  className="w-full cursor-pointer rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-sm font-bold outline-none transition focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10 dark:border-white/10 dark:bg-white/5"
+                >
+                  {activeCategoryList.map((cat) => (
+                    <option key={cat.id} value={cat.id}>Cat 0{cat.id} · {cat.name} ({cat.poolCount})</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <span className="mb-1.5 block font-mono text-[11px] font-bold tracking-widest text-zinc-500">QUESTIONS</span>
+                <div className="grid grid-cols-3 gap-2">
+                  {[10, 20, 'all'].map((opt) => (
+                    <button
+                      key={opt}
+                      type="button"
+                      data-testid={`count-option-${opt}`}
+                      onClick={() => setSelectedCount(opt as number | 'all')}
+                      className={`rounded-xl border py-3 font-mono text-[13px] font-bold transition active:scale-[0.97] ${
+                        selectedCount === opt
+                          ? 'border-navy-700 bg-navy-700 text-white shadow-glow-navy'
+                          : 'border-zinc-200 bg-white text-zinc-600 hover:border-navy-300 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
+                      }`}
+                    >
+                      {opt === 'all' ? 'ALL' : opt}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
+            <button type="button" data-testid="start-category-drill-btn" onClick={handleStartCategoryDrill} className="btn-navy w-full !py-4 text-[15px]">
+              Start drill{currentSelectedCategory ? ` · ${currentSelectedCategory.poolCount > 0 ? (selectedCount === 'all' ? currentSelectedCategory.poolCount : selectedCount) : ''} Qs` : ''} <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
-
-          <button
-            type="button"
-            data-testid="start-category-drill-btn"
-            onClick={handleStartCategoryDrill}
-            className="w-full py-3.5 px-5 bg-gradient-to-r from-navy-700 via-blue-700 to-navy-800 hover:from-navy-800 hover:to-blue-800 active:scale-[0.99] text-white font-bold text-sm sm:text-base rounded-lg shadow-md shadow-navy-700/30 flex items-center justify-center gap-2 transition"
-          >
-            <span>Start Practice Drill</span>
-            <ChevronRight className="w-5 h-5" />
-          </button>
         </div>
-      </div>
+      </section>
 
-      {/* Recent Exam History Summary */}
-      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/90 p-5 shadow-2xs space-y-3">
-        <div className="flex items-center justify-between border-b border-zinc-100 dark:border-navy-900 pb-2.5">
-          <div className="flex items-center gap-2">
-            <History className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
-            <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-xs tracking-tight">
-              Recent Exam Attempts ({history.length})
-            </h3>
-          </div>
-
+      {/* History */}
+      <section className="card-premium mt-4 p-5 sm:p-6">
+        <div className="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-white/10">
+          <h3 className="flex items-center gap-2 text-sm font-extrabold tracking-tight">
+            <History className="h-4 w-4 text-zinc-400" /> Recent attempts ({history.length})
+          </h3>
           {history.length > 0 && (
-            <button
-              type="button"
-              data-testid="clear-history-button"
-              onClick={clearHistory}
-              className="text-[11px] font-mono text-zinc-400 hover:text-crimson-600 flex items-center gap-1 transition-colors"
-              title="Clear exam history"
-            >
-              <Trash2 className="w-3 h-3" />
-              <span>CLEAR</span>
+            <button type="button" data-testid="clear-history-button" onClick={clearHistory} className="flex items-center gap-1 font-mono text-[11px] font-bold text-zinc-400 transition hover:text-crimson-600">
+              <Trash2 className="h-3 w-3" /> CLEAR
             </button>
           )}
         </div>
-
         {history.length === 0 ? (
-          <div
-            data-testid="history-empty-state"
-            className="text-center py-6 px-4 border border-dashed border-zinc-200 dark:border-navy-900 rounded space-y-1.5"
-          >
-            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
-              No exam attempts recorded yet
-            </p>
-            <p className="text-[11px] text-zinc-400 dark:text-zinc-500 max-w-sm mx-auto">
-              Complete your first 25-question simulation above to test your readiness and track scores here.
-            </p>
+          <div data-testid="history-empty-state" className="mt-3 rounded-2xl border border-dashed border-zinc-300 px-4 py-8 text-center dark:border-white/15">
+            <p className="text-sm font-bold">No attempts yet — your history will live here</p>
+            <p className="mx-auto mt-1 max-w-sm text-[13px] text-zinc-500">Finish one official simulation to see your score, accuracy and trend.</p>
           </div>
         ) : (
-          <div className="divide-y divide-zinc-100 dark:divide-navy-900/60 overflow-hidden font-mono">
+          <div className="divide-y divide-zinc-100 dark:divide-white/5">
             {history.slice(0, 5).map((attempt) => (
-              <div
-                key={attempt.id}
-                data-testid="history-row"
-                className="py-2.5 flex items-center justify-between gap-3 text-xs"
-              >
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      attempt.passed
-                        ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
-                        : 'bg-crimson-100 dark:bg-crimson-950/60 text-crimson-800 dark:text-crimson-300 border border-crimson-300 dark:border-crimson-800'
-                    }`}
-                  >
-                    {attempt.passed ? 'PASSED' : 'FAILED'}
+              <div key={attempt.id} data-testid="history-row" className="flex items-center justify-between gap-3 py-3">
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className={`shrink-0 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold ${attempt.passed ? 'bg-emerald-600 text-white' : 'bg-crimson-600 text-white'}`}>
+                    {attempt.passed ? 'PASS' : 'FAIL'}
                   </span>
-                  <div>
-                    <div className="font-semibold text-zinc-900 dark:text-zinc-100 text-xs">
-                      {attempt.score} / {attempt.totalMarks} PTS ({attempt.correctCount}/
-                      {attempt.totalQuestions} CORRECT)
-                    </div>
-                    <div className="text-[10px] text-zinc-400">
-                      {formatDate(attempt.timestamp)} • TOOK {formatDuration(attempt.timeTakenSeconds)}
-                    </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-[13px] font-bold">{attempt.score}/{attempt.totalMarks} pts · {attempt.correctCount}/{attempt.totalQuestions} correct</p>
+                    <p className="font-mono text-[11px] text-zinc-400">{formatDate(attempt.timestamp)} · {formatDuration(attempt.timeTakenSeconds)}</p>
                   </div>
                 </div>
-
-                <div className="text-right shrink-0">
-                  <span className="font-bold text-xs text-zinc-800 dark:text-zinc-200">
-                    {Math.round((attempt.correctCount / attempt.totalQuestions) * 100)}%
-                  </span>
-                </div>
+                <span className="shrink-0 font-mono text-sm font-extrabold">{Math.round((attempt.correctCount / attempt.totalQuestions) * 100)}%</span>
               </div>
             ))}
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 };

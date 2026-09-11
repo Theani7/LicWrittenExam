@@ -6,6 +6,7 @@ import {
   Eye,
   EyeOff,
   HelpCircle,
+  Keyboard,
 } from 'lucide-react';
 import type { Question, Category } from '../../types';
 import QuestionCard from './QuestionCard';
@@ -27,14 +28,12 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
   const [isShuffled, setIsShuffled] = useState<boolean>(false);
   const [revealed, setRevealed] = useState<boolean>(false);
 
-  // Category name lookup map
   const categoryMap = useMemo(() => {
     const map = new Map<number, string>();
     categories.forEach((c) => map.set(c.id, c.name));
     return map;
   }, [categories]);
 
-  // Handle shuffling
   const displayQuestions = useMemo(() => {
     if (!isShuffled) return questions;
     const copy = [...questions];
@@ -45,7 +44,6 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
     return copy;
   }, [questions, isShuffled]);
 
-  // Keep currentIndex in bounds when questions or shuffle changes
   useEffect(() => {
     if (currentIndex >= displayQuestions.length) {
       setCurrentIndex(Math.max(0, displayQuestions.length - 1));
@@ -67,57 +65,31 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
     setRevealed(false);
   }, [displayQuestions.length]);
 
-  const handleToggleReveal = useCallback(() => {
-    setRevealed((prev) => !prev);
-  }, []);
-
+  const handleToggleReveal = useCallback(() => setRevealed((prev) => !prev), []);
   const handleToggleShuffle = useCallback(() => {
     setIsShuffled((prev) => !prev);
     setCurrentIndex(0);
     setRevealed(false);
   }, []);
 
-  // Keyboard navigation: Left Arrow (prev), Right Arrow (next), Space (flip/reveal)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === 'INPUT' ||
-          target.tagName === 'TEXTAREA' ||
-          target.isContentEditable)
-      ) {
-        return;
-      }
-
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        handleNext();
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        handlePrev();
-      } else if (e.key === ' ' || e.code === 'Space') {
-        e.preventDefault();
-        handleToggleReveal();
-      }
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); handleNext(); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); handlePrev(); }
+      else if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); handleToggleReveal(); }
     };
-
     window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrev, handleToggleReveal]);
 
   if (displayQuestions.length === 0) {
     return (
-      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-12 text-center space-y-3">
-        <HelpCircle className="w-8 h-8 text-zinc-400 mx-auto" />
-        <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-          No questions match your filter
-        </h3>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
-          Try clearing your search query or selecting a different category.
-        </p>
+      <div className="card-premium p-12 text-center">
+        <HelpCircle className="mx-auto h-8 w-8 text-zinc-300" />
+        <h3 className="mt-3 font-extrabold">No cards in this deck</h3>
+        <p className="mx-auto mt-1 max-w-sm text-sm text-zinc-500">Clear your search or pick another category to rebuild the deck.</p>
       </div>
     );
   }
@@ -126,71 +98,44 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
   const progressPercent = Math.round(((currentIndex + 1) / displayQuestions.length) * 100);
 
   return (
-    <div className="space-y-4">
-      {/* Top Header & Progress */}
-      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-4 space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          {/* Progress label */}
-          <div className="flex items-center gap-2 font-mono text-sm sm:text-base">
-            <span className="font-bold text-zinc-900 dark:text-white">
-              Flashcard {currentIndex + 1}
-            </span>
-            <span className="text-zinc-500 dark:text-zinc-400 font-medium">
-              of {displayQuestions.length} ({progressPercent}%)
-            </span>
+    <div className="mx-auto max-w-3xl space-y-4">
+      <div className="card-premium overflow-hidden">
+        <div className="h-1 bg-gradient-to-r from-crimson-600 via-rose-400 to-navy-600" style={{ width: `${progressPercent}%` }} />
+        <div className="space-y-3 p-4 sm:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-baseline gap-2">
+              <span className="text-[15px] font-extrabold tracking-tight">Flashcard {currentIndex + 1}</span>
+              <span className="font-mono text-sm text-zinc-400">of {displayQuestions.length} ({progressPercent}%)</span>
+              <span className="rounded-full bg-zinc-100 px-2 py-0.5 font-mono text-[11px] font-bold text-zinc-600 dark:bg-white/10 dark:text-zinc-300">
+                {progressPercent}%
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleToggleShuffle}
+              aria-label="Toggle shuffle mode"
+              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 font-mono text-[12px] font-bold transition active:scale-[0.97] ${
+                isShuffled
+                  ? 'border-crimson-300 bg-crimson-50 text-crimson-700 dark:border-crimson-800 dark:bg-crimson-950/40 dark:text-crimson-300'
+                  : 'border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
+              }`}
+            >
+              <Shuffle className="h-3.5 w-3.5" /> {isShuffled ? 'Shuffle ON' : 'Shuffle OFF'}
+            </button>
           </div>
-
-          {/* Shuffle Toggle */}
-          <button
-            type="button"
-            onClick={handleToggleShuffle}
-            aria-label="Toggle shuffle mode"
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs sm:text-sm font-mono font-semibold transition-all border ${
-              isShuffled
-                ? 'bg-crimson-50 dark:bg-crimson-950/60 border-crimson-300 dark:border-crimson-800 text-crimson-700 dark:text-crimson-300'
-                : 'bg-white dark:bg-navy-900/60 border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900'
-            }`}
-          >
-            <Shuffle className="w-3.5 h-3.5" />
-            <span>Shuffle {isShuffled ? 'ON' : 'OFF'}</span>
-          </button>
-        </div>
-
-        {/* Progress Bar in Nepal Crimson */}
-        <div className="w-full bg-zinc-100 dark:bg-navy-950 h-2 rounded-full overflow-hidden">
-          <div
-            className="bg-crimson-600 h-full rounded-full transition-all duration-150"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-
-        {/* Keyboard shortcut hint */}
-        <div className="hidden sm:flex items-center justify-center gap-5 text-xs font-mono text-zinc-500 dark:text-zinc-400">
-          <span>
-            <kbd className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800 font-bold">
-              ←
-            </kbd>{' '}
-            PREV
-          </span>
-          <span>
-            <kbd className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800 font-bold">
-              →
-            </kbd>{' '}
-            NEXT
-          </span>
-          <span>
-            <kbd className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800 font-bold">
-              SPACE
-            </kbd>{' '}
-            REVEAL
-          </span>
+          <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-white/10">
+            <div className="h-full rounded-full bg-gradient-to-r from-crimson-700 via-crimson-500 to-rose-400 transition-all duration-300" style={{ width: `${progressPercent}%` }} />
+          </div>
+          <p className="hidden items-center justify-center gap-4 font-mono text-[11px] font-semibold text-zinc-400 sm:flex">
+            <span className="flex items-center gap-1"><Keyboard className="h-3 w-3" /> ← PREV</span>
+            <span>→ NEXT</span>
+            <span>SPACE REVEAL</span>
+          </p>
         </div>
       </div>
 
-      {/* Main Flashcard Card */}
-      <div className="relative">
+      <div key={`flashcard-${currentQuestion.id}-${isShuffled ? 'shuffled' : 'normal'}`} className="animate-fade-up">
         <QuestionCard
-          key={`flashcard-${currentQuestion.id}-${isShuffled ? 'shuffled' : 'normal'}`}
           question={currentQuestion}
           categoryName={categoryName}
           isBookmarked={isBookmarked(currentQuestion.id)}
@@ -200,49 +145,34 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
         />
       </div>
 
-      {/* Flashcard Navigation Controls */}
-      <div className="flex items-center justify-between gap-3 pt-1">
+      <div className="card-premium flex items-center justify-between gap-2 p-3">
         <button
           type="button"
           onClick={handlePrev}
           aria-label="Previous question"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-navy-900 text-sm font-semibold transition-all shadow-2xs"
+          className="btn-ghost flex-1 sm:flex-none sm:px-6"
         >
-          <ChevronLeft className="w-4 h-4" />
-          <span>Previous</span>
+          <ChevronLeft className="h-4 w-4" /> Prev
         </button>
-
         <button
           type="button"
           onClick={handleToggleReveal}
           aria-label="Toggle answer reveal"
-          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-bold text-sm transition-all border shadow-2xs ${
+          className={`inline-flex flex-[1.4] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition active:scale-[0.98] ${
             revealed
-              ? 'bg-zinc-100 dark:bg-navy-900 border-zinc-300 dark:border-navy-800 text-zinc-900 dark:text-zinc-100'
-              : 'bg-crimson-600 border-crimson-600 text-white hover:bg-crimson-700'
+              ? 'border border-zinc-200 bg-zinc-100 text-zinc-900 dark:border-white/10 dark:bg-white/10 dark:text-white'
+              : 'bg-gradient-to-r from-crimson-700 to-rose-600 text-white shadow-glow-crimson hover:brightness-110'
           }`}
         >
-          {revealed ? (
-            <>
-              <EyeOff className="w-4 h-4" />
-              <span>Hide Answer</span>
-            </>
-          ) : (
-            <>
-              <Eye className="w-4 h-4" />
-              <span>Reveal Answer</span>
-            </>
-          )}
+          {revealed ? <><EyeOff className="h-4 w-4" /> Hide Answer</> : <><Eye className="h-4 w-4" /> Reveal Answer</>}
         </button>
-
         <button
           type="button"
           onClick={handleNext}
           aria-label="Next question"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-800 dark:text-zinc-200 hover:bg-zinc-50 dark:hover:bg-navy-900 text-sm font-semibold transition-all shadow-2xs"
+          className="btn-ghost flex-1 sm:flex-none sm:px-6"
         >
-          <span>Next</span>
-          <ChevronRight className="w-4 h-4" />
+          Next <ChevronRight className="h-4 w-4" />
         </button>
       </div>
     </div>

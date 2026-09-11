@@ -24,101 +24,58 @@ export const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
   const answeredCount = questions.filter((q) => answers[q.id] != null).length;
   const flaggedCount = questions.filter((q) => flaggedQuestionIds.has(q.id)).length;
   const unansweredCount = totalQuestions - answeredCount;
+  const progress = totalQuestions ? Math.round((answeredCount / totalQuestions) * 100) : 0;
 
   return (
-    <div
-      data-testid="question-navigator"
-      className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/90 p-4 shadow-2xs flex flex-col space-y-3"
-    >
-      {/* Header & Stats */}
-      <div className="flex items-center justify-between border-b border-zinc-100 dark:border-navy-900 pb-3">
+    <div data-testid="question-navigator" className="card-premium flex flex-col gap-4 p-5">
+      <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm tracking-tight">
-            Question Navigator
-          </h3>
-          <p className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-0.5">
-            {answeredCount} of {totalQuestions} answered
-          </p>
+          <h3 className="text-sm font-extrabold tracking-tight">Question Navigator</h3>
+          <p className="mt-0.5 font-mono text-[12px] font-semibold text-zinc-500">{answeredCount} of {totalQuestions} answered</p>
         </div>
-
         {onClose && (
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close navigator"
-            className="md:hidden text-xs text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1 font-bold"
-          >
+          <button type="button" onClick={onClose} aria-label="Close navigator" className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-sm font-bold text-zinc-500 hover:bg-zinc-200 dark:bg-white/10 dark:hover:text-white">
             ✕
           </button>
         )}
       </div>
 
-      {/* Legend */}
-      <div className="grid grid-cols-2 gap-2 font-mono text-xs text-zinc-600 dark:text-zinc-300 pb-2.5 border-b border-zinc-100 dark:border-navy-900">
-        <div className="flex items-center gap-1.5">
-          <span className="w-3.5 h-3.5 rounded bg-navy-700 text-white flex items-center justify-center text-[9px] font-bold">
-            ✓
-          </span>
-          <span>Done ({answeredCount})</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-3.5 h-3.5 rounded bg-zinc-100 dark:bg-navy-950 border border-zinc-200 dark:border-navy-800" />
-          <span>Left ({unansweredCount})</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-3.5 h-3.5 rounded bg-crimson-600 text-white flex items-center justify-center text-[9px]">
-            <Flag className="w-2.5 h-2.5" />
-          </span>
-          <span>Flagged ({flaggedCount})</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-3.5 h-3.5 rounded border-2 border-crimson-600" />
-          <span>Current</span>
-        </div>
+      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-white/10">
+        <div className="h-full rounded-full bg-gradient-to-r from-navy-700 via-blue-600 to-crimson-500 transition-all duration-300" style={{ width: `${progress}%` }} />
       </div>
 
-      {/* Grid of Questions */}
-      <div className="grid grid-cols-5 gap-2 max-h-[380px] overflow-y-auto pr-0.5 font-mono">
+      <div className="grid grid-cols-3 gap-2 font-mono text-[11px] font-bold text-zinc-600 dark:text-zinc-400">
+        <span className="flex items-center gap-1.5"><span className="flex h-4 w-4 items-center justify-center rounded-md bg-navy-700 text-[9px] text-white">✓</span>{answeredCount} done</span>
+        <span className="flex items-center gap-1.5"><span className="h-4 w-4 rounded-md border border-zinc-300 bg-zinc-50 dark:border-white/15 dark:bg-white/5" />{unansweredCount} left</span>
+        <span className="flex items-center gap-1.5"><span className="flex h-4 w-4 items-center justify-center rounded-md bg-crimson-600 text-white"><Flag className="h-2.5 w-2.5 fill-current" /></span>{flaggedCount} flagged</span>
+      </div>
+
+      <div className="grid max-h-[380px] grid-cols-5 gap-2 overflow-y-auto pr-0.5">
         {questions.map((q, idx) => {
           const isCurrent = idx === currentIndex;
           const isAnswered = answers[q.id] != null;
           const isFlagged = flaggedQuestionIds.has(q.id);
-
-          let buttonClasses =
-            'relative w-full aspect-square rounded-md flex items-center justify-center text-xs sm:text-sm font-bold transition-all ';
-
-          if (isCurrent) {
-            buttonClasses += 'ring-2 ring-crimson-600 ring-offset-1 dark:ring-offset-[#0c1424] font-bold ';
-          }
-
-          if (isAnswered) {
-            buttonClasses += 'bg-navy-700 bg-blue-600 text-white hover:bg-navy-800 ';
-          } else {
-            buttonClasses +=
-              'bg-zinc-50 dark:bg-navy-950 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-navy-900 border border-zinc-200 dark:border-navy-900 ';
-          }
-
           return (
             <button
               key={q.id}
               type="button"
               data-testid={`nav-question-${idx + 1}`}
-              aria-label={`Question ${idx + 1}${isAnswered ? ', Answered' : ', Unanswered'}${
-                isFlagged ? ', Flagged for review' : ''
-              }${isCurrent ? ', Current' : ''}`}
+              aria-label={`Question ${idx + 1}${isAnswered ? ', Answered' : ', Unanswered'}${isFlagged ? ', Flagged for review' : ''}${isCurrent ? ', Current' : ''}`}
               onClick={() => onSelectQuestion(idx)}
-              className={buttonClasses}
+              className={`relative flex aspect-square w-full items-center justify-center rounded-xl font-mono text-[13px] font-bold transition-all active:scale-95 ${
+                isAnswered
+                  ? 'bg-blue-600 text-white hover:bg-navy-800'
+                  : 'border border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-400 hover:bg-zinc-100 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10'
+              } ${
+                isCurrent
+                  ? 'ring-2 ring-crimson-600 ring-offset-2 dark:ring-offset-ink-900'
+                  : ''
+              }`}
             >
-              <span>{idx + 1}</span>
-
-              {/* Flagged indicator badge */}
+              {idx + 1}
               {isFlagged && (
-                <span
-                  data-testid={`flagged-badge-${idx + 1}`}
-                  className="absolute -top-1 -right-1 w-3 h-3 bg-crimson-600 text-white rounded-full flex items-center justify-center text-[7px]"
-                  title="Flagged for review"
-                >
-                  <Flag className="w-1.5 h-1.5 fill-current" />
+                <span data-testid={`flagged-badge-${idx + 1}`} title="Flagged for review" className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-crimson-600 text-white ring-2 ring-white dark:ring-ink-900">
+                  <Flag className="h-2 w-2 fill-current" />
                 </span>
               )}
             </button>

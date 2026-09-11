@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import {
-  CheckCircle2,
-  XCircle,
-  HelpCircle,
   Bookmark,
   ZoomIn,
   X,
 } from 'lucide-react';
 import type { Question, OptionKey } from '../../types';
 import { useBookmarks } from '../../hooks/useBookmarks';
-
 import { getCategoryTheme } from '../../utils/categoryColors';
 
 export interface QuestionReviewItemProps {
@@ -33,212 +29,90 @@ export const QuestionReviewItem: React.FC<QuestionReviewItemProps> = ({
   const [isImageZoomed, setIsImageZoomed] = useState<boolean>(false);
   const catTheme = getCategoryTheme(question.categoryId);
 
-  const isBookmarked =
-    propIsBookmarked !== undefined
-      ? propIsBookmarked
-      : hookBookmarks.isBookmarked(question.id);
-
+  const isBookmarked = propIsBookmarked !== undefined ? propIsBookmarked : hookBookmarks.isBookmarked(question.id);
   const handleToggleBookmark = () => {
-    if (propOnToggleBookmark) {
-      propOnToggleBookmark(question.id);
-    } else {
-      hookBookmarks.toggleBookmark(question.id);
-    }
+    if (propOnToggleBookmark) propOnToggleBookmark(question.id);
+    else hookBookmarks.toggleBookmark(question.id);
   };
 
   const isAnswered = userAnswer != null;
   const isCorrect = isAnswered && userAnswer === question.correctAnswer;
   const isIncorrect = isAnswered && userAnswer !== question.correctAnswer;
-  const isUnanswered = !isAnswered;
-
   const displayNum = questionNumber ?? question.id;
 
   return (
     <div
       data-testid={`question-review-item-${question.id}`}
-      className={`rounded-xl border-2 p-4 sm:p-5 bg-white dark:bg-[#0c1424] transition-all shadow-xs ${
-        isCorrect
-          ? 'border-emerald-400/80 dark:border-emerald-800/60 bg-emerald-50/10'
-          : isIncorrect
-          ? 'border-crimson-400/80 dark:border-crimson-800/60 bg-crimson-50/10'
-          : 'border-zinc-200 dark:border-navy-900'
+      className={`card-premium relative overflow-hidden p-5 sm:p-6 ${
+        isCorrect ? 'ring-1 ring-emerald-500/40' : isIncorrect ? 'ring-1 ring-crimson-500/40' : ''
       }`}
     >
-      {/* Header: Question Number, Category, Status Badge, Bookmark */}
-      <div className="flex items-center justify-between gap-3 mb-3.5 flex-wrap">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-gradient-to-r from-navy-700 to-blue-700 text-white shadow-xs">
-            Q{displayNum}
-          </span>
-          {categoryName && (
-            <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md border ${catTheme.badge}`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${catTheme.dotBg}`} />
-              <span>{categoryName}</span>
-            </span>
-          )}
-          {isCorrect && (
-            <span
-              data-testid="status-badge-correct"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
-            >
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>CORRECT</span>
-            </span>
-          )}
-          {isIncorrect && (
-            <span
-              data-testid="status-badge-incorrect"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs font-bold bg-crimson-50 dark:bg-crimson-950/60 text-crimson-700 dark:text-crimson-300 border border-crimson-200 dark:border-crimson-800"
-            >
-              <XCircle className="w-3.5 h-3.5" />
-              <span>INCORRECT</span>
-            </span>
-          )}
-          {isUnanswered && (
-            <span
-              data-testid="status-badge-unanswered"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md font-mono text-xs font-bold bg-zinc-100 dark:bg-navy-950 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-navy-800"
-            >
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>UNANSWERED</span>
-            </span>
-          )}
-        </div>
+      <div className={`absolute inset-x-0 top-0 h-[3px] ${isCorrect ? 'bg-gradient-to-r from-emerald-500 to-teal-400' : isIncorrect ? 'bg-gradient-to-r from-crimson-600 to-rose-400' : 'bg-gradient-to-r from-zinc-300 to-zinc-200 dark:from-white/20 dark:to-white/5'}`} />
 
-        <button
-          type="button"
-          onClick={handleToggleBookmark}
-          data-testid={`bookmark-btn-${question.id}`}
-          aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark question'}
-          className={`p-2 rounded-md border transition-all ${
-            isBookmarked
-              ? 'bg-crimson-50 dark:bg-crimson-950/50 border-crimson-300 dark:border-crimson-800 text-crimson-600 dark:text-crimson-400'
-              : 'bg-zinc-50 dark:bg-navy-950/40 border-zinc-200 dark:border-navy-900 text-zinc-400 hover:text-crimson-600'
-          }`}
-        >
-          <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+      <div className="mb-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="rounded-lg bg-zinc-900 px-2.5 py-1 font-mono text-[12px] font-bold text-white dark:bg-white dark:text-zinc-900">Q{displayNum}</span>
+          {categoryName && (
+            <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-bold ${catTheme.badge}`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${catTheme.dotBg}`} />{categoryName}
+            </span>
+          )}
+          {isCorrect && <span data-testid="status-badge-correct" className="rounded-full bg-emerald-600 px-2.5 py-1 font-mono text-[11px] font-bold text-white">✓ CORRECT</span>}
+          {isIncorrect && <span data-testid="status-badge-incorrect" className="rounded-full bg-crimson-600 px-2.5 py-1 font-mono text-[11px] font-bold text-white">✗ WRONG</span>}
+          {!isAnswered && <span data-testid="status-badge-unanswered" className="rounded-full bg-zinc-200 px-2.5 py-1 font-mono text-[11px] font-bold text-zinc-600 dark:bg-white/10 dark:text-zinc-300">UNANSWERED</span>}
+        </div>
+        <button type="button" onClick={handleToggleBookmark} data-testid={`bookmark-btn-${question.id}`} aria-label={isBookmarked ? 'Remove bookmark' : 'Bookmark question'}
+          className={`flex h-9 w-9 items-center justify-center rounded-xl border transition active:scale-95 ${isBookmarked ? 'border-transparent bg-crimson-600 text-white shadow-glow-crimson' : 'border-zinc-200 text-zinc-400 hover:border-crimson-300 hover:text-crimson-600 dark:border-white/10 dark:bg-white/5'}`}>
+          <Bookmark className={`h-4 w-4 ${isBookmarked ? 'fill-current' : ''}`} />
         </button>
       </div>
 
-      {/* Question Text */}
-      <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 leading-snug tracking-tight mb-4">
-        {question.question}
-      </h3>
+      <h3 className="mb-4 text-[15px] font-bold leading-relaxed tracking-tight sm:text-base">{question.question}</h3>
 
-      {/* Sign Image if present */}
       {question.image && (
-        <div className="mb-4">
-          <div
-            onClick={() => setIsImageZoomed(true)}
-            className="inline-block relative group cursor-zoom-in rounded-lg border border-zinc-200 dark:border-navy-900 bg-white dark:bg-navy-950 overflow-hidden"
-          >
-            <img
-              src={question.image}
-              alt={`Traffic sign for question ${question.id}`}
-              className="h-28 sm:h-36 object-contain p-2.5 transition-transform duration-150 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-              <ZoomIn className="w-4 h-4" />
-            </div>
-          </div>
-        </div>
+        <button type="button" onClick={() => setIsImageZoomed(true)} className="group relative mb-4 overflow-hidden rounded-2xl border border-zinc-200 bg-zinc-50 p-3 transition hover:shadow-card-hover dark:border-white/10 dark:bg-white/5">
+          <img src={question.image} alt={`Traffic sign for question ${question.id}`} className="h-28 object-contain transition group-hover:scale-105 sm:h-32" />
+          <span className="absolute inset-0 flex items-center justify-center bg-zinc-900/0 transition group-hover:bg-zinc-900/15"><ZoomIn className="h-4 w-4 text-white opacity-0 group-hover:opacity-100" /></span>
+        </button>
       )}
 
-      {/* Options List */}
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         {question.options.map((opt) => {
           const isUserChoice = userAnswer === opt.key;
           const isCorrectChoice = question.correctAnswer === opt.key;
-
-          let optionStyle =
-            'bg-zinc-50/50 dark:bg-navy-950/40 border-zinc-200/80 dark:border-navy-900 text-zinc-700 dark:text-zinc-300';
+          let optionStyle = 'border-zinc-200 bg-zinc-50/60 text-zinc-600 dark:border-white/10 dark:bg-white/[0.02] dark:text-zinc-400';
           let badgeText: string | null = null;
           let badgeStyle = '';
-
           if (isUserChoice && isCorrectChoice) {
-            optionStyle =
-              'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-500 dark:border-emerald-600 text-emerald-950 dark:text-emerald-200 font-semibold';
-            badgeText = 'Your Answer (Correct)';
-            badgeStyle =
-              'bg-emerald-600 text-white font-mono text-xs font-bold';
+            optionStyle = 'border-emerald-500 bg-emerald-50 text-emerald-950 ring-1 ring-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-100';
+            badgeText = 'Your Answer (Correct)'; badgeStyle = 'bg-emerald-600 text-white';
           } else if (isUserChoice && !isCorrectChoice) {
-            optionStyle =
-              'bg-crimson-50/70 dark:bg-crimson-950/30 border-crimson-500 dark:border-crimson-600 text-crimson-950 dark:text-crimson-200 font-semibold';
-            badgeText = 'Your Answer';
-            badgeStyle = 'bg-crimson-600 text-white font-mono text-xs font-bold';
+            optionStyle = 'border-crimson-500 bg-crimson-50 text-crimson-950 ring-1 ring-crimson-500/40 dark:bg-crimson-500/10 dark:text-crimson-100';
+            badgeText = 'Your Answer'; badgeStyle = 'bg-crimson-600 text-white';
           } else if (!isUserChoice && isCorrectChoice) {
-            optionStyle =
-              'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-400 dark:border-emerald-600 text-emerald-900 dark:text-emerald-200 font-semibold';
-            badgeText = 'Correct Answer';
-            badgeStyle =
-              'bg-emerald-100 dark:bg-emerald-900/80 text-emerald-800 dark:text-emerald-200 font-mono text-xs font-bold border border-emerald-300 dark:border-emerald-700';
+            optionStyle = 'border-emerald-400 bg-emerald-50/60 text-emerald-900 ring-1 ring-emerald-400/30 dark:bg-emerald-500/[0.07] dark:text-emerald-100';
+            badgeText = 'Correct Answer'; badgeStyle = 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300 dark:bg-emerald-900/60 dark:text-emerald-200 dark:ring-emerald-800';
           }
-
           return (
-            <div
-              key={opt.key}
-              data-testid={`review-option-${opt.key}`}
-              className={`flex items-center justify-between p-3.5 sm:p-4 rounded-lg border text-sm sm:text-base leading-relaxed transition-all ${optionStyle}`}
-            >
-              <div className="flex items-center gap-3 min-w-0 pr-2">
-                <span
-                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md shrink-0 flex items-center justify-center font-mono font-bold text-xs sm:text-sm border ${
-                    isCorrectChoice
-                      ? 'bg-emerald-600 border-emerald-600 text-white shadow-xs'
-                      : isUserChoice
-                      ? 'bg-crimson-600 border-crimson-600 text-white shadow-xs'
-                      : 'bg-white dark:bg-navy-900 border-zinc-300 dark:border-navy-800 text-zinc-700 dark:text-zinc-300'
-                  }`}
-                >
-                  {opt.key}
-                </span>
+            <div key={opt.key} data-testid={`review-option-${opt.key}`} className={`flex items-center justify-between gap-2 rounded-2xl border p-3.5 text-sm leading-relaxed ${optionStyle}`}>
+              <span className="flex min-w-0 items-center gap-3">
+                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl font-mono text-[13px] font-bold ${isCorrectChoice ? 'bg-emerald-600 text-white' : isUserChoice ? 'bg-crimson-600 text-white' : 'bg-white text-zinc-500 ring-1 ring-zinc-200 dark:bg-white/10 dark:text-zinc-300 dark:ring-white/10'}`}>{opt.key}</span>
                 <span className="break-words font-medium">{opt.text}</span>
-              </div>
-
-              {badgeText && (
-                <span
-                  data-testid={isCorrectChoice ? 'correct-badge' : 'user-badge'}
-                  className={`shrink-0 ml-2 px-2.5 py-1 rounded whitespace-nowrap ${badgeStyle}`}
-                >
-                  {badgeText}
-                </span>
-              )}
+              </span>
+              {badgeText && <span data-testid={isCorrectChoice ? 'correct-badge' : 'user-badge'} className={`shrink-0 rounded-full px-2.5 py-1 font-mono text-[10px] font-bold ${badgeStyle}`}>{badgeText}</span>}
             </div>
           );
         })}
       </div>
 
-      {/* Image Zoom Modal */}
       {isImageZoomed && question.image && (
-        <div
-          data-testid="zoom-modal"
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-xs"
-          onClick={() => setIsImageZoomed(false)}
-        >
-          <div
-            className="relative max-w-md w-full bg-white dark:bg-[#0c1424] rounded-lg p-5 shadow-xl border border-zinc-200 dark:border-navy-900"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setIsImageZoomed(false)}
-              className="absolute top-2.5 right-2.5 p-1 rounded bg-zinc-100 dark:bg-navy-950 text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition"
-              aria-label="Close image modal"
-            >
-              <X className="w-4 h-4" />
+        <div data-testid="zoom-modal" role="dialog" aria-modal="true" className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/80 p-4 backdrop-blur-md" onClick={() => setIsImageZoomed(false)}>
+          <div className="relative w-full max-w-md rounded-3xl border border-white/10 bg-white p-5 shadow-float dark:bg-ink-900" onClick={(e) => e.stopPropagation()}>
+            <button type="button" onClick={() => setIsImageZoomed(false)} aria-label="Close image modal" className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 hover:text-zinc-900 dark:bg-white/10">
+              <X className="h-4 w-4" />
             </button>
-            <div className="text-center pt-2">
-              <img
-                src={question.image}
-                alt={`Traffic sign for question ${question.id}`}
-                className="max-h-72 mx-auto object-contain rounded mb-2"
-              />
-              <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
-                Question {displayNum} Sign Reference
-              </p>
-            </div>
+            <img src={question.image} alt={`Traffic sign for question ${question.id}`} className="mx-auto max-h-72 object-contain" />
+            <p className="mt-2 text-center font-mono text-[11px] text-zinc-500">Q{displayNum} · SIGN REFERENCE</p>
           </div>
         </div>
       )}

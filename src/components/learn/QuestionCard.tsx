@@ -9,7 +9,6 @@ import {
   ZoomIn,
 } from 'lucide-react';
 import type { Question, OptionKey } from '../../types';
-
 import { getCategoryTheme } from '../../utils/categoryColors';
 
 export interface QuestionCardProps {
@@ -39,7 +38,6 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [showAnswer, setShowAnswer] = useState<boolean>(initialShowAnswer);
   const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
 
-  // Sync state if question or initialShowAnswer changes
   useEffect(() => {
     setSelectedOption(initialSelectedOption);
     setShowAnswer(initialShowAnswer);
@@ -57,31 +55,44 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
     onAnswerSelected?.(question.id, key, correct);
   };
 
-  const handleToggleShowAnswer = () => {
-    setShowAnswer((prev) => !prev);
-  };
-
+  const handleToggleShowAnswer = () => setShowAnswer((prev) => !prev);
   const handleReset = () => {
     setSelectedOption(null);
     setShowAnswer(false);
   };
 
   return (
-    <div
-      className={`bg-white dark:bg-[#0c1424] rounded-xl border border-zinc-200 dark:border-navy-900/80 shadow-xs transition-all hover:border-navy-300 dark:hover:border-navy-700 hover:shadow-md ${
-        compact ? 'p-3 sm:p-4' : 'p-4 sm:p-5'
-      }`}
+    <article
+      className={`card-premium card-lift group relative overflow-hidden transition-all ${
+        isAnswered
+          ? isCorrect
+            ? 'ring-1 ring-emerald-500/40'
+            : 'ring-1 ring-crimson-500/30'
+          : 'hover:shadow-card-hover'
+      } ${compact ? 'p-4' : 'p-5 sm:p-6'}`}
     >
-      {/* Card Header: Question Number & Category & Bookmark */}
-      <div className="flex items-center justify-between gap-3 mb-3.5">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-navy-700 to-blue-700 px-2.5 py-0.5 rounded-md shadow-xs">
+      {/* top accent */}
+      <div
+        className={`absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r opacity-0 transition-opacity group-hover:opacity-100 ${
+          isRevealed ? 'opacity-100' : ''
+        } ${catTheme.accentBar}`}
+      />
+
+      {/* Header */}
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <span className="inline-flex items-center rounded-xl bg-zinc-900 px-2.5 py-1 font-mono text-[12px] font-bold tracking-tight text-white dark:bg-white dark:text-zinc-900">
             Q{question.id}
           </span>
           {categoryName && (
-            <span className={`inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-2.5 py-0.5 rounded-md border ${catTheme.badge}`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${catTheme.dotBg}`} />
-              <span className="truncate max-w-[220px] sm:max-w-md">{categoryName}</span>
+            <span className={`inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-bold ${catTheme.badge}`}>
+              <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${catTheme.dotBg}`} />
+              <span className="truncate">{categoryName}</span>
+            </span>
+          )}
+          {question.image && (
+            <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900/60">
+              Diagram
             </span>
           )}
         </div>
@@ -90,194 +101,194 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           type="button"
           onClick={() => onToggleBookmark(question.id)}
           aria-label={isBookmarked ? `Remove bookmark for question ${question.id}` : `Bookmark question ${question.id}`}
-          className={`p-2 rounded-lg border transition-all ${
+          title={isBookmarked ? 'Remove bookmark' : 'Save for revision'}
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all active:scale-95 ${
             isBookmarked
-              ? 'bg-crimson-600 border-crimson-600 text-white shadow-sm shadow-crimson-600/30'
-              : 'bg-zinc-50 dark:bg-navy-900/40 border-zinc-200 dark:border-navy-900 text-zinc-400 hover:text-crimson-600 hover:border-crimson-300 hover:bg-crimson-50/50'
+              ? 'border-transparent bg-gradient-to-br from-crimson-600 to-rose-500 text-white shadow-glow-crimson'
+              : 'border-zinc-200 bg-zinc-50 text-zinc-400 hover:-translate-y-px hover:border-crimson-300 hover:bg-crimson-50 hover:text-crimson-600 dark:border-white/10 dark:bg-white/5 dark:hover:border-crimson-800'
           }`}
         >
-          <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
+          <Bookmark className={`h-4 w-4 ${isBookmarked ? 'fill-current' : ''}`} />
         </button>
       </div>
 
-      {/* Question Prompt */}
-      <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-50 leading-snug tracking-tight mb-4">
+      {/* Prompt */}
+      <h3 className="mb-4 text-balance text-[15px] font-bold leading-relaxed tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-[17px]">
         {question.question}
       </h3>
 
-      {/* Traffic Sign Image Preview */}
+      {/* Image */}
       {question.image && (
-        <div className="mb-4 flex flex-col items-center sm:items-start">
-          <div
+        <div className="mb-5">
+          <button
+            type="button"
             onClick={() => setIsImageModalOpen(true)}
-            className="group relative inline-flex items-center justify-center p-3 rounded-lg bg-zinc-50 dark:bg-navy-950/70 border border-zinc-200 dark:border-navy-900 cursor-pointer overflow-hidden transition-all hover:border-navy-500"
+            className="group/img relative flex items-center justify-center overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-b from-zinc-50 to-white p-4 transition-all hover:border-navy-400 hover:shadow-card-hover dark:border-white/10 dark:from-white/5 dark:to-transparent"
           >
             <img
               src={question.image}
               alt={`Traffic sign for question ${question.id}`}
-              className="max-h-36 sm:max-h-44 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+              className="max-h-40 w-auto object-contain transition-transform duration-300 group-hover/img:scale-[1.04] sm:max-h-48"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-zinc-900/20 dark:bg-zinc-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-zinc-900/90 text-white font-mono text-xs font-semibold backdrop-blur">
-                <ZoomIn className="w-3.5 h-3.5" />
-                Zoom
-              </span>
-            </div>
-          </div>
-          <span className="font-mono text-xs text-zinc-400 dark:text-zinc-500 mt-1">
-            Click diagram to enlarge
-          </span>
+            <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-zinc-900/85 px-2.5 py-1 font-mono text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/img:opacity-100">
+              <ZoomIn className="h-3 w-3" /> ENLARGE
+            </span>
+          </button>
         </div>
       )}
 
-      {/* 4 Interactive Option Rows */}
-      <div className="space-y-2.5 mb-4">
+      {/* Options */}
+      <div className="mb-4 space-y-2.5" role="radiogroup" aria-label={`Options for question ${question.id}`}>
         {question.options.map((opt) => {
           const isSelected = selectedOption === opt.key;
           const isCorrectAnswer = opt.key === question.correctAnswer;
 
           let optionStyle =
-            'border-zinc-200 dark:border-navy-900/70 bg-white dark:bg-[#0c1424] text-zinc-900 dark:text-zinc-100 hover:border-zinc-300 dark:hover:border-navy-700 hover:bg-zinc-50/70 dark:hover:bg-navy-900/40';
+            'border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50 hover:shadow-card dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-white/25 dark:hover:bg-white/[0.06]';
           let badgeStyle =
-            'bg-zinc-100 dark:bg-navy-900 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-800';
+            'bg-zinc-100 text-zinc-600 border-zinc-200 dark:bg-white/10 dark:text-zinc-300 dark:border-white/10';
           let feedbackIcon = null;
 
           if (isRevealed) {
             if (isCorrectAnswer) {
               optionStyle =
-                'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/30 text-emerald-950 dark:text-emerald-50 font-semibold ring-1 ring-emerald-500/50';
-              badgeStyle = 'bg-emerald-600 text-white font-bold border-emerald-600';
-              feedbackIcon = <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />;
+                'border-emerald-500/70 bg-emerald-50 shadow-[0_0_0_3px_rgb(16_185_129/0.12)] dark:bg-emerald-500/[0.08] dark:border-emerald-500/50';
+              badgeStyle = 'bg-emerald-600 text-white border-emerald-600 shadow-sm';
+              feedbackIcon = (
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white">
+                  <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                </span>
+              );
             } else if (isSelected && !isCorrect) {
               optionStyle =
-                'border-crimson-500 bg-crimson-50/50 dark:bg-crimson-950/30 text-crimson-950 dark:text-crimson-50 font-semibold ring-1 ring-crimson-500/50';
-              badgeStyle = 'bg-crimson-600 text-white font-bold border-crimson-600';
-              feedbackIcon = <X className="w-4 h-4 text-crimson-600 dark:text-crimson-400 shrink-0" />;
+                'border-crimson-500/70 bg-crimson-50 shadow-[0_0_0_3px_rgb(220_20_60/0.10)] dark:bg-crimson-500/[0.08] dark:border-crimson-500/50';
+              badgeStyle = 'bg-crimson-600 text-white border-crimson-600 shadow-sm';
+              feedbackIcon = (
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-crimson-600 text-white">
+                  <X className="h-3.5 w-3.5" strokeWidth={3} />
+                </span>
+              );
             } else {
-              optionStyle =
-                'border-zinc-200/60 dark:border-navy-900/40 bg-zinc-50/40 dark:bg-navy-950/30 text-zinc-400 dark:text-zinc-500 opacity-60';
-              badgeStyle =
-                'bg-zinc-100 dark:bg-navy-900/40 text-zinc-400 dark:text-zinc-500 border-transparent';
+              optionStyle = 'border-zinc-200/70 bg-zinc-50/50 text-zinc-400 opacity-70 dark:border-white/5 dark:bg-white/[0.02]';
+              badgeStyle = 'bg-zinc-100 text-zinc-400 border-transparent dark:bg-white/5 dark:text-zinc-500';
             }
+          } else if (isSelected) {
+            optionStyle = 'border-navy-600 bg-blue-50/60 shadow-[0_0_0_3px_rgb(0_56_147/0.12)] dark:bg-blue-500/10 dark:border-blue-500/60';
+            badgeStyle = 'bg-navy-700 text-white border-navy-700';
           }
 
           return (
             <button
               key={opt.key}
               type="button"
+              role="radio"
+              aria-checked={isSelected}
               onClick={() => handleSelectOption(opt.key)}
-              className={`w-full flex items-center justify-between gap-3.5 p-3 sm:p-3.5 rounded-lg border text-left text-sm sm:text-base transition-all ${optionStyle}`}
+              className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-3 text-left transition-all active:scale-[0.995] sm:p-3.5 ${optionStyle}`}
             >
-              <div className="flex items-center gap-3 flex-1 min-w-0">
+              <span className="flex min-w-0 flex-1 items-center gap-3">
                 <span
-                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center font-mono text-xs sm:text-sm font-bold shrink-0 border transition-colors ${badgeStyle}`}
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border font-mono text-[13px] font-bold transition-colors ${badgeStyle}`}
                 >
                   {opt.key}
                 </span>
-                <span className="flex-1 leading-snug break-words">{opt.text}</span>
-              </div>
+                <span className="min-w-0 flex-1 break-words text-sm font-medium leading-relaxed sm:text-[15px]">
+                  {opt.text}
+                </span>
+              </span>
               {feedbackIcon}
             </button>
           );
         })}
       </div>
 
-      {/* Footer Controls: Show Answer, Reset, Status Feedback */}
+      {/* Footer */}
       {(!hideShowAnswerButton || isAnswered || isRevealed) && (
-        <div className="flex items-center justify-between pt-3 border-t border-zinc-100 dark:border-navy-900/60 text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 flex-wrap gap-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 border-t border-zinc-100 pt-4 dark:border-white/10">
           <div className="flex items-center gap-2">
             {!hideShowAnswerButton && (
               <button
                 type="button"
                 onClick={handleToggleShowAnswer}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border font-semibold text-xs sm:text-sm transition-all ${
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[13px] font-bold transition-all active:scale-[0.97] ${
                   showAnswer
-                    ? 'bg-navy-50 dark:bg-navy-950 border-navy-300 dark:border-navy-800 text-navy-700 dark:text-navy-300'
-                    : 'bg-white dark:bg-navy-900/60 border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900'
+                    ? 'border-navy-200 bg-blue-50 text-navy-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300'
+                    : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10'
                 }`}
               >
-                {showAnswer ? (
-                  <>
-                    <EyeOff className="w-3.5 h-3.5" />
-                    <span>Hide Answer</span>
-                  </>
-                ) : (
-                  <>
-                    <Eye className="w-3.5 h-3.5" />
-                    <span>Show Answer</span>
-                  </>
-                )}
+                {showAnswer ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                {showAnswer ? 'Hide Answer' : 'Show Answer'}
               </button>
             )}
-
             {(isAnswered || showAnswer) && (
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-navy-900/60 text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-navy-900 font-semibold text-xs sm:text-sm transition-all"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-transparent px-3 py-2 text-[13px] font-bold text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Reset</span>
+                <RotateCcw className="h-3.5 w-3.5" />
+                Reset
               </button>
             )}
           </div>
 
-          {/* Answer Status feedback badge */}
           {isAnswered && (
             <span
-              className={`font-mono font-bold px-2.5 py-1 rounded-md text-xs sm:text-sm ${
+              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[12px] font-bold ${
                 isCorrect
-                  ? 'bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
-                  : 'bg-crimson-100 dark:bg-crimson-950/70 text-crimson-800 dark:text-crimson-300 border border-crimson-300 dark:border-crimson-800'
+                  ? 'bg-emerald-600 text-white shadow-[0_4px_14px_-4px_rgb(16_185_129/0.6)]'
+                  : 'bg-crimson-600 text-white shadow-glow-crimson'
               }`}
             >
-              {isCorrect ? 'Correct! ✓' : `Incorrect (Correct: ${question.correctAnswer})`}
+              {isCorrect ? (
+                <>
+                  <Check className="h-3.5 w-3.5" strokeWidth={3} /> Correct! ✓
+                </>
+              ) : (
+                <>Incorrect (Correct: {question.correctAnswer})</>
+              )}
             </span>
           )}
         </div>
       )}
 
-      {/* Click-to-enlarge Modal for Sign Image */}
+      {/* Image modal */}
       {isImageModalOpen && question.image && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`Enlarged image for question ${question.id}`}
           onClick={() => setIsImageModalOpen(false)}
-          className="fixed inset-0 z-50 bg-zinc-950/80 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/80 p-4 backdrop-blur-md animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white dark:bg-[#0c1424] rounded-lg p-5 max-w-lg w-full border border-zinc-200 dark:border-navy-900 shadow-xl space-y-3"
+            className="w-full max-w-lg overflow-hidden rounded-3xl border border-white/10 bg-white shadow-float dark:bg-ink-900 animate-scale-in"
           >
-            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-navy-900 pb-2">
-              <h4 className="font-mono text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-3.5 dark:border-white/10">
+              <p className="font-mono text-[12px] font-bold text-zinc-600 dark:text-zinc-300">
                 Question #{question.id} — Sign Detail
-              </h4>
+              </p>
               <button
                 type="button"
                 onClick={() => setIsImageModalOpen(false)}
                 aria-label="Close enlarged image"
-                className="p-1 rounded text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900 dark:bg-white/10 dark:hover:text-white"
               >
-                <X className="w-4 h-4" />
+                <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="flex items-center justify-center p-4 bg-zinc-50 dark:bg-[#070d19] rounded border border-zinc-100 dark:border-navy-900">
-              <img
-                src={question.image}
-                alt={`Traffic sign for question ${question.id}`}
-                className="max-h-72 w-auto object-contain"
-              />
+            <div className="flex items-center justify-center bg-gradient-to-b from-zinc-50 to-white p-6 dark:from-white/5 dark:to-transparent">
+              <img src={question.image} alt={`Traffic sign for question ${question.id}`} className="max-h-72 w-auto object-contain" />
             </div>
-            <p className="text-xs text-center text-zinc-600 dark:text-zinc-400">
+            <p className="border-t border-zinc-100 px-5 py-3.5 text-center text-[13px] text-zinc-600 dark:border-white/10 dark:text-zinc-400">
               {question.question}
             </p>
           </div>
         </div>
       )}
-    </div>
+    </article>
   );
 };
 

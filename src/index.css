@@ -7,6 +7,163 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'ss01';
+  }
+
+  ::selection {
+    background: #dc143c;
+    color: #fff;
+  }
+
+  /* Refined scrollbars */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(161 161 170 / 0.45);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(220 20 60 / 0.55);
+    background-clip: content-box;
+    border: 2px solid transparent;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgb(82 82 91 / 0.6);
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Dot-grid pattern */
+  .bg-dot-grid {
+    background-image: radial-gradient(circle, rgb(9 9 11 / 0.10) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .dark .bg-dot-grid {
+    background-image: radial-gradient(circle, rgb(255 255 255 / 0.09) 1px, transparent 1px);
+  }
+  .bg-dot-grid-faint {
+    background-image: radial-gradient(circle, rgb(9 9 11 / 0.06) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .dark .bg-dot-grid-faint {
+    background-image: radial-gradient(circle, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  }
+
+  /* Diagonal stripe texture for hero cards */
+  .bg-diagonal-lines {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgb(255 255 255 / 0.07) 0px,
+      rgb(255 255 255 / 0.07) 1.5px,
+      transparent 1.5px,
+      transparent 9px
+    );
+  }
+
+  /* Mesh / aurora backgrounds */
+  .bg-aurora-light {
+    background:
+      radial-gradient(42rem 22rem at 8% -6%, rgb(220 20 60 / 0.10), transparent 60%),
+      radial-gradient(38rem 20rem at 96% 4%, rgb(0 56 147 / 0.10), transparent 60%),
+      radial-gradient(30rem 18rem at 55% 110%, rgb(245 158 11 / 0.07), transparent 60%);
+  }
+  .bg-aurora-dark {
+    background:
+      radial-gradient(46rem 24rem at 10% -8%, rgb(220 20 60 / 0.16), transparent 62%),
+      radial-gradient(40rem 22rem at 95% 6%, rgb(29 78 216 / 0.20), transparent 62%),
+      radial-gradient(34rem 20rem at 55% 112%, rgb(245 158 11 / 0.08), transparent 60%);
+  }
+
+  /* Glass */
+  .glass {
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  }
+
+  /* Card lift */
+  .card-lift {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Shimmer loading */
+  .shimmer {
+    background: linear-gradient(100deg, rgb(228 228 231 / 0.6) 40%, rgb(255 255 255) 50%, rgb(228 228 231 / 0.6) 60%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s linear infinite;
+  }
+  .dark .shimmer {
+    background: linear-gradient(100deg, rgb(39 39 42 / 0.8) 40%, rgb(63 63 70 / 0.9) 50%, rgb(39 39 42 / 0.8) 60%);
+    background-size: 200% 100%;
+  }
+
+  /* Gradient text */
+  .text-gradient-nepal {
+    background: linear-gradient(100deg, #dc143c 10%, #f43f5e 40%, #1d4ed8 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Focus ring */
+  .focus-ring {
+    outline: none;
+  }
+  .focus-ring:focus-visible {
+    outline: 2px solid #dc143c;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Premium buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-crimson-700 via-crimson-600 to-rose-600 px-5 py-3 text-sm font-bold text-white shadow-glow-crimson transition-all hover:brightness-110 hover:-translate-y-px active:translate-y-0 active:scale-[0.99];
+  }
+  .btn-navy {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-navy-800 via-navy-700 to-blue-700 px-5 py-3 text-sm font-bold text-white shadow-glow-navy transition-all hover:brightness-110 hover:-translate-y-px active:translate-y-0 active:scale-[0.99];
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-700 transition-all hover:border-zinc-300 hover:bg-zinc-50 active:scale-[0.99] dark:border-white/10 dark:bg-white/5 dark:text-zinc-200 dark:hover:bg-white/10;
+  }
+
+  .card-premium {
+    @apply rounded-2xl border border-zinc-200/80 bg-white shadow-card dark:border-white/10 dark:bg-ink-900;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold;
+  }
+
+  .input-premium {
+    @apply w-full rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 placeholder-zinc-400 shadow-card outline-none transition-all focus:border-crimson-500 focus:ring-4 focus:ring-crimson-600/10 dark:border-white/10 dark:bg-white/5 dark:text-zinc-100 dark:placeholder-zinc-500 dark:focus:border-crimson-500;
   }
 }

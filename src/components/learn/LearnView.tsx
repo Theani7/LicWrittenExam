@@ -9,6 +9,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  BookOpenCheck,
+  Timer,
+  Trophy,
+  ArrowRight,
 } from 'lucide-react';
 import type { Question, Category, OptionKey } from '../../types';
 import { useQuestions } from '../../hooks/useQuestions';
@@ -39,14 +43,12 @@ export const LearnView: React.FC<LearnViewProps> = ({
   const loading = propQuestions ? false : hookData.loading;
   const error = propQuestions ? null : hookData.error;
 
-  // View state
   const [studyMode, setStudyMode] = useState<StudyMode>('list');
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeFilter, setActiveFilter] = useState<QuickFilter>('all');
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  // Session answer tracker for study session stats
   const [sessionAnswers, setSessionAnswers] = useState<
     Record<number, { selected: OptionKey; correct: boolean }>
   >({});
@@ -61,14 +63,12 @@ export const LearnView: React.FC<LearnViewProps> = ({
     []
   );
 
-  // Category mapping for quick lookups
   const categoryMap = useMemo(() => {
     const map = new Map<number, string>();
     categories.forEach((c) => map.set(c.id, c.name));
     return map;
   }, [categories]);
 
-  // Category questions counts
   const categoryCounts = useMemo(() => {
     const counts: Record<number, number> = {};
     categories.forEach((c) => (counts[c.id] = 0));
@@ -78,86 +78,49 @@ export const LearnView: React.FC<LearnViewProps> = ({
     return counts;
   }, [categories, questions]);
 
-  // Quick filter counts
   const quickFilterCounts = useMemo(() => {
     let signs = 0;
     let images = 0;
     let bookmarked = 0;
-
     questions.forEach((q) => {
       if (q.categoryId === 6 || q.image) signs++;
       if (q.image) images++;
       if (isBookmarked(q.id)) bookmarked++;
     });
-
     return { signs, images, bookmarked };
   }, [questions, isBookmarked]);
 
-  // Filter questions according to Category, Quick Filter, and Search Query
   const filteredQuestions = useMemo(() => {
     return questions.filter((q) => {
-      // 1. Category filter
-      if (selectedCategoryId !== null && q.categoryId !== selectedCategoryId) {
-        return false;
-      }
-
-      // 2. Quick filter
-      if (activeFilter === 'bookmarked' && !isBookmarked(q.id)) {
-        return false;
-      }
-      if (activeFilter === 'signs' && q.categoryId !== 6 && !q.image) {
-        return false;
-      }
-      if (activeFilter === 'images' && !q.image) {
-        return false;
-      }
-
-      // 3. Search query
+      if (selectedCategoryId !== null && q.categoryId !== selectedCategoryId) return false;
+      if (activeFilter === 'bookmarked' && !isBookmarked(q.id)) return false;
+      if (activeFilter === 'signs' && q.categoryId !== 6 && !q.image) return false;
+      if (activeFilter === 'images' && !q.image) return false;
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
-
-        // Check ID matches (e.g. "12", "Q12", "Q 12")
         const idQuery = query.replace(/^q\s*/i, '');
-        if (idQuery && q.id.toString() === idQuery) {
-          return true;
-        }
-
-        // Check question text
-        if (q.question.toLowerCase().includes(query)) {
-          return true;
-        }
-
-        // Check options text
-        const optionMatch = q.options.some((opt) =>
-          opt.text.toLowerCase().includes(query)
-        );
-        if (optionMatch) {
-          return true;
-        }
-
+        if (idQuery && q.id.toString() === idQuery) return true;
+        if (q.question.toLowerCase().includes(query)) return true;
+        const optionMatch = q.options.some((opt) => opt.text.toLowerCase().includes(query));
+        if (optionMatch) return true;
         return false;
       }
-
       return true;
     });
   }, [questions, selectedCategoryId, activeFilter, searchQuery, isBookmarked]);
 
-  // Reset to page 1 whenever filters change
   const handleSelectCategory = useCallback((catId: number | null) => {
     setSelectedCategoryId(catId);
     setCurrentPage(1);
   }, []);
-
   const handleSearchChange = useCallback((query: string) => {
     setSearchQuery(query);
     setCurrentPage(1);
   }, []);
-
   const handleFilterChange = useCallback((filter: QuickFilter) => {
     setActiveFilter(filter);
     setCurrentPage(1);
   }, []);
-
   const handleResetFilters = useCallback(() => {
     setSelectedCategoryId(null);
     setSearchQuery('');
@@ -165,7 +128,6 @@ export const LearnView: React.FC<LearnViewProps> = ({
     setCurrentPage(1);
   }, []);
 
-  // Pagination for List View
   const totalPages = Math.max(1, Math.ceil(filteredQuestions.length / PAGE_SIZE));
   const safeCurrentPage = Math.min(currentPage, totalPages);
 
@@ -174,245 +136,244 @@ export const LearnView: React.FC<LearnViewProps> = ({
     return filteredQuestions.slice(start, start + PAGE_SIZE);
   }, [filteredQuestions, safeCurrentPage]);
 
-  // Answered stats calculation
   const totalAnsweredCount = Object.keys(sessionAnswers).length;
   const correctCount = Object.values(sessionAnswers).filter((a) => a.correct).length;
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 space-y-3">
-        <div className="w-8 h-8 border-2 border-crimson-600 border-t-transparent rounded-full animate-spin"></div>
-        <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
-          Loading question pool...
-        </p>
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="card-premium shimmer h-40" />
+          ))}
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6 max-w-md mx-auto bg-crimson-50 dark:bg-crimson-950/30 border border-crimson-200 dark:border-crimson-900/60 rounded-lg text-center space-y-3">
-        <AlertCircle className="w-8 h-8 text-crimson-600 mx-auto" />
-        <h3 className="text-sm font-semibold text-crimson-900 dark:text-crimson-200">
-          Failed to load study questions
-        </h3>
-        <p className="text-xs text-crimson-700 dark:text-crimson-400">{error}</p>
+      <div className="mx-auto max-w-md p-6">
+        <div className="card-premium p-8 text-center">
+          <AlertCircle className="mx-auto h-8 w-8 text-crimson-600" />
+          <h3 className="mt-3 font-extrabold">Failed to load study questions</h3>
+          <p className="mt-1 text-sm text-zinc-500">{error}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 space-y-5">
-      {/* Top Bar: Title, Stats, and Mode Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-zinc-200 dark:border-navy-900/80">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <h2 className="text-xl sm:text-2xl font-extrabold text-zinc-900 dark:text-zinc-50 tracking-tight">
-              Learn Mode
-            </h2>
-            <span className="font-mono text-xs font-bold text-crimson-700 dark:text-crimson-400 bg-crimson-50 dark:bg-crimson-950/70 px-2 py-0.5 rounded border border-crimson-200 dark:border-crimson-900">
-              500 POOL
-            </span>
+    <div className="mx-auto max-w-6xl px-4 pb-12 sm:px-6">
+      {/* Hero */}
+      <section className="relative mt-6 overflow-hidden rounded-[28px] border border-zinc-200/70 bg-white shadow-card dark:border-white/10 dark:bg-ink-900">
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-br from-crimson-600/[0.07] via-transparent to-navy-700/[0.08] dark:from-crimson-600/15 dark:to-blue-600/15" />
+          <div className="bg-dot-grid absolute inset-0 opacity-50 [mask-image:radial-gradient(40rem_16rem_at_20%_0%,black,transparent)]" />
+        </div>
+        <div className="relative grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.5fr_1fr] lg:items-center">
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="chip border-crimson-200 bg-crimson-50 text-crimson-700 dark:border-crimson-900/60 dark:bg-crimson-950/40 dark:text-crimson-300">
+                <BookOpenCheck className="h-3.5 w-3.5" /> Learn Mode
+              </span>
+              <span className="chip border-zinc-200 bg-white text-zinc-600 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300">
+                OFFICIAL 500Q POOL
+              </span>
+              {totalAnsweredCount > 0 && (
+                <span className="chip border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300">
+                  <Sparkles className="h-3.5 w-3.5" /> {totalAnsweredCount} TRIED · {correctCount} CORRECT
+                </span>
+              )}
+            </div>
+            <div>
+              <h1 className="text-balance text-2xl font-extrabold leading-tight tracking-tight sm:text-[34px] sm:leading-[1.1]">
+                Master the DoTM bank, <span className="text-gradient-nepal">one question at a time.</span>
+              </h1>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-[15px]">
+                Study all 500 official questions across 6 syllabus categories. Tap any option for instant feedback, save tricky ones, or switch to flashcards for rapid recall.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <div className={`inline-flex rounded-2xl border border-zinc-200 bg-zinc-100/70 p-1 dark:border-white/10 dark:bg-white/5`}>
+                <button
+                  type="button"
+                  onClick={() => setStudyMode('list')}
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[13px] font-bold transition-all ${
+                    studyMode === 'list'
+                      ? 'bg-white text-zinc-900 shadow-card dark:bg-white/10 dark:text-white'
+                      : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+                  }`}
+                >
+                  <List className="h-4 w-4" /> List View
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStudyMode('flashcard')}
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-[13px] font-bold transition-all ${
+                    studyMode === 'flashcard'
+                      ? 'bg-white text-zinc-900 shadow-card dark:bg-white/10 dark:text-white'
+                      : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+                  }`}
+                >
+                  <Layers className="h-4 w-4" /> Flashcards
+                </button>
+              </div>
+              <div className="flex items-center gap-4 font-mono text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
+                <span className="flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-blue-500" /> MATCHED: {filteredQuestions.length} / {questions.length}</span>
+                <span className="hidden items-center gap-1.5 sm:flex"><Bookmark className="h-3 w-3 text-crimson-600" /> {bookmarks.length} SAVED</span>
+              </div>
+            </div>
           </div>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 mt-1">
-            Official Nepal Department of Transport Management (DoTM) examination question bank.
-          </p>
+
+          {/* Hero stats */}
+          <div className="grid grid-cols-3 gap-2.5 lg:grid-cols-1 xl:grid-cols-3">
+            {[
+              { icon: BookOpenCheck, value: '500', label: 'Questions', tint: 'from-crimson-600 to-rose-500' },
+              { icon: Timer, value: '72s', label: 'Per Q in exam', tint: 'from-navy-700 to-blue-600' },
+              { icon: Trophy, value: '60%', label: 'To pass', tint: 'from-amber-500 to-orange-500' },
+            ].map((s) => (
+              <div key={s.label} className="rounded-2xl border border-zinc-200/80 bg-white/80 p-3.5 text-center shadow-card backdrop-blur dark:border-white/10 dark:bg-white/5">
+                <div className={`mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br text-white ${s.tint}`}>
+                  <s.icon className="h-4 w-4" />
+                </div>
+                <p className="font-mono text-xl font-extrabold tracking-tight">{s.value}</p>
+                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-500">{s.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
+      </section>
 
-        {/* List vs Flashcard Mode Toggle */}
-        <div className="inline-flex p-1 bg-zinc-100 dark:bg-navy-950 rounded-lg border border-zinc-200 dark:border-navy-900 self-start sm:self-auto">
-          <button
-            type="button"
-            onClick={() => setStudyMode('list')}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all ${
-              studyMode === 'list'
-                ? 'bg-white dark:bg-navy-900 text-zinc-950 dark:text-white shadow-2xs'
-                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
-            }`}
-          >
-            <List className="w-4 h-4" />
-            <span>List View</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setStudyMode('flashcard')}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all ${
-              studyMode === 'flashcard'
-                ? 'bg-white dark:bg-navy-900 text-zinc-950 dark:text-white shadow-2xs'
-                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white'
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>Flashcards</span>
-          </button>
-        </div>
-      </div>
+      {/* Filters */}
+      <section className="mt-5 space-y-3">
+        <CategoryPills
+          categories={categories}
+          selectedCategoryId={selectedCategoryId}
+          onSelectCategory={handleSelectCategory}
+          categoryCounts={categoryCounts}
+          totalQuestionsCount={questions.length}
+        />
+        <SearchBar
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+          bookmarkedCount={quickFilterCounts.bookmarked}
+          signsCount={quickFilterCounts.signs}
+          imagesCount={quickFilterCounts.images}
+          totalCount={questions.length}
+        />
+      </section>
 
-      {/* Category Pills */}
-      <CategoryPills
-        categories={categories}
-        selectedCategoryId={selectedCategoryId}
-        onSelectCategory={handleSelectCategory}
-        categoryCounts={categoryCounts}
-        totalQuestionsCount={questions.length}
-      />
+      {/* Content */}
+      <section className="mt-5">
+        {studyMode === 'flashcard' ? (
+          <FlashcardView
+            questions={filteredQuestions}
+            categories={categories}
+            isBookmarked={isBookmarked}
+            onToggleBookmark={toggleBookmark}
+          />
+        ) : (
+          <div className="space-y-4">
+            {filteredQuestions.length === 0 ? (
+              <div className="card-premium p-12 text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-100 text-zinc-400 dark:bg-white/5">
+                  <Search className="h-6 w-6" />
+                </div>
+                <h3 className="font-extrabold">No questions match your search</h3>
+                <p className="mx-auto mt-1 max-w-sm text-sm text-zinc-500">
+                  Try a different keyword, or clear the category and quick filters.
+                </p>
+                <button type="button" onClick={handleResetFilters} className="btn-navy mt-5">
+                  <RotateCcw className="h-4 w-4" /> Reset all filters
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between px-1 font-mono text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
+                  <span>SHOWING {(safeCurrentPage - 1) * PAGE_SIZE + 1}–{Math.min(safeCurrentPage * PAGE_SIZE, filteredQuestions.length)} OF {filteredQuestions.length}</span>
+                  <span className="hidden sm:inline">PAGE {safeCurrentPage} / {totalPages}</span>
+                </div>
+                <div className="space-y-4">
+                  {paginatedQuestions.map((q, idx) => (
+                    <div key={`q-${q.id}`} className="animate-fade-up" style={{ animationDelay: `${Math.min(idx, 8) * 40}ms` }}>
+                      <QuestionCard
+                        question={q}
+                        categoryName={categoryMap.get(q.categoryId)}
+                        isBookmarked={isBookmarked(q.id)}
+                        onToggleBookmark={toggleBookmark}
+                        onAnswerSelected={handleAnswerSelected}
+                      />
+                    </div>
+                  ))}
+                </div>
 
-      {/* Search and Quick Filters */}
-      <SearchBar
-        searchQuery={searchQuery}
-        onSearchChange={handleSearchChange}
-        activeFilter={activeFilter}
-        onFilterChange={handleFilterChange}
-        bookmarkedCount={quickFilterCounts.bookmarked}
-        signsCount={quickFilterCounts.signs}
-        imagesCount={quickFilterCounts.images}
-        totalCount={questions.length}
-      />
-
-      {/* Stats Summary Bar */}
-      <div className="flex items-center justify-between gap-3 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 bg-white dark:bg-[#0c1424] px-4 py-3 rounded-xl border border-zinc-200 dark:border-navy-900 flex-wrap shadow-xs">
-        <div className="flex items-center gap-2.5 font-mono text-xs sm:text-sm flex-wrap">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/60 font-semibold">
-            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-            <span>
-              MATCHED: <strong className="font-extrabold text-blue-900 dark:text-blue-100">{filteredQuestions.length}</strong> / {questions.length}
-            </span>
-          </span>
-
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-crimson-50 dark:bg-crimson-950/60 text-crimson-700 dark:text-crimson-300 border border-crimson-200 dark:border-crimson-900/60 font-semibold">
-            <Bookmark className="w-3.5 h-3.5 text-crimson-600 fill-current" />
-            <span>
-              <strong className="font-extrabold text-crimson-900 dark:text-crimson-100">{bookmarks.length}</strong> SAVED
-            </span>
-          </span>
-        </div>
-
-        {totalAnsweredCount > 0 && (
-          <div className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm px-3 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/60 font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>
-              SESSION: {totalAnsweredCount} ATTEMPTS ({correctCount} CORRECT)
-            </span>
+                {totalPages > 1 && (
+                  <div className="card-premium flex flex-col items-center justify-between gap-3 p-4 sm:flex-row">
+                    <span className="font-mono text-[11px] font-bold text-zinc-500">
+                      PAGE {safeCurrentPage} OF {totalPages}
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        disabled={safeCurrentPage <= 1}
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        aria-label="Previous page"
+                        className="btn-ghost !px-3 !py-2 text-[13px] disabled:opacity-40"
+                      >
+                        <ChevronLeft className="h-4 w-4" /> Prev
+                      </button>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
+                          let pageNum = idx + 1;
+                          if (totalPages > 5 && safeCurrentPage > 3) {
+                            pageNum = safeCurrentPage - 3 + idx;
+                            if (pageNum + (4 - idx) > totalPages) pageNum = totalPages - 4 + idx;
+                          }
+                          return (
+                            <button
+                              key={pageNum}
+                              type="button"
+                              onClick={() => setCurrentPage(pageNum)}
+                              className={`h-9 w-9 rounded-xl font-mono text-[13px] font-bold transition ${
+                                safeCurrentPage === pageNum
+                                  ? 'bg-crimson-600 text-white shadow-glow-crimson'
+                                  : 'border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
+                              }`}
+                            >
+                              {pageNum}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <button
+                        type="button"
+                        disabled={safeCurrentPage >= totalPages}
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        aria-label="Next page"
+                        className="btn-ghost !px-3 !py-2 text-[13px] disabled:opacity-40"
+                      >
+                        Next <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                    {totalPages > 5 && (
+                      <button
+                        type="button"
+                        onClick={() => setCurrentPage(totalPages)}
+                        className="font-mono text-[11px] font-bold text-crimson-600 hover:underline"
+                      >
+                        LAST <ArrowRight className="inline h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
           </div>
         )}
-      </div>
-
-      {/* View Content: List View vs Flashcard View */}
-      {studyMode === 'flashcard' ? (
-        <FlashcardView
-          questions={filteredQuestions}
-          categories={categories}
-          isBookmarked={isBookmarked}
-          onToggleBookmark={toggleBookmark}
-        />
-      ) : (
-        /* List View */
-        <div className="space-y-3">
-          {filteredQuestions.length === 0 ? (
-            /* Empty State */
-            <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-12 text-center space-y-3">
-              <Search className="w-8 h-8 text-zinc-300 dark:text-zinc-600 mx-auto" />
-              <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-                  No questions match your search
-                </h3>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
-                  Try clearing your search term or selecting another category.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-navy-700 text-white text-xs font-medium hover:bg-navy-800 transition-colors"
-              >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset All Filters</span>
-              </button>
-            </div>
-          ) : (
-            <>
-              {/* Question Cards List */}
-              <div className="space-y-3">
-                {paginatedQuestions.map((q) => (
-                  <QuestionCard
-                    key={`q-${q.id}`}
-                    question={q}
-                    categoryName={categoryMap.get(q.categoryId)}
-                    isBookmarked={isBookmarked(q.id)}
-                    onToggleBookmark={toggleBookmark}
-                    onAnswerSelected={handleAnswerSelected}
-                  />
-                ))}
-              </div>
-
-              {/* Clean Pagination Bar */}
-              {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-zinc-200 dark:border-navy-900/80">
-                  <span className="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
-                    Showing {(safeCurrentPage - 1) * PAGE_SIZE + 1}–
-                    {Math.min(safeCurrentPage * PAGE_SIZE, filteredQuestions.length)} of{' '}
-                    {filteredQuestions.length}
-                  </span>
-
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      disabled={safeCurrentPage <= 1}
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                      aria-label="Previous page"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-navy-900 transition-colors"
-                    >
-                      <ChevronLeft className="w-3.5 h-3.5" />
-                      <span>Prev</span>
-                    </button>
-
-                    {/* Page Numbers */}
-                    <div className="flex items-center gap-1 font-mono text-xs">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
-                        let pageNum = idx + 1;
-                        if (totalPages > 5) {
-                          if (safeCurrentPage > 3) {
-                            pageNum = safeCurrentPage - 3 + idx;
-                            if (pageNum + (4 - idx) > totalPages) {
-                              pageNum = totalPages - 4 + idx;
-                            }
-                          }
-                        }
-
-                        return (
-                          <button
-                            key={pageNum}
-                            type="button"
-                            onClick={() => setCurrentPage(pageNum)}
-                            className={`w-7 h-7 rounded-md text-xs transition-all ${
-                              safeCurrentPage === pageNum
-                                ? 'bg-crimson-600 text-white font-semibold shadow-2xs'
-                                : 'bg-white dark:bg-[#0c1424] border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900'
-                            }`}
-                          >
-                            {pageNum}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <button
-                      type="button"
-                      disabled={safeCurrentPage >= totalPages}
-                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                      aria-label="Next page"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-navy-900 transition-colors"
-                    >
-                      <span>Next</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-      )}
+      </section>
     </div>
   );
 };

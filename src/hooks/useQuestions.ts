@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import type { QuestionsData, Question, Category, ExamMetadata } from '../types';
-import fallbackData from '../../public/data/questions.json';
+import fallbackEnglishData from '../../public/data/questions.json';
+import fallbackNepaliData from '../../public/data/questions_ne.json';
+import { useLanguage } from '../context/LanguageContext';
 
 export interface UseQuestionsResult {
   data: QuestionsData | null;
@@ -17,6 +19,7 @@ export interface UseQuestionsOptions {
 
 export function useQuestions(options?: UseQuestionsOptions): UseQuestionsResult {
   const enabled = options?.enabled ?? true;
+  const { language } = useLanguage();
   const [data, setData] = useState<QuestionsData | null>(null);
   const [loading, setLoading] = useState<boolean>(enabled);
   const [error, setError] = useState<string | null>(null);
@@ -24,10 +27,14 @@ export function useQuestions(options?: UseQuestionsOptions): UseQuestionsResult 
   useEffect(() => {
     if (!enabled) return;
     let isMounted = true;
+    setLoading(true);
 
     async function loadQuestions() {
+      const filePath = language === 'ne' ? '/data/questions_ne.json' : '/data/questions.json';
+      const fallback = language === 'ne' ? fallbackNepaliData : fallbackEnglishData;
+
       try {
-        const response = await fetch('/data/questions.json');
+        const response = await fetch(filePath);
         if (!response.ok) {
           throw new Error(`Failed to fetch questions: ${response.status} ${response.statusText}`);
         }
@@ -40,10 +47,9 @@ export function useQuestions(options?: UseQuestionsOptions): UseQuestionsResult 
       } catch (err) {
         if (isMounted) {
           try {
-            // Fallback to bundled static questions data
-            setData(fallbackData as QuestionsData);
+            setData(fallback as unknown as QuestionsData);
             setError(null);
-          } catch (fallbackErr) {
+          } catch {
             setError(err instanceof Error ? err.message : 'Failed to load questions data');
           } finally {
             setLoading(false);
@@ -57,7 +63,7 @@ export function useQuestions(options?: UseQuestionsOptions): UseQuestionsResult 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [enabled, language]);
 
   return {
     data,

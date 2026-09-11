@@ -44,9 +44,12 @@ describe('Navbar', () => {
     const testTab = screen.getByTestId('nav-tab-test');
     const bookmarksTab = screen.getByTestId('nav-tab-bookmarks');
 
-    expect(learnTab.className).toContain('bg-blue-50');
-    expect(testTab.className).not.toContain('bg-blue-50');
-    expect(bookmarksTab.className).not.toContain('bg-blue-50');
+    // Active tab is marked with aria-current; inactive tabs are not
+    expect(learnTab.getAttribute('aria-current')).toBe('page');
+    expect(testTab.getAttribute('aria-current')).toBeNull();
+    expect(bookmarksTab.getAttribute('aria-current')).toBeNull();
+    // Active tab is visually distinct from inactive tabs
+    expect(learnTab.className).not.toBe(testTab.className);
   });
 
   it('calls onSelectTab when a navigation tab is clicked', () => {

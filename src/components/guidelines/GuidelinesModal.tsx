@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
   X,
   Award,
@@ -25,84 +25,27 @@ interface CategoryBreakdownItem {
 }
 
 const CATEGORY_BREAKDOWN: CategoryBreakdownItem[] = [
-  {
-    id: 1,
-    name: 'Knowledge Related to Vehicle Operation',
-    nameNepali: 'सवारी सञ्चालन सम्बन्धी ज्ञान',
-    poolCount: 130,
-    examQuestions: 6,
-    marks: 24,
-  },
-  {
-    id: 2,
-    name: 'Knowledge of Vehicle Laws & Regulations',
-    nameNepali: 'सवारी ऐन नियम सम्बन्धी ज्ञान',
-    poolCount: 90,
-    examQuestions: 5,
-    marks: 20,
-  },
-  {
-    id: 3,
-    name: 'Technical and Mechanical Knowledge of Vehicles',
-    nameNepali: 'सवारी साधनको प्राविधिक तथा यान्त्रिक ज्ञान',
-    poolCount: 80,
-    examQuestions: 3,
-    marks: 12,
-  },
-  {
-    id: 4,
-    name: 'Conceptual Knowledge of Environmental Pollution',
-    nameNepali: 'वातावरण प्रदूषण सम्बन्धी अवधारणात्मक ज्ञान',
-    poolCount: 30,
-    examQuestions: 2,
-    marks: 8,
-  },
-  {
-    id: 5,
-    name: 'Knowledge on Accident Awareness & Safety',
-    nameNepali: 'दुर्घटना सचेतना सम्बन्धी ज्ञान',
-    poolCount: 60,
-    examQuestions: 3,
-    marks: 12,
-  },
-  {
-    id: 6,
-    name: 'Knowledge of Traffic Signs & Signals',
-    nameNepali: 'ट्राफिक सङ्केत सम्बन्धी ज्ञान',
-    poolCount: 110,
-    examQuestions: 6,
-    marks: 24,
-  },
+  { id: 1, name: 'Knowledge Related to Vehicle Operation', nameNepali: 'सवारी सञ्चालन सम्बन्धी ज्ञान', poolCount: 130, examQuestions: 6, marks: 24 },
+  { id: 2, name: 'Knowledge of Vehicle Laws & Regulations', nameNepali: 'सवारी ऐन नियम सम्बन्धी ज्ञान', poolCount: 90, examQuestions: 5, marks: 20 },
+  { id: 3, name: 'Technical and Mechanical Knowledge of Vehicles', nameNepali: 'सवारी साधनको प्राविधिक तथा यान्त्रिक ज्ञान', poolCount: 80, examQuestions: 3, marks: 12 },
+  { id: 4, name: 'Conceptual Knowledge of Environmental Pollution', nameNepali: 'वातावरण प्रदूषण सम्बन्धी अवधारणात्मक ज्ञान', poolCount: 30, examQuestions: 2, marks: 8 },
+  { id: 5, name: 'Knowledge on Accident Awareness & Safety', nameNepali: 'दुर्घटना सचेतना सम्बन्धी ज्ञान', poolCount: 60, examQuestions: 3, marks: 12 },
+  { id: 6, name: 'Knowledge of Traffic Signs & Signals', nameNepali: 'ट्राफिक सङ्केत सम्बन्धी ज्ञान', poolCount: 110, examQuestions: 6, marks: 24 },
 ];
 
 export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClose }) => {
-  const modalContentRef = useRef<HTMLDivElement>(null);
-
-  // Close on Escape key press
   useEffect(() => {
     if (!isOpen) return;
-
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-      }
+      if (e.key === 'Escape') { e.preventDefault(); onClose(); }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Lock body scroll when open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -112,136 +55,76 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
       role="dialog"
       aria-modal="true"
       aria-labelledby="guidelines-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-navy-950/70 dark:bg-navy-950/80 backdrop-blur-sm animate-in fade-in duration-150"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/60 p-3 backdrop-blur-md animate-fade-in sm:p-4"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div
-        ref={modalContentRef}
-        className="bg-white dark:bg-navy-950 border border-zinc-200 dark:border-navy-900 rounded-lg max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150"
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-navy-900 bg-zinc-50/70 dark:bg-navy-900/40 sticky top-0 z-10">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-md bg-crimson-600 text-white flex items-center justify-center font-mono font-bold text-xs shadow-sm">
-              NP
-            </div>
+      <div className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-float dark:border-white/10 dark:bg-ink-900 animate-scale-in">
+        <div className="h-1.5 shrink-0 bg-gradient-to-r from-crimson-700 via-rose-500 via-amber-400 to-navy-700" />
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-zinc-100 px-6 py-4 dark:border-white/10">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-crimson-700 to-rose-500 font-mono text-[12px] font-bold text-white shadow-glow-crimson">NP</span>
             <div>
-              <h2
-                id="guidelines-modal-title"
-                className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight"
-              >
-                Official Examination Guidelines
-              </h2>
-              <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
-                Nepal DoTM • Category A (Motorcycle) &amp; Category K (Scooter)
-              </p>
+              <h2 id="guidelines-modal-title" className="font-extrabold tracking-tight sm:text-lg">Official Examination Guidelines</h2>
+              <p className="font-mono text-[11px] font-semibold text-zinc-500">DOTM · CATEGORY A & K · 2082/83</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close guidelines"
-            className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-navy-900 transition-colors"
-          >
-            <X className="w-5 h-5" />
+          <button type="button" onClick={onClose} aria-label="Close guidelines" className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900 dark:bg-white/10 dark:hover:text-white">
+            <X className="h-4 w-4" />
           </button>
         </div>
 
-        {/* Scrollable Body */}
-        <div className="p-6 overflow-y-auto space-y-6">
-          {/* Key Exam Rules Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-lg p-3.5 text-center">
-              <div className="flex items-center justify-center text-navy-600 dark:text-navy-300 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
-                <CheckCircle2 className="w-4 h-4 mr-1.5" />
-                <span>Questions</span>
+        <div className="space-y-6 overflow-y-auto p-6">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            {[
+              { icon: CheckCircle2, label: 'QUESTIONS', value: '25 Qs', sub: '4 marks each', tint: 'text-navy-700 bg-blue-50 ring-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-900/60' },
+              { icon: Award, label: 'PASS MARK', value: '60 / 100', sub: 'Min 15 Correct', tint: 'text-crimson-700 bg-crimson-50 ring-crimson-200 dark:bg-crimson-950/40 dark:text-crimson-300 dark:ring-crimson-900/60' },
+              { icon: Clock, label: 'TIME', value: '30 Mins', sub: '72s per Q', tint: 'text-amber-700 bg-amber-50 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900/60' },
+              { icon: ShieldCheck, label: 'MARKING', value: 'No −ve', sub: 'attempt all', tint: 'text-emerald-700 bg-emerald-50 ring-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-900/60' },
+            ].map((c) => (
+              <div key={c.label} className={`rounded-2xl p-4 text-center ring-1 ${c.tint}`}>
+                <c.icon className="mx-auto mb-1 h-4 w-4" />
+                <p className="font-mono text-[10px] font-bold tracking-widest opacity-70">{c.label}</p>
+                <p className="font-mono text-2xl font-extrabold tracking-tight">{c.value}</p>
+                <p className="font-mono text-[11px] font-semibold opacity-70">{c.sub}</p>
               </div>
-              <div className="font-mono text-2xl font-extrabold text-zinc-900 dark:text-zinc-100">25 Qs</div>
-              <div className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-0.5">4 Marks Each</div>
-            </div>
-
-            <div className="bg-crimson-50/50 dark:bg-crimson-950/20 border border-crimson-200 dark:border-crimson-900/50 rounded-lg p-3.5 text-center">
-              <div className="flex items-center justify-center text-crimson-600 dark:text-crimson-400 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
-                <Award className="w-4 h-4 mr-1.5" />
-                <span>Pass Mark</span>
-              </div>
-              <div className="font-mono text-2xl font-extrabold text-crimson-600 dark:text-crimson-400">60 / 100</div>
-              <div className="font-mono text-xs text-crimson-600 dark:text-crimson-400 font-bold mt-0.5">Min 15 Correct</div>
-            </div>
-
-            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-lg p-3.5 text-center">
-              <div className="flex items-center justify-center text-amber-600 dark:text-amber-400 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
-                <Clock className="w-4 h-4 mr-1.5" />
-                <span>Time Limit</span>
-              </div>
-              <div className="font-mono text-2xl font-extrabold text-zinc-900 dark:text-zinc-100">30 Mins</div>
-              <div className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-0.5">72s per question</div>
-            </div>
-
-            <div className="bg-zinc-50 dark:bg-navy-900/40 border border-zinc-200 dark:border-navy-900 rounded-lg p-3.5 text-center">
-              <div className="flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-1 font-mono text-xs font-bold uppercase tracking-wider">
-                <ShieldCheck className="w-4 h-4 mr-1.5" />
-                <span>Marking</span>
-              </div>
-              <div className="font-mono text-2xl font-extrabold text-zinc-900 dark:text-zinc-100">No Penalty</div>
-              <div className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-0.5">Attempt all 25</div>
-            </div>
+            ))}
           </div>
 
-          {/* Category Breakdown Table */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base flex items-center space-x-2">
-                <FileText className="w-4 h-4 text-crimson-600 dark:text-crimson-400" />
-                <span>Official Category Weightage (Syllabus Breakdown)</span>
-              </h3>
-              <span className="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400">Total: 500 Question Bank</span>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="flex items-center gap-2 text-[15px] font-extrabold tracking-tight"><FileText className="h-4 w-4 text-crimson-600" /> Official Category Weightage (Syllabus Breakdown)</h3>
+              <span className="font-mono text-[11px] font-bold text-zinc-400">500Q BANK → 25Q PAPER</span>
             </div>
-
-            <div className="border border-zinc-200 dark:border-navy-900 rounded-lg overflow-hidden">
+            <div className="overflow-hidden rounded-2xl border border-zinc-200 dark:border-white/10">
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="bg-zinc-100/70 dark:bg-navy-900/80 border-b border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 font-mono uppercase text-xs font-bold tracking-wider">
-                    <tr>
-                      <th className="py-3 px-3.5 text-center w-12">#</th>
-                      <th className="py-3 px-3.5">Subject Category</th>
-                      <th className="py-3 px-3.5 text-center">Question Pool</th>
-                      <th className="py-3 px-3.5 text-center">Exam Questions</th>
-                      <th className="py-3 px-3.5 text-right pr-4">Total Marks</th>
+                <table className="w-full text-left text-[13px]">
+                  <thead>
+                    <tr className="bg-zinc-50 font-mono text-[11px] font-bold tracking-wider text-zinc-500 dark:bg-white/5 dark:text-zinc-400">
+                      <th className="px-4 py-3 text-center">#</th>
+                      <th className="px-4 py-3">CATEGORY</th>
+                      <th className="px-4 py-3 text-center">POOL</th>
+                      <th className="px-4 py-3 text-center">EXAM</th>
+                      <th className="px-4 py-3 text-right">MARKS</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-200 dark:divide-navy-900/60 text-zinc-700 dark:text-zinc-300">
+                  <tbody className="divide-y divide-zinc-100 dark:divide-white/5">
                     {CATEGORY_BREAKDOWN.map((cat) => (
-                      <tr key={cat.id} className="hover:bg-zinc-50/60 dark:hover:bg-navy-900/40 transition-colors">
-                        <td className="py-3 px-3.5 text-center font-mono font-bold text-zinc-400 dark:text-zinc-500">
-                          {cat.id}
+                      <tr key={cat.id} className="transition hover:bg-zinc-50/70 dark:hover:bg-white/[0.03]">
+                        <td className="px-4 py-3 text-center font-mono font-bold text-zinc-400">{cat.id}</td>
+                        <td className="px-4 py-3">
+                          <p className="font-bold">{cat.nameNepali}</p>
+                          <p className="text-[12px] text-zinc-500">{cat.name}</p>
                         </td>
-                        <td className="py-3 px-3.5">
-                          <div className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base">{cat.nameNepali}</div>
-                          <div className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{cat.name}</div>
-                        </td>
-                        <td className="py-3 px-3.5 text-center font-mono font-medium text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
-                          {cat.poolCount}
-                        </td>
-                        <td className="py-3 px-3.5 text-center font-mono font-bold text-xs sm:text-sm text-crimson-600 dark:text-crimson-400">
-                          {cat.examQuestions}
-                        </td>
-                        <td className="py-3 px-3.5 text-right pr-4 font-mono font-bold text-xs sm:text-sm text-zinc-900 dark:text-zinc-100">
-                          {cat.marks}
-                        </td>
+                        <td className="px-4 py-3 text-center font-mono text-zinc-500">{cat.poolCount}</td>
+                        <td className="px-4 py-3 text-center font-mono font-bold text-crimson-600">{cat.examQuestions}</td>
+                        <td className="px-4 py-3 text-right font-mono font-bold">{cat.marks}</td>
                       </tr>
                     ))}
-                    <tr className="bg-zinc-100/60 dark:bg-navy-900/60 font-mono font-bold text-zinc-900 dark:text-zinc-100 border-t-2 border-zinc-200 dark:border-navy-800 text-sm">
-                      <td colSpan={2} className="py-3 px-3.5 text-right font-black">
-                        Grand Total:
-                      </td>
-                      <td className="py-3 px-3.5 text-center font-bold">500</td>
-                      <td className="py-3 px-3.5 text-center font-bold text-crimson-600 dark:text-crimson-400">25</td>
-                      <td className="py-3 px-3.5 text-right pr-4 font-bold">100</td>
+                    <tr className="bg-zinc-50 font-mono font-bold dark:bg-white/5">
+                      <td colSpan={2} className="px-4 py-3 text-right">Grand Total:</td>
+                      <td className="px-4 py-3 text-center">500</td>
+                      <td className="px-4 py-3 text-center text-crimson-600">25</td>
+                      <td className="px-4 py-3 text-right">100</td>
                     </tr>
                   </tbody>
                 </table>
@@ -249,69 +132,27 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
             </div>
           </div>
 
-          {/* Exam Tips & Official Note */}
           <div className="space-y-3">
-            <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm sm:text-base flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4 text-amber-500" />
-              <span>Exam Tips &amp; Strategic Advice</span>
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
-              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
-                  Focus on High-Yield Sections
-                </span>
-                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                  Category 1 (Vehicle Operation) &amp; Category 6 (Traffic Signs) contribute 12 questions (48 marks) out of 100 marks. Mastering these two categories is essential for passing.
-                </p>
-              </div>
-
-              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
-                  Never Leave Blank Answers
-                </span>
-                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                  There is no negative marking. Even if you are unsure of the correct option, always select your best guess before submitting the exam.
-                </p>
-              </div>
-
-              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
-                  Pacing and Flagging
-                </span>
-                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                  You have 30 minutes for 25 questions (~72 seconds per question). Flag tricky questions to return to them later without losing your rhythm.
-                </p>
-              </div>
-
-              <div className="p-3.5 bg-zinc-50/60 dark:bg-navy-900/30 rounded-lg border border-zinc-200 dark:border-navy-900 space-y-1">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100 flex items-center text-xs sm:text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-crimson-600 dark:text-crimson-400 mr-1.5 shrink-0" />
-                  Official Source
-                </span>
-                <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                  Based on the official curriculum published by the Department of Transport Management (DoTM), Ministry of Physical Infrastructure &amp; Transport, Government of Nepal.
-                </p>
-              </div>
+            <h3 className="flex items-center gap-2 text-[15px] font-extrabold tracking-tight"><AlertCircle className="h-4 w-4 text-amber-500" /> Strategy that works</h3>
+            <div className="grid gap-2.5 sm:grid-cols-2">
+              {[
+                ['Win the big two first', 'Cat 1 + Cat 6 = 12 Qs / 48 marks. Own them and you are halfway to passing.'],
+                ['Never leave blanks', 'No negative marking — a guess is always better than a skip. Flag and return.'],
+                ['Pace at 72s per Q', '30 minutes for 25 Qs. If a Q takes over a minute, flag it and move on.'],
+                ['Trust the source', 'Every Q mirrors the DoTM 500Q curriculum, Ministry of Physical Infrastructure & Transport.'],
+              ].map(([t, d]) => (
+                <div key={t} className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-white/10 dark:bg-white/[0.03]">
+                  <p className="flex items-center gap-1.5 text-[13px] font-bold"><CheckCircle2 className="h-4 w-4 shrink-0 text-crimson-600" />{t}</p>
+                  <p className="mt-1 text-[13px] leading-relaxed text-zinc-500">{d}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-200 dark:border-navy-900 bg-zinc-50/70 dark:bg-navy-900/40">
-          <div className="font-mono text-xs sm:text-sm font-semibold text-zinc-500 dark:text-zinc-400 flex items-center space-x-1.5">
-            <HelpCircle className="w-4 h-4 text-navy-600 dark:text-navy-400" />
-            <span>Pass standard: 15 / 25 questions correct (60%)</span>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs sm:text-sm font-bold rounded-lg shadow-sm transition-colors"
-          >
-            Got It
-          </button>
+        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-zinc-100 bg-zinc-50/70 px-6 py-4 dark:border-white/10 dark:bg-white/[0.02]">
+          <p className="flex items-center gap-1.5 font-mono text-[12px] font-semibold text-zinc-500"><HelpCircle className="h-4 w-4 text-navy-600" /> PASS = 15/25 CORRECT</p>
+          <button type="button" onClick={onClose} className="btn-primary !py-2.5">Got it</button>
         </div>
       </div>
     </div>

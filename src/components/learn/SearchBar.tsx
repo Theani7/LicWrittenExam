@@ -24,133 +24,75 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   imagesCount = 0,
   totalCount,
 }) => {
+  const chips: { id: QuickFilter; label: string; icon: React.FC<{ className?: string }>; count?: number; activeClass: string }[] = [
+    { id: 'all', label: 'All', icon: Layers, count: totalCount, activeClass: 'bg-zinc-900 text-white border-zinc-900 dark:bg-white dark:text-zinc-900 dark:border-white' },
+    { id: 'bookmarked', label: 'Bookmarked', icon: Bookmark, count: bookmarkedCount, activeClass: 'bg-crimson-600 text-white border-crimson-600 shadow-glow-crimson' },
+    { id: 'signs', label: 'Traffic Signs', icon: TrafficCone, count: signsCount, activeClass: 'bg-navy-700 text-white border-navy-700 shadow-glow-navy' },
+    { id: 'images', label: 'Diagrams', icon: ImageIcon, count: imagesCount, activeClass: 'bg-navy-700 text-white border-navy-700 shadow-glow-navy' },
+  ];
+
   return (
-    <div className="space-y-2.5">
-      {/* Search Input Box */}
-      <div className="relative flex items-center">
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
-          <Search className="w-5 h-5 text-navy-700 dark:text-navy-300" />
+    <div className="space-y-3">
+      <div className="group relative">
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-zinc-400">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-100 transition-colors group-focus-within:bg-crimson-600 group-focus-within:text-white dark:bg-white/10">
+            <Search className="h-4 w-4" />
+          </span>
         </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search questions by keyword, topic or number (e.g., 'speed', 'sign', 'Q12')..."
-          className="w-full pl-11 pr-10 py-3 rounded-lg border border-zinc-300 dark:border-navy-800 bg-white dark:bg-[#0c1424] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-navy-600 dark:focus:ring-crimson-600 focus:border-transparent transition-all shadow-xs"
+          placeholder="Search questions by keyword, topic or number (e.g. 'overtake', 'sign', 'Q12')..."
+          className="w-full rounded-2xl border border-zinc-200 bg-white py-3.5 pl-[68px] pr-12 text-sm font-medium text-zinc-900 shadow-card outline-none transition-all placeholder:text-zinc-400 focus:border-crimson-500 focus:ring-4 focus:ring-crimson-600/10 dark:border-white/10 dark:bg-white/5 dark:text-zinc-100 dark:placeholder:text-zinc-500"
         />
-        {searchQuery && (
-          <button
-            type="button"
-            onClick={() => onSearchChange('')}
-            aria-label="Clear search input"
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        )}
+        <div className="absolute inset-y-0 right-3 flex items-center gap-2">
+          {searchQuery ? (
+            <button
+              type="button"
+              onClick={() => onSearchChange('')}
+              aria-label="Clear search input"
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900 dark:bg-white/10 dark:hover:text-white"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          ) : (
+            <kbd className="hidden rounded-lg border border-zinc-200 bg-zinc-50 px-2 py-1 font-mono text-[10px] font-bold text-zinc-400 sm:block dark:border-white/10 dark:bg-white/5">
+              ⌘K
+            </kbd>
+          )}
+        </div>
       </div>
 
-      {/* Quick Filter Chips */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs sm:text-sm">
-        {/* All Chip */}
-        <button
-          type="button"
-          onClick={() => onFilterChange('all')}
-          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all shrink-0 border ${
-            activeFilter === 'all'
-              ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-100 dark:text-zinc-950 dark:border-zinc-100 shadow-2xs'
-              : 'bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900'
-          }`}
-        >
-          <Layers className="w-3.5 h-3.5" />
-          <span>All</span>
-          {typeof totalCount === 'number' && (
-            <span
-              className={`font-mono text-xs font-bold px-1.5 py-0.2 rounded ${
-                activeFilter === 'all'
-                  ? 'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900'
-                  : 'bg-zinc-100 dark:bg-navy-900 text-zinc-600 dark:text-zinc-400'
+      <div className="no-scrollbar flex items-center gap-2 overflow-x-auto pb-1">
+        {chips.map((chip) => {
+          const Icon = chip.icon;
+          const isActive = activeFilter === chip.id;
+          return (
+            <button
+              key={chip.id}
+              type="button"
+              onClick={() => onFilterChange(chip.id)}
+              className={`inline-flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-bold transition-all active:scale-[0.97] ${
+                isActive
+                  ? chip.activeClass
+                  : 'border-zinc-200 bg-white text-zinc-600 shadow-card hover:-translate-y-px hover:shadow-card-hover dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
               }`}
             >
-              {totalCount}
-            </span>
-          )}
-        </button>
-
-        {/* Bookmarked Only Chip */}
-        <button
-          type="button"
-          onClick={() => onFilterChange('bookmarked')}
-          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all shrink-0 border ${
-            activeFilter === 'bookmarked'
-              ? 'bg-crimson-600 text-white border-crimson-600 shadow-2xs'
-              : 'bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900'
-          }`}
-        >
-          <Bookmark className="w-3.5 h-3.5 fill-current" />
-          <span>Bookmarked</span>
-          {bookmarkedCount > 0 && (
-            <span
-              className={`font-mono text-xs font-bold px-1.5 py-0.2 rounded ${
-                activeFilter === 'bookmarked'
-                  ? 'bg-crimson-700 text-white'
-                  : 'bg-crimson-100 dark:bg-crimson-950 text-crimson-700 dark:text-crimson-300'
-              }`}
-            >
-              {bookmarkedCount}
-            </span>
-          )}
-        </button>
-
-        {/* Traffic Signs Only Chip */}
-        <button
-          type="button"
-          onClick={() => onFilterChange('signs')}
-          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all shrink-0 border ${
-            activeFilter === 'signs'
-              ? 'bg-navy-700 text-white border-navy-700 shadow-2xs'
-              : 'bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900'
-          }`}
-        >
-          <TrafficCone className="w-3.5 h-3.5" />
-          <span>Traffic Signs</span>
-          {signsCount > 0 && (
-            <span
-              className={`font-mono text-xs font-bold px-1.5 py-0.2 rounded ${
-                activeFilter === 'signs'
-                  ? 'bg-navy-800 text-white'
-                  : 'bg-zinc-100 dark:bg-navy-900 text-zinc-600 dark:text-zinc-400'
-              }`}
-            >
-              {signsCount}
-            </span>
-          )}
-        </button>
-
-        {/* With Images / Diagrams Chip */}
-        <button
-          type="button"
-          onClick={() => onFilterChange('images')}
-          className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold transition-all shrink-0 border ${
-            activeFilter === 'images'
-              ? 'bg-navy-700 text-white border-navy-700 shadow-2xs'
-              : 'bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900'
-          }`}
-        >
-          <ImageIcon className="w-3.5 h-3.5" />
-          <span>Diagrams</span>
-          {imagesCount > 0 && (
-            <span
-              className={`font-mono text-xs font-bold px-1.5 py-0.2 rounded ${
-                activeFilter === 'images'
-                  ? 'bg-navy-800 text-white'
-                  : 'bg-zinc-100 dark:bg-navy-900 text-zinc-600 dark:text-zinc-400'
-              }`}
-            >
-              {imagesCount}
-            </span>
-          )}
-        </button>
+              <Icon className="h-3.5 w-3.5" />
+              <span>{chip.label}</span>
+              {!!chip.count && (
+                <span
+                  className={`rounded-full px-1.5 py-px font-mono text-[11px] font-bold ${
+                    isActive ? 'bg-white/20 text-white dark:bg-black/10' : 'bg-zinc-100 text-zinc-600 dark:bg-white/10 dark:text-zinc-300'
+                  }`}
+                >
+                  {chip.count}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
