@@ -10402,7 +10402,7 @@
           "text": "सवारी पार्क गर्न"
         }
       ],
-      "correctAnswer": "C"
+      "correctAnswer": "B"
     },
     {
       "id": 415,
@@ -10427,7 +10427,7 @@
           "text": "ट्राफिक सङ्केत"
         }
       ],
-      "correctAnswer": "C"
+      "correctAnswer": "B"
     },
     {
       "id": 416,
@@ -11374,7 +11374,7 @@
         },
         {
           "key": "D",
-          "text": "बायाँ मोड"
+          "text": "बायाँ घुम्ती"
         }
       ],
       "correctAnswer": "C"
