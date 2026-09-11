@@ -1,14 +1,4 @@
 import React from 'react';
-import {
-  Layers,
-  Car,
-  Scale,
-  Wrench,
-  Leaf,
-  AlertTriangle,
-  TrafficCone,
-  type LucideIcon,
-} from 'lucide-react';
 import type { Category } from '../../types';
 
 export interface CategoryPillsProps {
@@ -18,15 +8,6 @@ export interface CategoryPillsProps {
   categoryCounts?: Record<number, number>;
   totalQuestionsCount?: number;
 }
-
-const CATEGORY_ICONS: Record<number, LucideIcon> = {
-  1: Car,
-  2: Scale,
-  3: Wrench,
-  4: Leaf,
-  5: AlertTriangle,
-  6: TrafficCone,
-};
 
 export const CategoryPills: React.FC<CategoryPillsProps> = ({
   categories,
@@ -43,7 +24,7 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
     <div
       role="tablist"
       aria-label="Category filters"
-      className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar scroll-smooth"
+      className="flex items-center gap-1.5 overflow-x-auto pb-2 pt-1 no-scrollbar scroll-smooth"
     >
       {/* "All Questions" Pill */}
       <button
@@ -51,25 +32,18 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
         role="tab"
         aria-selected={selectedCategoryId === null}
         onClick={() => onSelectCategory(null)}
-        className={`group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-150 shrink-0 border ${
+        className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all shrink-0 border ${
           selectedCategoryId === null
-            ? 'bg-blue-600 border-blue-600 text-white shadow-sm shadow-blue-500/25'
-            : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+            ? 'bg-crimson-600 border-crimson-600 text-white font-semibold shadow-2xs'
+            : 'bg-white dark:bg-[#0c1424] border-zinc-200/80 dark:border-navy-900 text-zinc-600 dark:text-zinc-400 hover:border-crimson-200 dark:hover:border-navy-700 hover:text-zinc-950 dark:hover:text-zinc-200'
         }`}
       >
-        <Layers
-          className={`w-4 h-4 transition-colors ${
-            selectedCategoryId === null
-              ? 'text-white'
-              : 'text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200'
-          }`}
-        />
         <span>All Questions</span>
         <span
-          className={`px-1.5 py-0.5 rounded-full text-xs font-semibold ${
+          className={`font-mono text-[10px] px-1.5 py-0.2 rounded ${
             selectedCategoryId === null
-              ? 'bg-white/20 text-white'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+              ? 'bg-crimson-700 text-white'
+              : 'bg-zinc-100 dark:bg-navy-900 text-zinc-500 dark:text-zinc-400'
           }`}
         >
           {total}
@@ -78,7 +52,6 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
 
       {/* 6 Official Category Pills */}
       {categories.map((category) => {
-        const Icon = CATEGORY_ICONS[category.id] || Layers;
         const isSelected = selectedCategoryId === category.id;
         const count = categoryCounts?.[category.id] ?? category.poolCount;
 
@@ -89,25 +62,19 @@ export const CategoryPills: React.FC<CategoryPillsProps> = ({
             role="tab"
             aria-selected={isSelected}
             onClick={() => onSelectCategory(category.id)}
-            className={`group inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-150 shrink-0 border ${
+            className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all shrink-0 border ${
               isSelected
-                ? 'bg-blue-600 border-blue-600 text-white shadow-sm shadow-blue-500/25'
-                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/60'
+                ? 'bg-navy-700 border-navy-700 text-white font-semibold shadow-2xs'
+                : 'bg-white dark:bg-[#0c1424] border-zinc-200/80 dark:border-navy-900 text-zinc-600 dark:text-zinc-400 hover:border-navy-500/40 dark:hover:border-navy-700 hover:text-zinc-950 dark:hover:text-zinc-200'
             }`}
           >
-            <Icon
-              className={`w-4 h-4 transition-colors ${
-                isSelected
-                  ? 'text-white'
-                  : 'text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200'
-              }`}
-            />
+            <span className="font-mono text-[11px] opacity-60">0{category.id}</span>
             <span>{category.name}</span>
             <span
-              className={`px-1.5 py-0.5 rounded-full text-xs font-semibold ${
+              className={`font-mono text-[10px] px-1.5 py-0.2 rounded ${
                 isSelected
-                  ? 'bg-white/20 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                  ? 'bg-navy-800 text-white'
+                  : 'bg-zinc-100 dark:bg-navy-900 text-zinc-500 dark:text-zinc-400'
               }`}
             >
               {count}

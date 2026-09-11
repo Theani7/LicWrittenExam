@@ -28,15 +28,15 @@ export const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
   return (
     <div
       data-testid="question-navigator"
-      className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col space-y-4"
+      className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/90 p-4 shadow-2xs flex flex-col space-y-3"
     >
       {/* Header & Stats */}
-      <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-zinc-100 dark:border-navy-900 pb-2.5">
         <div>
-          <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
+          <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-xs tracking-tight">
             Question Navigator
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+          <p className="font-mono text-[10px] text-zinc-400 dark:text-zinc-500 mt-0.5">
             {answeredCount} of {totalQuestions} answered
           </p>
         </div>
@@ -46,7 +46,7 @@ export const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close navigator"
-            className="md:hidden text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 p-1"
+            className="md:hidden text-xs text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1"
           >
             ✕
           </button>
@@ -54,48 +54,48 @@ export const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
       </div>
 
       {/* Legend */}
-      <div className="grid grid-cols-2 gap-2 text-xs text-slate-600 dark:text-slate-400 pb-2 border-b border-slate-100 dark:border-slate-800">
-        <div className="flex items-center space-x-1.5">
-          <span className="w-3.5 h-3.5 rounded bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold">
+      <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px] text-zinc-500 dark:text-zinc-400 pb-2 border-b border-zinc-100 dark:border-navy-900">
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded bg-navy-700 text-white flex items-center justify-center text-[8px] font-bold">
             ✓
           </span>
-          <span>Answered ({answeredCount})</span>
+          <span>Done ({answeredCount})</span>
         </div>
-        <div className="flex items-center space-x-1.5">
-          <span className="w-3.5 h-3.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700" />
-          <span>Unanswered ({unansweredCount})</span>
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded bg-zinc-100 dark:bg-navy-950 border border-zinc-200 dark:border-navy-800" />
+          <span>Left ({unansweredCount})</span>
         </div>
-        <div className="flex items-center space-x-1.5">
-          <span className="w-3.5 h-3.5 rounded bg-amber-500 text-white flex items-center justify-center text-[9px]">
-            <Flag className="w-2.5 h-2.5" />
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded bg-crimson-600 text-white flex items-center justify-center text-[8px]">
+            <Flag className="w-2 h-2" />
           </span>
           <span>Flagged ({flaggedCount})</span>
         </div>
-        <div className="flex items-center space-x-1.5">
-          <span className="w-3.5 h-3.5 rounded border-2 border-blue-500" />
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded border-2 border-crimson-600" />
           <span>Current</span>
         </div>
       </div>
 
       {/* Grid of Questions */}
-      <div className="grid grid-cols-5 gap-2 max-h-[360px] overflow-y-auto pr-1">
+      <div className="grid grid-cols-5 gap-1.5 max-h-[360px] overflow-y-auto pr-0.5 font-mono">
         {questions.map((q, idx) => {
           const isCurrent = idx === currentIndex;
           const isAnswered = answers[q.id] != null;
           const isFlagged = flaggedQuestionIds.has(q.id);
 
           let buttonClasses =
-            'relative w-full aspect-square rounded-lg flex items-center justify-center text-xs font-semibold transition-all duration-150 ';
+            'relative w-full aspect-square rounded flex items-center justify-center text-xs font-medium transition-all ';
 
           if (isCurrent) {
-            buttonClasses += 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-900 ';
+            buttonClasses += 'ring-2 ring-crimson-600 ring-offset-1 dark:ring-offset-[#0c1424] font-bold ';
           }
 
           if (isAnswered) {
-            buttonClasses += 'bg-blue-600 text-white hover:bg-blue-700 ';
+            buttonClasses += 'bg-navy-700 bg-blue-600 text-white hover:bg-navy-800 ';
           } else {
             buttonClasses +=
-              'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 ';
+              'bg-zinc-50 dark:bg-navy-950 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-navy-900 border border-zinc-200 dark:border-navy-900 ';
           }
 
           return (
@@ -115,10 +115,10 @@ export const QuestionNavigator: React.FC<QuestionNavigatorProps> = ({
               {isFlagged && (
                 <span
                   data-testid={`flagged-badge-${idx + 1}`}
-                  className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-xs text-[8px]"
+                  className="absolute -top-1 -right-1 w-3 h-3 bg-crimson-600 text-white rounded-full flex items-center justify-center text-[7px]"
                   title="Flagged for review"
                 >
-                  <Flag className="w-2 h-2 fill-current" />
+                  <Flag className="w-1.5 h-1.5 fill-current" />
                 </span>
               )}
             </button>

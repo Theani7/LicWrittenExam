@@ -25,55 +25,51 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   totalCount,
 }) => {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {/* Search Input Box */}
       <div className="relative flex items-center">
-        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+        <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
           <Search className="w-4 h-4" />
         </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search questions by text or number (e.g. 'speed', 'sign', 'Q12')..."
-          className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+          placeholder="Search questions by keyword, topic or number (e.g., 'speed', 'sign', 'Q12')..."
+          className="w-full pl-9 pr-9 py-2 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600 text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-navy-700 dark:focus:ring-crimson-600 focus:border-transparent transition-all shadow-2xs"
         />
         {searchQuery && (
           <button
             type="button"
             onClick={() => onSearchChange('')}
             aria-label="Clear search input"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         )}
       </div>
 
       {/* Quick Filter Chips */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-        <span className="text-slate-400 dark:text-slate-500 font-medium mr-1 text-xs shrink-0">
-          Filter:
-        </span>
-
         {/* All Chip */}
         <button
           type="button"
           onClick={() => onFilterChange('all')}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all shrink-0 border ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all shrink-0 border ${
             activeFilter === 'all'
-              ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white shadow-sm'
-              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+              ? 'bg-zinc-900 text-white border-zinc-900 dark:bg-zinc-100 dark:text-zinc-950 dark:border-zinc-100 shadow-2xs font-semibold'
+              : 'bg-white dark:bg-[#0c1424] text-zinc-600 dark:text-zinc-400 border-zinc-200/80 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900/50'
           }`}
         >
-          <Layers className="w-3.5 h-3.5" />
+          <Layers className="w-3 h-3" />
           <span>All</span>
           {typeof totalCount === 'number' && (
             <span
-              className={`px-1 py-0.2 rounded text-[11px] ${
+              className={`font-mono text-[10px] px-1 py-0.2 rounded ${
                 activeFilter === 'all'
-                  ? 'bg-white/20 text-white dark:bg-slate-900/20 dark:text-slate-900'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  ? 'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900'
+                  : 'bg-zinc-100 dark:bg-navy-900 text-zinc-500 dark:text-zinc-400'
               }`}
             >
               {totalCount}
@@ -85,19 +81,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <button
           type="button"
           onClick={() => onFilterChange('bookmarked')}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all shrink-0 border ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all shrink-0 border ${
             activeFilter === 'bookmarked'
-              ? 'bg-amber-500 text-white border-amber-500 shadow-sm shadow-amber-500/20'
-              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+              ? 'bg-crimson-600 text-white border-crimson-600 shadow-2xs font-semibold'
+              : 'bg-white dark:bg-[#0c1424] text-zinc-600 dark:text-zinc-400 border-zinc-200/80 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900/50'
           }`}
         >
-          <Bookmark className="w-3.5 h-3.5 fill-current" />
+          <Bookmark className="w-3 h-3 fill-current" />
           <span>Bookmarked</span>
           <span
-            className={`px-1 py-0.2 rounded text-[11px] font-semibold ${
+            className={`font-mono text-[10px] px-1 py-0.2 rounded ${
               activeFilter === 'bookmarked'
-                ? 'bg-white/25 text-white'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                ? 'bg-crimson-700 text-white'
+                : 'bg-zinc-100 dark:bg-navy-900 text-zinc-500 dark:text-zinc-400'
             }`}
           >
             {bookmarkedCount}
@@ -108,20 +104,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <button
           type="button"
           onClick={() => onFilterChange('signs')}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all shrink-0 border ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all shrink-0 border ${
             activeFilter === 'signs'
-              ? 'bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-500/20'
-              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+              ? 'bg-navy-700 text-white border-navy-700 shadow-2xs font-semibold'
+              : 'bg-white dark:bg-[#0c1424] text-zinc-600 dark:text-zinc-400 border-zinc-200/80 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900/50'
           }`}
         >
-          <TrafficCone className="w-3.5 h-3.5" />
+          <TrafficCone className="w-3 h-3" />
           <span>Traffic Signs</span>
           {signsCount > 0 && (
             <span
-              className={`px-1 py-0.2 rounded text-[11px] font-semibold ${
+              className={`font-mono text-[10px] px-1 py-0.2 rounded ${
                 activeFilter === 'signs'
-                  ? 'bg-white/25 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  ? 'bg-navy-800 text-white'
+                  : 'bg-zinc-100 dark:bg-navy-900 text-zinc-500 dark:text-zinc-400'
               }`}
             >
               {signsCount}
@@ -133,20 +129,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <button
           type="button"
           onClick={() => onFilterChange('images')}
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-all shrink-0 border ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium transition-all shrink-0 border ${
             activeFilter === 'images'
-              ? 'bg-purple-600 text-white border-purple-600 shadow-sm shadow-purple-500/20'
-              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+              ? 'bg-zinc-800 text-white border-zinc-800 dark:bg-zinc-200 dark:text-zinc-900 dark:border-zinc-200 shadow-2xs font-semibold'
+              : 'bg-white dark:bg-[#0c1424] text-zinc-600 dark:text-zinc-400 border-zinc-200/80 dark:border-navy-900 hover:bg-zinc-50 dark:hover:bg-navy-900/50'
           }`}
         >
-          <ImageIcon className="w-3.5 h-3.5" />
-          <span>With Images</span>
+          <ImageIcon className="w-3 h-3" />
+          <span>Diagrams</span>
           {imagesCount > 0 && (
             <span
-              className={`px-1 py-0.2 rounded text-[11px] font-semibold ${
+              className={`font-mono text-[10px] px-1 py-0.2 rounded ${
                 activeFilter === 'images'
-                  ? 'bg-white/25 text-white'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                  ? 'bg-zinc-900 text-white dark:bg-zinc-300 dark:text-zinc-900'
+                  : 'bg-zinc-100 dark:bg-navy-900 text-zinc-500 dark:text-zinc-400'
               }`}
             >
               {imagesCount}

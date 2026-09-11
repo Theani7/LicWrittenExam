@@ -180,10 +180,10 @@ export const LearnView: React.FC<LearnViewProps> = ({
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 space-y-4">
-        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-          Loading questions...
+      <div className="flex flex-col items-center justify-center py-20 space-y-3">
+        <div className="w-8 h-8 border-2 border-crimson-600 border-t-transparent rounded-full animate-spin"></div>
+        <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
+          Loading question pool...
         </p>
       </div>
     );
@@ -191,53 +191,58 @@ export const LearnView: React.FC<LearnViewProps> = ({
 
   if (error) {
     return (
-      <div className="p-6 max-w-md mx-auto bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-2xl text-center space-y-3">
-        <AlertCircle className="w-10 h-10 text-red-500 mx-auto" />
-        <h3 className="text-base font-semibold text-red-800 dark:text-red-300">
+      <div className="p-6 max-w-md mx-auto bg-crimson-50 dark:bg-crimson-950/30 border border-crimson-200 dark:border-crimson-900/60 rounded-lg text-center space-y-3">
+        <AlertCircle className="w-8 h-8 text-crimson-600 mx-auto" />
+        <h3 className="text-sm font-semibold text-crimson-900 dark:text-crimson-200">
           Failed to load study questions
         </h3>
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <p className="text-xs text-crimson-700 dark:text-crimson-400">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 space-y-5">
       {/* Top Bar: Title, Stats, and Mode Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200 dark:border-navy-900/80">
         <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-            Learn Mode
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
-            Study official Nepal Category A &amp; K questions by category, search, or flashcard drill.
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white tracking-tight">
+              Learn Mode
+            </h2>
+            <span className="font-mono text-[11px] text-zinc-400 dark:text-zinc-500">
+              500 POOL
+            </span>
+          </div>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+            Official Nepal Department of Transport Management (DoTM) examination question bank.
           </p>
         </div>
 
         {/* List vs Flashcard Mode Toggle */}
-        <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-800/80 rounded-xl border border-slate-200 dark:border-slate-700/60 self-start sm:self-auto">
+        <div className="inline-flex p-0.5 bg-zinc-100 dark:bg-navy-950 rounded-lg border border-zinc-200 dark:border-navy-900 self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setStudyMode('list')}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               studyMode === 'list'
-                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm font-semibold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+                ? 'bg-white dark:bg-navy-900 text-zinc-900 dark:text-white shadow-2xs font-semibold'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
             }`}
           >
-            <List className="w-4 h-4" />
+            <List className="w-3.5 h-3.5" />
             <span>List View</span>
           </button>
           <button
             type="button"
             onClick={() => setStudyMode('flashcard')}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
               studyMode === 'flashcard'
-                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm font-semibold'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100'
+                ? 'bg-white dark:bg-navy-900 text-zinc-900 dark:text-white shadow-2xs font-semibold'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
             }`}
           >
-            <Layers className="w-4 h-4" />
+            <Layers className="w-3.5 h-3.5" />
             <span>Flashcards</span>
           </button>
         </div>
@@ -265,34 +270,30 @@ export const LearnView: React.FC<LearnViewProps> = ({
       />
 
       {/* Stats Summary Bar */}
-      <div className="flex items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/40 px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-800/60 flex-wrap">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-zinc-400 bg-white dark:bg-[#0c1424] px-3.5 py-2 rounded-md border border-zinc-200/80 dark:border-navy-900/80 flex-wrap">
+        <div className="flex items-center gap-3 font-mono text-[11px]">
           <span>
-            Matched:{' '}
-            <strong className="text-slate-900 dark:text-slate-100 font-semibold">
+            MATCHED:{' '}
+            <strong className="text-zinc-900 dark:text-zinc-100 font-semibold">
               {filteredQuestions.length}
             </strong>{' '}
-            of {questions.length}
+            / {questions.length}
           </span>
-          <span>•</span>
+          <span className="text-zinc-300 dark:text-zinc-700">/</span>
           <span className="inline-flex items-center gap-1">
-            <Bookmark className="w-3.5 h-3.5 text-amber-500 fill-current" />
-            <strong className="text-slate-900 dark:text-slate-100 font-semibold">
+            <Bookmark className="w-3 h-3 text-crimson-600 fill-current" />
+            <strong className="text-zinc-900 dark:text-zinc-100 font-semibold">
               {bookmarks.length}
             </strong>{' '}
-            saved
+            SAVED
           </span>
         </div>
 
         {totalAnsweredCount > 0 && (
-          <div className="inline-flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
-            <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+          <div className="inline-flex items-center gap-1.5 font-mono text-[11px] text-zinc-600 dark:text-zinc-300">
+            <Sparkles className="w-3 h-3 text-crimson-600" />
             <span>
-              Session:{' '}
-              <strong className="text-slate-900 dark:text-white font-semibold">
-                {totalAnsweredCount}
-              </strong>{' '}
-              answered ({correctCount} correct)
+              SESSION: {totalAnsweredCount} ATTEMPTS ({correctCount} CORRECT)
             </span>
           </div>
         )}
@@ -308,32 +309,32 @@ export const LearnView: React.FC<LearnViewProps> = ({
         />
       ) : (
         /* List View */
-        <div className="space-y-4">
+        <div className="space-y-3">
           {filteredQuestions.length === 0 ? (
             /* Empty State */
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center space-y-4">
-              <Search className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto" />
+            <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-12 text-center space-y-3">
+              <Search className="w-8 h-8 text-zinc-300 dark:text-zinc-600 mx-auto" />
               <div className="space-y-1">
-                <h3 className="text-base font-semibold text-slate-800 dark:text-slate-200">
+                <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
                   No questions match your search
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                  Try clearing your search term or selecting another category filter.
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+                  Try clearing your search term or selecting another category.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold hover:opacity-90 transition-opacity"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-navy-700 text-white text-xs font-medium hover:bg-navy-800 transition-colors"
               >
-                <RotateCcw className="w-3.5 h-3.5" />
+                <RotateCcw className="w-3 h-3" />
                 <span>Reset All Filters</span>
               </button>
             </div>
           ) : (
             <>
               {/* Question Cards List */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {paginatedQuestions.map((q) => (
                   <QuestionCard
                     key={`q-${q.id}`}
@@ -348,27 +349,27 @@ export const LearnView: React.FC<LearnViewProps> = ({
 
               {/* Clean Pagination Bar */}
               {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-slate-200 dark:border-slate-800">
-                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-zinc-200 dark:border-navy-900/80">
+                  <span className="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
                     Showing {(safeCurrentPage - 1) * PAGE_SIZE + 1}–
                     {Math.min(safeCurrentPage * PAGE_SIZE, filteredQuestions.length)} of{' '}
-                    {filteredQuestions.length} questions
+                    {filteredQuestions.length}
                   </span>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       disabled={safeCurrentPage <= 1}
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       aria-label="Previous page"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-navy-900 transition-colors"
                     >
-                      <ChevronLeft className="w-4 h-4" />
+                      <ChevronLeft className="w-3.5 h-3.5" />
                       <span>Prev</span>
                     </button>
 
                     {/* Page Numbers */}
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1 font-mono text-xs">
                       {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
                         let pageNum = idx + 1;
                         if (totalPages > 5) {
@@ -385,10 +386,10 @@ export const LearnView: React.FC<LearnViewProps> = ({
                             key={pageNum}
                             type="button"
                             onClick={() => setCurrentPage(pageNum)}
-                            className={`w-8 h-8 rounded-lg text-xs font-medium transition-all ${
+                            className={`w-7 h-7 rounded-md text-xs transition-all ${
                               safeCurrentPage === pageNum
-                                ? 'bg-blue-600 text-white font-bold shadow-sm shadow-blue-500/25'
-                                : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                                ? 'bg-crimson-600 text-white font-semibold shadow-2xs'
+                                : 'bg-white dark:bg-[#0c1424] border border-zinc-200 dark:border-navy-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900'
                             }`}
                           >
                             {pageNum}
@@ -402,10 +403,10 @@ export const LearnView: React.FC<LearnViewProps> = ({
                       disabled={safeCurrentPage >= totalPages}
                       onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       aria-label="Next page"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 text-xs font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-zinc-50 dark:hover:bg-navy-900 transition-colors"
                     >
                       <span>Next</span>
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>

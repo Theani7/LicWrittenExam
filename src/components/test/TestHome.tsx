@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Award,
   Clock,
-  FileCheck2,
+  FileCheck,
   Target,
   History,
   Trash2,
@@ -70,64 +70,64 @@ export const TestHome: React.FC<TestHomeProps> = ({
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 space-y-10">
+    <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       {/* Header Banner */}
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 text-xs font-semibold">
+      <div className="text-center max-w-xl mx-auto space-y-2">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-crimson-200 dark:border-crimson-900 bg-crimson-50 dark:bg-crimson-950/60 text-crimson-700 dark:text-crimson-300 font-mono text-[11px] font-medium">
           <Award className="w-3.5 h-3.5" />
-          <span>Official DoTM Syllabus Compliant</span>
+          <span>OFFICIAL DoTM CURRICULUM</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-          Driving License Test Simulation
+        <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
+          Exam Simulation &amp; Category Drills
         </h1>
-        <p className="text-sm text-slate-600 dark:text-slate-400">
-          Simulate the real Nepal Driving License written test with time limits and official category quotas, or drill specific categories.
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          Simulate the timed Nepal driving license written examination under official rules, or practice focused categories.
         </p>
       </div>
 
       {/* Mode Selection Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
         {/* Card 1: Official DoTM Exam Simulation */}
         <div
           data-testid="official-exam-card"
-          className="relative bg-white dark:bg-slate-900 rounded-2xl border-2 border-blue-500/80 dark:border-blue-500/60 p-6 sm:p-7 shadow-lg shadow-blue-500/5 flex flex-col justify-between space-y-6"
+          className="relative bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/90 p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-5"
         >
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20">
-                <FileCheck2 className="w-6 h-6" />
+              <div className="w-8 h-8 rounded bg-crimson-600 text-white flex items-center justify-center font-mono text-xs font-bold">
+                <FileCheck className="w-4 h-4" />
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wider bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">
-                Official Rules
+              <span className="font-mono text-[10px] font-semibold tracking-wider text-crimson-700 dark:text-crimson-300 bg-crimson-50 dark:bg-crimson-950/60 px-2 py-0.5 rounded border border-crimson-200/80 dark:border-crimson-900/60">
+                OFFICIAL SIMULATION
               </span>
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 Official DoTM Exam Simulation
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                25 randomly generated questions with exact official category distribution under realistic test constraints.
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 leading-relaxed">
+                25 weighted questions randomly sampled across the 6 official syllabus categories with a 30-minute timer.
               </p>
             </div>
 
             {/* Rules badges */}
-            <div className="grid grid-cols-2 gap-2 text-xs pt-2">
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
-                <HelpCircle className="w-4 h-4 text-blue-500" />
-                <span className="text-slate-700 dark:text-slate-300 font-medium">25 Questions (4 pts each)</span>
+            <div className="grid grid-cols-2 gap-2 text-xs pt-1 font-mono">
+              <div className="p-2 rounded bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200/80 dark:border-navy-900 flex items-center gap-2">
+                <HelpCircle className="w-3.5 h-3.5 text-navy-600 dark:text-navy-400 shrink-0" />
+                <span className="text-zinc-700 dark:text-zinc-300 text-[11px]">25 Qs (4 pts each)</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
-                <Clock className="w-4 h-4 text-amber-500" />
-                <span className="text-slate-700 dark:text-slate-300 font-medium">30 Minutes Limit</span>
+              <div className="p-2 rounded bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200/80 dark:border-navy-900 flex items-center gap-2">
+                <Clock className="w-3.5 h-3.5 text-crimson-600 dark:text-crimson-400 shrink-0" />
+                <span className="text-zinc-700 dark:text-zinc-300 text-[11px]">30:00 Countdown</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
-                <Award className="w-4 h-4 text-emerald-500" />
-                <span className="text-slate-700 dark:text-slate-300 font-medium">Pass Mark: 60/100 (15 Correct)</span>
+              <div className="p-2 rounded bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200/80 dark:border-navy-900 flex items-center gap-2">
+                <Award className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span className="text-zinc-700 dark:text-zinc-300 text-[11px]">Pass: 60/100 (15 Qs)</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 flex items-center space-x-2">
-                <BarChart3 className="w-4 h-4 text-indigo-500" />
-                <span className="text-slate-700 dark:text-slate-300 font-medium">Weighted 6 Categories</span>
+              <div className="p-2 rounded bg-zinc-50 dark:bg-navy-950/60 border border-zinc-200/80 dark:border-navy-900 flex items-center gap-2">
+                <BarChart3 className="w-3.5 h-3.5 text-navy-600 dark:text-navy-400 shrink-0" />
+                <span className="text-zinc-700 dark:text-zinc-300 text-[11px]">Weighted Quotas</span>
               </div>
             </div>
           </div>
@@ -136,9 +136,9 @@ export const TestHome: React.FC<TestHomeProps> = ({
             type="button"
             data-testid="start-official-exam-btn"
             onClick={onStartOfficialExam}
-            className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-md shadow-blue-500/25 flex items-center justify-center space-x-2 transition"
+            className="w-full py-2.5 px-4 bg-crimson-600 hover:bg-crimson-700 active:scale-[0.99] text-white font-medium text-xs rounded-md shadow-2xs flex items-center justify-center gap-1.5 transition"
           >
-            <span>Start Official Exam</span>
+            <span>Start Official Exam Simulation</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -146,69 +146,69 @@ export const TestHome: React.FC<TestHomeProps> = ({
         {/* Card 2: Category Practice Drill */}
         <div
           data-testid="category-drill-card"
-          className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm flex flex-col justify-between space-y-6"
+          className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/90 p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-5"
         >
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             <div className="flex items-center justify-between">
-              <div className="w-12 h-12 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
-                <Target className="w-6 h-6" />
+              <div className="w-8 h-8 rounded bg-navy-700 text-white flex items-center justify-center font-mono text-xs font-bold">
+                <Target className="w-4 h-4" />
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300">
-                Targeted Practice
+              <span className="font-mono text-[10px] font-semibold tracking-wider text-navy-700 dark:text-navy-300 bg-navy-50 dark:bg-navy-950/60 px-2 py-0.5 rounded border border-navy-200/80 dark:border-navy-900/60">
+                CATEGORY DRILL
               </span>
             </div>
 
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+              <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
                 Category Practice Drill
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                Focus on weak subjects or master a specific category with custom question lengths.
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 leading-relaxed">
+                Focus on high-yield areas like Traffic Signs or Mechanical rules with customizable question count.
               </p>
             </div>
 
             {/* Category Dropdown */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <label
                 htmlFor="category-select"
-                className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider"
+                className="block font-mono text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 tracking-wider"
               >
-                Select Category
+                SELECT CATEGORY
               </label>
               <select
                 id="category-select"
                 data-testid="category-select"
                 value={selectedCatId}
                 onChange={(e) => setSelectedCatId(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-indigo-500 text-slate-900 dark:text-slate-100 font-medium"
+                className="w-full px-3 py-2 text-xs bg-zinc-50 dark:bg-navy-950 border border-zinc-200 dark:border-navy-900 rounded-md text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-navy-700"
               >
                 {activeCategoryList.map((cat) => (
                   <option key={cat.id} value={cat.id}>
-                    Cat {cat.id}: {cat.name} ({cat.poolCount} Qs)
+                    Cat 0{cat.id}: {cat.name} ({cat.poolCount} Qs)
                   </option>
                 ))}
               </select>
             </div>
 
             {/* Question Count Selector */}
-            <div className="space-y-2">
-              <span className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                Question Count
+            <div className="space-y-1.5">
+              <span className="block font-mono text-[10px] font-semibold text-zinc-500 dark:text-zinc-400 tracking-wider">
+                QUESTION COUNT
               </span>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-1.5 font-mono">
                 {[10, 20, 'all'].map((opt) => (
                   <button
                     key={opt}
                     type="button"
                     data-testid={`count-option-${opt}`}
                     onClick={() => setSelectedCount(opt as number | 'all')}
-                    className={`py-2 text-xs font-semibold rounded-lg border transition ${
+                    className={`py-1.5 text-xs rounded border transition ${
                       selectedCount === opt
-                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                        : 'bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-300'
+                        ? 'bg-navy-700 text-white border-navy-700 font-semibold'
+                        : 'bg-zinc-50 dark:bg-navy-950 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-navy-900 hover:border-zinc-300'
                     }`}
                   >
-                    {opt === 'all' ? 'All' : `${opt} Qs`}
+                    {opt === 'all' ? 'ALL' : `${opt} QS`}
                   </button>
                 ))}
               </div>
@@ -219,7 +219,7 @@ export const TestHome: React.FC<TestHomeProps> = ({
             type="button"
             data-testid="start-category-drill-btn"
             onClick={handleStartCategoryDrill}
-            className="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-semibold rounded-xl shadow-md shadow-indigo-500/25 flex items-center justify-center space-x-2 transition"
+            className="w-full py-2.5 px-4 bg-navy-700 hover:bg-navy-800 active:scale-[0.99] text-white font-medium text-xs rounded-md shadow-2xs flex items-center justify-center gap-1.5 transition"
           >
             <span>Start Category Drill</span>
             <ChevronRight className="w-4 h-4" />
@@ -228,11 +228,11 @@ export const TestHome: React.FC<TestHomeProps> = ({
       </div>
 
       {/* Recent Exam History Summary */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-          <div className="flex items-center space-x-2">
-            <History className="w-5 h-5 text-slate-500 dark:text-slate-400" />
-            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base">
+      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900/90 p-5 shadow-2xs space-y-3">
+        <div className="flex items-center justify-between border-b border-zinc-100 dark:border-navy-900 pb-2.5">
+          <div className="flex items-center gap-2">
+            <History className="w-4 h-4 text-zinc-400 dark:text-zinc-500" />
+            <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 text-xs tracking-tight">
               Recent Exam Attempts ({history.length})
             </h3>
           </div>
@@ -242,11 +242,11 @@ export const TestHome: React.FC<TestHomeProps> = ({
               type="button"
               data-testid="clear-history-button"
               onClick={clearHistory}
-              className="text-xs text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 flex items-center space-x-1"
+              className="text-[11px] font-mono text-zinc-400 hover:text-crimson-600 flex items-center gap-1 transition-colors"
               title="Clear exam history"
             >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Clear History</span>
+              <Trash2 className="w-3 h-3" />
+              <span>CLEAR</span>
             </button>
           )}
         </div>
@@ -254,47 +254,46 @@ export const TestHome: React.FC<TestHomeProps> = ({
         {history.length === 0 ? (
           <div
             data-testid="history-empty-state"
-            className="text-center py-8 px-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl space-y-2"
+            className="text-center py-6 px-4 border border-dashed border-zinc-200 dark:border-navy-900 rounded space-y-1.5"
           >
-            <Award className="w-8 h-8 text-slate-400 mx-auto" />
-            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-              No exam attempts yet
+            <p className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              No exam attempts recorded yet
             </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-              Take your first official 25-question exam simulation above to test your readiness and track your scores here!
+            <p className="text-[11px] text-zinc-400 dark:text-zinc-500 max-w-sm mx-auto">
+              Complete your first 25-question simulation above to test your readiness and track scores here.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100 dark:divide-slate-800 overflow-hidden">
+          <div className="divide-y divide-zinc-100 dark:divide-navy-900/60 overflow-hidden font-mono">
             {history.slice(0, 5).map((attempt) => (
               <div
                 key={attempt.id}
                 data-testid="history-row"
-                className="py-3 sm:py-4 flex items-center justify-between gap-3 text-xs sm:text-sm"
+                className="py-2.5 flex items-center justify-between gap-3 text-xs"
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                   <span
-                    className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                       attempt.passed
-                        ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300'
-                        : 'bg-red-100 dark:bg-red-950/60 text-red-700 dark:text-red-300'
+                        ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800'
+                        : 'bg-crimson-100 dark:bg-crimson-950/60 text-crimson-800 dark:text-crimson-300 border border-crimson-300 dark:border-crimson-800'
                     }`}
                   >
                     {attempt.passed ? 'PASSED' : 'FAILED'}
                   </span>
                   <div>
-                    <div className="font-semibold text-slate-900 dark:text-slate-100">
-                      Score: {attempt.score} / {attempt.totalMarks} ({attempt.correctCount}/
-                      {attempt.totalQuestions} correct)
+                    <div className="font-semibold text-zinc-900 dark:text-zinc-100 text-xs">
+                      {attempt.score} / {attempt.totalMarks} PTS ({attempt.correctCount}/
+                      {attempt.totalQuestions} CORRECT)
                     </div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400">
-                      {formatDate(attempt.timestamp)} • Took {formatDuration(attempt.timeTakenSeconds)}
+                    <div className="text-[10px] text-zinc-400">
+                      {formatDate(attempt.timestamp)} • TOOK {formatDuration(attempt.timeTakenSeconds)}
                     </div>
                   </div>
                 </div>
 
                 <div className="text-right shrink-0">
-                  <span className="font-mono font-bold text-sm text-slate-700 dark:text-slate-300">
+                  <span className="font-bold text-xs text-zinc-800 dark:text-zinc-200">
                     {Math.round((attempt.correctCount / attempt.totalQuestions) * 100)}%
                   </span>
                 </div>

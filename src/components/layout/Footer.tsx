@@ -1,39 +1,35 @@
 import React from 'react';
-import { ShieldCheck, WifiOff } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 py-8 px-4 transition-colors">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-        <div className="flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-3 text-center sm:text-left">
-          <span className="font-semibold text-slate-700 dark:text-slate-300">
-            Nepal Driving License Written Prep
+    <footer className="border-t border-zinc-200 dark:border-zinc-800/80 bg-white/50 dark:bg-[#09090b]/50 py-8 px-4 transition-colors">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left">
+          <span className="font-semibold text-zinc-800 dark:text-zinc-200 tracking-tight">
+            Nepal License Written Prep
           </span>
-          <span className="hidden sm:inline">•</span>
-          <span>Category A (Motorcycle) &amp; Category K (Scooter)</span>
-          <span className="hidden sm:inline">•</span>
-          <span>Syllabus FY 2082/83</span>
+          <span className="hidden sm:inline text-zinc-300 dark:text-zinc-700">/</span>
+          <span className="font-mono text-[11px]">Category A &amp; K</span>
+          <span className="hidden sm:inline text-zinc-300 dark:text-zinc-700">/</span>
+          <span className="font-mono text-[11px]">Syllabus FY 2082/83</span>
         </div>
 
-        <div className="flex items-center space-x-4 text-[11px]">
-          <span className="flex items-center space-x-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-            <span>DoTM 500 Question Curriculum</span>
+        <div className="flex items-center gap-3 font-mono text-[11px]">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+            <span>500 Questions</span>
           </span>
-          <span>•</span>
-          <span className="flex items-center space-x-1">
-            <WifiOff className="w-3.5 h-3.5 text-blue-500" />
-            <span>100% Offline Capable</span>
-          </span>
+          <span className="text-zinc-300 dark:text-zinc-700">/</span>
+          <span>100% Client-Side</span>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto mt-4 pt-4 border-t border-slate-100 dark:border-slate-800/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 dark:text-slate-500 gap-2">
+      <div className="max-w-6xl mx-auto mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-850 flex flex-col sm:flex-row items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500 gap-2">
         <p>
-          Curriculum reference: Department of Transport Management (DoTM), Ministry of Physical Infrastructure &amp; Transport, Government of Nepal.
+          DoTM 500 Question Curriculum • Ministry of Physical Infrastructure &amp; Transport, Government of Nepal.
         </p>
-        <p className="flex items-center space-x-1">
-          <span>Crafted for Nepali aspirants</span>
+        <p className="font-mono">
+          Decoupled JSON Dataset
         </p>
       </div>
     </footer>

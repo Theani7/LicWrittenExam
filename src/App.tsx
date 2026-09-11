@@ -167,10 +167,10 @@ export function AppContent(): React.JSX.Element {
   // Loading State
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#fcfcfd] dark:bg-[#070d19] text-zinc-900 dark:text-zinc-100 p-4">
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+          <div className="w-9 h-9 border-2 border-crimson-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400 tracking-wide">
             Loading 500-question exam database...
           </p>
         </div>
@@ -181,18 +181,18 @@ export function AppContent(): React.JSX.Element {
   // Error State
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4">
-        <div className="max-w-md w-full bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-2xl p-6 text-center space-y-3">
-          <AlertCircle className="w-10 h-10 text-red-500 mx-auto" />
-          <h2 className="text-lg font-semibold text-red-800 dark:text-red-300">Failed to Load Questions</h2>
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+      <div className="min-h-screen flex items-center justify-center bg-[#fcfcfd] dark:bg-[#070d19] text-zinc-900 dark:text-zinc-100 p-4">
+        <div className="max-w-md w-full bg-crimson-50 dark:bg-crimson-950/40 border border-crimson-200 dark:border-crimson-900/60 rounded-md p-6 text-center space-y-3">
+          <AlertCircle className="w-9 h-9 text-crimson-600 mx-auto" />
+          <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">Failed to Load Questions</h2>
+          <p className="font-mono text-xs text-crimson-700 dark:text-crimson-300">{error}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen flex flex-col bg-[#fcfcfd] dark:bg-[#070d19] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-crimson-100 selection:text-crimson-900 dark:selection:bg-crimson-950 dark:selection:text-crimson-200 font-sans">
       {/* Header Navigation */}
       <Navbar
         activeTab={activeTab}
@@ -268,25 +268,25 @@ export function AppContent(): React.JSX.Element {
           role="dialog"
           aria-modal="true"
           aria-labelledby="leave-exam-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/70 dark:bg-navy-950/80 backdrop-blur-sm animate-in fade-in duration-150"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               handleCancelLeaveExam();
             }
           }}
         >
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-              <AlertTriangle className="w-6 h-6" />
+          <div className="bg-white dark:bg-navy-950 border border-zinc-200 dark:border-navy-900 rounded-lg max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="w-10 h-10 rounded-md bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-900/60 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5" />
             </div>
             <div>
               <h3
                 id="leave-exam-title"
-                className="text-lg font-bold text-slate-900 dark:text-white"
+                className="text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight"
               >
                 Leave Exam in Progress?
               </h3>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+              <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1.5 leading-relaxed">
                 Your test is currently active. If you navigate away now, your current test progress and answers will be lost.
               </p>
             </div>
@@ -295,7 +295,7 @@ export function AppContent(): React.JSX.Element {
                 type="button"
                 onClick={handleCancelLeaveExam}
                 data-testid="cancel-leave-exam-btn"
-                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium transition-colors"
+                className="px-3.5 py-1.5 rounded-md border border-zinc-200 dark:border-navy-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-navy-900 font-mono text-xs font-semibold transition-colors"
               >
                 Continue Exam
               </button>
@@ -303,7 +303,7 @@ export function AppContent(): React.JSX.Element {
                 type="button"
                 onClick={handleConfirmLeaveExam}
                 data-testid="confirm-leave-exam-btn"
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors"
+                className="px-3.5 py-1.5 bg-crimson-600 hover:bg-crimson-700 text-white font-mono text-xs font-semibold rounded-md shadow-sm transition-colors"
               >
                 Yes, Leave Exam
               </button>

@@ -38,7 +38,6 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
   const displayQuestions = useMemo(() => {
     if (!isShuffled) return questions;
     const copy = [...questions];
-    // Fisher-Yates shuffle with deterministic seeded shuffle or standard random
     for (let i = copy.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [copy[i], copy[j]] = [copy[j], copy[i]];
@@ -81,7 +80,6 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
   // Keyboard navigation: Left Arrow (prev), Right Arrow (next), Space (flip/reveal)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't intercept if user is typing in an input or textarea
       const target = e.target as HTMLElement | null;
       if (
         target &&
@@ -112,13 +110,13 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
 
   if (displayQuestions.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center space-y-4">
-        <HelpCircle className="w-12 h-12 text-slate-400 mx-auto" />
-        <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">
+      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-12 text-center space-y-3">
+        <HelpCircle className="w-8 h-8 text-zinc-400 mx-auto" />
+        <h3 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
           No questions match your filter
         </h3>
-        <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-          Try resetting your search query or selecting a different category pill above.
+        <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
+          Try clearing your search query or selecting a different category.
         </p>
       </div>
     );
@@ -128,65 +126,63 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
   const progressPercent = Math.round(((currentIndex + 1) / displayQuestions.length) * 100);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Top Header & Progress */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm space-y-3">
-        <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="bg-white dark:bg-[#0c1424] rounded-lg border border-zinc-200 dark:border-navy-900 p-4 space-y-2.5">
+        <div className="flex items-center justify-between flex-wrap gap-2">
           {/* Progress label */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-slate-900 dark:text-white">
+          <div className="flex items-center gap-2 font-mono text-xs">
+            <span className="font-semibold text-zinc-900 dark:text-white">
               Flashcard {currentIndex + 1}
             </span>
-            <span className="text-xs text-slate-500 dark:text-slate-400">
+            <span className="text-zinc-400 dark:text-zinc-500">
               of {displayQuestions.length} ({progressPercent}%)
             </span>
           </div>
 
           {/* Shuffle Toggle */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleToggleShuffle}
-              aria-label="Toggle shuffle mode"
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
-                isShuffled
-                  ? 'bg-purple-50 dark:bg-purple-950/50 border-purple-300 dark:border-purple-800 text-purple-700 dark:text-purple-300 shadow-sm'
-                  : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
-              }`}
-            >
-              <Shuffle className="w-3.5 h-3.5" />
-              <span>Shuffle {isShuffled ? 'ON' : 'OFF'}</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleToggleShuffle}
+            aria-label="Toggle shuffle mode"
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-medium transition-all border ${
+              isShuffled
+                ? 'bg-crimson-50 dark:bg-crimson-950/60 border-crimson-300 dark:border-crimson-800 text-crimson-700 dark:text-crimson-300'
+                : 'bg-white dark:bg-navy-900/60 border-zinc-200 dark:border-navy-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-navy-900'
+            }`}
+          >
+            <Shuffle className="w-3 h-3" />
+            <span>Shuffle {isShuffled ? 'ON' : 'OFF'}</span>
+          </button>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+        {/* Progress Bar in Nepal Crimson */}
+        <div className="w-full bg-zinc-100 dark:bg-navy-950 h-1.5 rounded-full overflow-hidden">
           <div
-            className="bg-blue-600 h-full rounded-full transition-all duration-200 ease-out"
+            className="bg-crimson-600 h-full rounded-full transition-all duration-150"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
 
         {/* Keyboard shortcut hint */}
-        <div className="hidden sm:flex items-center justify-center gap-4 pt-1 text-[11px] text-slate-400 dark:text-slate-500">
+        <div className="hidden sm:flex items-center justify-center gap-4 text-[10px] font-mono text-zinc-400 dark:text-zinc-500">
           <span>
-            <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">
+            <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800">
               ←
             </kbd>{' '}
-            Prev
+            PREV
           </span>
           <span>
-            <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">
+            <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800">
               →
             </kbd>{' '}
-            Next
+            NEXT
           </span>
           <span>
-            <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 font-mono text-[10px]">
-              Space
+            <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-navy-900 border border-zinc-200 dark:border-navy-800">
+              SPACE
             </kbd>{' '}
-            Reveal
+            REVEAL
           </span>
         </div>
       </div>
@@ -205,12 +201,12 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
       </div>
 
       {/* Flashcard Navigation Controls */}
-      <div className="flex items-center justify-between gap-3 pt-2">
+      <div className="flex items-center justify-between gap-3 pt-1">
         <button
           type="button"
           onClick={handlePrev}
           aria-label="Previous question"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-semibold shadow-sm transition-all active:scale-95"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900 text-xs font-medium transition-all"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Previous</span>
@@ -220,20 +216,20 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
           type="button"
           onClick={handleToggleReveal}
           aria-label="Toggle answer reveal"
-          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-sm active:scale-95 border ${
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-md font-medium text-xs transition-all border ${
             revealed
-              ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 text-amber-800 dark:text-amber-300'
-              : 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700 shadow-blue-500/20'
+              ? 'bg-zinc-100 dark:bg-navy-900 border-zinc-300 dark:border-navy-800 text-zinc-800 dark:text-zinc-200'
+              : 'bg-crimson-600 border-crimson-600 text-white hover:bg-crimson-700 shadow-2xs'
           }`}
         >
           {revealed ? (
             <>
-              <EyeOff className="w-4 h-4" />
+              <EyeOff className="w-3.5 h-3.5" />
               <span>Hide Answer</span>
             </>
           ) : (
             <>
-              <Eye className="w-4 h-4" />
+              <Eye className="w-3.5 h-3.5" />
               <span>Reveal Answer</span>
             </>
           )}
@@ -243,7 +239,7 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
           type="button"
           onClick={handleNext}
           aria-label="Next question"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-semibold shadow-sm transition-all active:scale-95"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md border border-zinc-200 dark:border-navy-900 bg-white dark:bg-[#0c1424] text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-navy-900 text-xs font-medium transition-all"
         >
           <span>Next</span>
           <ChevronRight className="w-4 h-4" />
