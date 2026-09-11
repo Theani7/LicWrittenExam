@@ -11,12 +11,18 @@ export interface UseQuestionsResult {
   error: string | null;
 }
 
-export function useQuestions(): UseQuestionsResult {
+export interface UseQuestionsOptions {
+  enabled?: boolean;
+}
+
+export function useQuestions(options?: UseQuestionsOptions): UseQuestionsResult {
+  const enabled = options?.enabled ?? true;
   const [data, setData] = useState<QuestionsData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(enabled);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
     let isMounted = true;
 
     async function loadQuestions() {
