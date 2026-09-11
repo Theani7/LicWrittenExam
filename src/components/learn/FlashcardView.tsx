@@ -200,6 +200,7 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
           isBookmarked={isBookmarked(currentQuestion.id)}
           onToggleBookmark={onToggleBookmark}
           initialShowAnswer={revealed}
+          hideShowAnswerButton={true}
         />
       </div>
 

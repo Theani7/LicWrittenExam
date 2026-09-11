@@ -301,6 +301,30 @@ describe('QuestionCard Component', () => {
     fireEvent.click(closeBtn);
     expect(screen.queryByRole('dialog')).toBeNull();
   });
+  it('syncs revealed state when initialShowAnswer prop updates', () => {
+    const { rerender } = render(
+      <QuestionCard
+        question={mockQuestions[0]}
+        isBookmarked={false}
+        onToggleBookmark={vi.fn()}
+        initialShowAnswer={false}
+      />
+    );
+
+    const optionA = screen.getByText('Before starting the engine').closest('button')!;
+    expect(optionA.className).not.toContain('border-emerald-500');
+
+    rerender(
+      <QuestionCard
+        question={mockQuestions[0]}
+        isBookmarked={false}
+        onToggleBookmark={vi.fn()}
+        initialShowAnswer={true}
+      />
+    );
+
+    expect(optionA.className).toContain('border-emerald-500');
+  });
 });
 
 describe('FlashcardView Component', () => {
@@ -345,6 +369,9 @@ describe('FlashcardView Component', () => {
 
     expect(screen.getByText('Flashcard 1')).toBeDefined();
 
+    const optionAButton = screen.getByText('Before starting the engine').closest('button')!;
+    expect(optionAButton.className).not.toContain('border-emerald-500');
+
     // Press ArrowRight
     fireEvent.keyDown(window, { key: 'ArrowRight' });
     expect(screen.getByText('Flashcard 2')).toBeDefined();
@@ -356,6 +383,28 @@ describe('FlashcardView Component', () => {
     // Press Space to reveal answer
     fireEvent.keyDown(window, { key: ' ', code: 'Space' });
     expect(screen.getByText('Hide Answer')).toBeDefined();
+
+    // Re-query the current card's option A button: it is now highlighted in emerald
+    const activeOptionAButton = screen.getByText('Before starting the engine').closest('button')!;
+    expect(activeOptionAButton.className).toContain('border-emerald-500');
+  });
+
+  it('hides duplicate Show Answer button inside QuestionCard when in FlashcardView', () => {
+    render(
+      <FlashcardView
+        questions={mockQuestions}
+        categories={mockCategories}
+        isBookmarked={() => false}
+        onToggleBookmark={vi.fn()}
+      />
+    );
+
+    // QuestionCard's internal "Show Answer" button is hidden in flashcard mode
+    expect(screen.queryByText('Show Answer')).toBeNull();
+
+    // The single FlashcardView reveal button is present
+    expect(screen.getByRole('button', { name: /toggle answer reveal/i })).toBeDefined();
+    expect(screen.getByText('Reveal Answer')).toBeDefined();
   });
 
   it('toggles shuffle mode', () => {

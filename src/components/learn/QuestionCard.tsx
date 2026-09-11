@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Bookmark,
   Eye,
@@ -19,6 +19,7 @@ export interface QuestionCardProps {
   initialShowAnswer?: boolean;
   onAnswerSelected?: (questionId: number, optionKey: OptionKey, isCorrect: boolean) => void;
   compact?: boolean;
+  hideShowAnswerButton?: boolean;
 }
 
 export const QuestionCard: React.FC<QuestionCardProps> = ({
@@ -30,14 +31,24 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   initialShowAnswer = false,
   onAnswerSelected,
   compact = false,
+  hideShowAnswerButton = false,
 }) => {
   const [selectedOption, setSelectedOption] = useState<OptionKey | null>(initialSelectedOption);
   const [showAnswer, setShowAnswer] = useState<boolean>(initialShowAnswer);
   const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    setShowAnswer(initialShowAnswer);
+  }, [initialShowAnswer]);
+
+  useEffect(() => {
+    setSelectedOption(initialSelectedOption);
+    setShowAnswer(initialShowAnswer);
+  }, [question.id]);
+
   const isAnswered = selectedOption !== null;
   const isCorrect = selectedOption === question.correctAnswer;
-  const isRevealed = showAnswer || isAnswered;
+  const isRevealed = showAnswer || initialShowAnswer || isAnswered;
 
   const handleSelectOption = (key: OptionKey) => {
     if (selectedOption === key) return;
@@ -173,55 +184,59 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       </div>
 
       {/* Footer Controls: Show Answer, Reset */}
-      <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400 flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={handleToggleShowAnswer}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium transition-all ${
-              showAnswer
-                ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-900/60 text-blue-700 dark:text-blue-300'
-                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-            }`}
-          >
-            {showAnswer ? (
-              <>
-                <EyeOff className="w-3.5 h-3.5" />
-                <span>Hide Answer</span>
-              </>
-            ) : (
-              <>
-                <Eye className="w-3.5 h-3.5" />
-                <span>Show Answer</span>
-              </>
+      {(!hideShowAnswerButton || isAnswered || isRevealed) && (
+        <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400 flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            {!hideShowAnswerButton && (
+              <button
+                type="button"
+                onClick={handleToggleShowAnswer}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-medium transition-all ${
+                  showAnswer
+                    ? 'bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-900/60 text-blue-700 dark:text-blue-300'
+                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                {showAnswer ? (
+                  <>
+                    <EyeOff className="w-3.5 h-3.5" />
+                    <span>Hide Answer</span>
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Show Answer</span>
+                  </>
+                )}
+              </button>
             )}
-          </button>
 
-          {(isAnswered || showAnswer) && (
-            <button
-              type="button"
-              onClick={handleReset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-all"
+            {(isAnswered || showAnswer) && (
+              <button
+                type="button"
+                onClick={handleReset}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800 font-medium transition-all"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
+
+          {/* Answer Status feedback pill */}
+          {isAnswered && (
+            <span
+              className={`font-semibold px-2.5 py-1 rounded-md text-xs ${
+                isCorrect
+                  ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
+                  : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
+              }`}
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset</span>
-            </button>
+              {isCorrect ? 'Correct! ✓' : `Incorrect (Correct: ${question.correctAnswer})`}
+            </span>
           )}
         </div>
-
-        {/* Answer Status feedback pill */}
-        {isAnswered && (
-          <span
-            className={`font-semibold px-2.5 py-1 rounded-md text-xs ${
-              isCorrect
-                ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300'
-                : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'
-            }`}
-          >
-            {isCorrect ? 'Correct! ✓' : `Incorrect (Correct: ${question.correctAnswer})`}
-          </span>
-        )}
-      </div>
+      )}
 
       {/* Click-to-enlarge Modal for Sign Image */}
       {isImageModalOpen && question.image && (
