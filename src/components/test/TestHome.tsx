@@ -20,12 +20,12 @@ export interface TestHomeProps {
 }
 
 const DEFAULT_CATEGORIES: Category[] = [
-  { id: 1, name: 'सवारी सञ्चालन सम्बन्धी ज्ञान (Vehicle Operation)', slug: 'vehicle-operation', poolCount: 130, examWeight: 6 },
-  { id: 2, name: 'सवारी ऐन नियम सम्बन्धी ज्ञान (Traffic Laws)', slug: 'traffic-laws', poolCount: 90, examWeight: 5 },
-  { id: 3, name: 'सवारी साधनको प्राविधिक तथा यान्त्रिक ज्ञान (Technical & Mechanical)', slug: 'technical-mechanical', poolCount: 80, examWeight: 3 },
-  { id: 4, name: 'वातावरण प्रदूषण सम्बन्धी ज्ञान (Environmental Awareness)', slug: 'environmental-awareness', poolCount: 40, examWeight: 2 },
-  { id: 5, name: 'दुर्घटना सचेतना सम्बन्धी ज्ञान (Accident Safety)', slug: 'accident-awareness', poolCount: 60, examWeight: 3 },
-  { id: 6, name: 'ट्राफिक सङ्केत सम्बन्धी ज्ञान (Traffic Signs & Signals)', slug: 'traffic-signs', poolCount: 100, examWeight: 6 },
+  { id: 1, name: 'Knowledge Related to Vehicle Operation', slug: 'vehicle-operation', poolCount: 130, examWeight: 6 },
+  { id: 2, name: 'Knowledge of Vehicle Laws', slug: 'vehicle-laws', poolCount: 90, examWeight: 5 },
+  { id: 3, name: 'Technical and Mechanical Knowledge of Vehicles', slug: 'technical-mechanical', poolCount: 80, examWeight: 3 },
+  { id: 4, name: 'Conceptual Knowledge of Environmental Pollution', slug: 'environmental-pollution', poolCount: 30, examWeight: 2 },
+  { id: 5, name: 'Knowledge on Accident Awareness', slug: 'accident-awareness', poolCount: 60, examWeight: 3 },
+  { id: 6, name: 'Knowledge of Traffic Signs', slug: 'traffic-signs', poolCount: 110, examWeight: 6 },
 ];
 
 export const TestHome: React.FC<TestHomeProps> = ({
