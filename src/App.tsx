@@ -1,25 +1,188 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuestions } from './hooks/useQuestions';
-import { BookOpen, Award, Clock, CheckCircle2, AlertCircle, Sparkles } from 'lucide-react';
+import { useBookmarks } from './hooks/useBookmarks';
+import { useExamHistory } from './hooks/useExamHistory';
+import { ThemeProvider } from './context/ThemeContext';
+import { Navbar, type NavigationTab } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
+import { GuidelinesModal } from './components/guidelines/GuidelinesModal';
+import { LearnView } from './components/learn/LearnView';
+import { BookmarksView } from './components/bookmarks/BookmarksView';
+import { TestHome } from './components/test/TestHome';
+import { ExamEngine } from './components/test/ExamEngine';
+import { ExamResultView } from './components/test/ExamResultView';
+import { generateOfficialExam, generateCategoryTest } from './utils/examGenerator';
+import { calculateExamResult } from './utils/examScorer';
+import type { Question, ExamResult, OptionKey } from './types';
+import { AlertCircle, AlertTriangle } from 'lucide-react';
 
-export function App(): React.JSX.Element {
+type TestViewMode = 'home' | 'exam' | 'result';
+
+export function AppContent(): React.JSX.Element {
   const { questions, categories, metadata, loading, error } = useQuestions();
+  const { bookmarks, toggleBookmark, clearBookmarks } = useBookmarks();
+  const { saveExamResult } = useExamHistory();
 
+  // Navigation State
+  const [activeTab, setActiveTab] = useState<NavigationTab>('learn');
+  const [isGuidelinesOpen, setIsGuidelinesOpen] = useState<boolean>(false);
+
+  // Test Mode State
+  const [testView, setTestView] = useState<TestViewMode>('home');
+  const [activeExamQuestions, setActiveExamQuestions] = useState<Question[]>([]);
+  const [activeExamTitle, setActiveExamTitle] = useState<string>('DoTM Driving License Examination');
+  const [activeExamDuration, setActiveExamDuration] = useState<number>(1800);
+  const [activeExamResult, setActiveExamResult] = useState<ExamResult | null>(null);
+
+  // Pending Navigation Confirmation State (when exam is in progress)
+  const [pendingTab, setPendingTab] = useState<NavigationTab | null>(null);
+  const [showLeaveExamModal, setShowLeaveExamModal] = useState<boolean>(false);
+
+  // Prevent accidental browser reload/close during exam
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (activeTab === 'test' && testView === 'exam') {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [activeTab, testView]);
+
+  // Handle Tab Navigation with safeguard for running exams
+  const handleTabChange = useCallback(
+    (newTab: NavigationTab) => {
+      if (activeTab === newTab && testView !== 'exam') return;
+
+      if (activeTab === 'test' && testView === 'exam') {
+        setPendingTab(newTab);
+        setShowLeaveExamModal(true);
+        return;
+      }
+
+      setActiveTab(newTab);
+    },
+    [activeTab, testView]
+  );
+
+  const handleConfirmLeaveExam = () => {
+    setShowLeaveExamModal(false);
+    setTestView('home');
+    setActiveExamQuestions([]);
+    if (pendingTab) {
+      setActiveTab(pendingTab);
+      setPendingTab(null);
+    }
+  };
+
+  const handleCancelLeaveExam = () => {
+    setShowLeaveExamModal(false);
+    setPendingTab(null);
+  };
+
+  // Start Official Exam
+  const handleStartOfficialExam = useCallback(() => {
+    const examQuestions = generateOfficialExam(questions);
+    setActiveExamQuestions(examQuestions);
+    setActiveExamTitle('DoTM Official Exam Simulation (Cat A & K)');
+    setActiveExamDuration((metadata?.examDurationMinutes ?? 30) * 60);
+    setTestView('exam');
+  }, [questions, metadata]);
+
+  // Start Category Drill Test
+  const handleStartCategoryExam = useCallback(
+    (categoryId: number, count?: number) => {
+      const examQuestions = generateCategoryTest(questions, categoryId, count ?? 20);
+      const cat = categories.find((c) => c.id === categoryId);
+      setActiveExamQuestions(examQuestions);
+      setActiveExamTitle(cat ? `${cat.name} Practice Drill` : `Category ${categoryId} Practice Drill`);
+      setActiveExamDuration(Math.max(300, examQuestions.length * 72));
+      setTestView('exam');
+    },
+    [questions, categories]
+  );
+
+  // Exam Engine Submit
+  const handleExamSubmit = useCallback(
+    (userAnswers: Record<number, OptionKey | null>, timeTakenSeconds: number) => {
+      const result = calculateExamResult(
+        activeExamQuestions,
+        userAnswers,
+        activeExamDuration,
+        timeTakenSeconds,
+        categories
+      );
+      saveExamResult(result);
+      setActiveExamResult(result);
+      setTestView('result');
+    },
+    [activeExamQuestions, activeExamDuration, categories, saveExamResult]
+  );
+
+  // Exam Engine Exit
+  const handleExamExit = useCallback(() => {
+    setTestView('home');
+    setActiveExamQuestions([]);
+  }, []);
+
+  // Exam Result: Retake
+  const handleRetakeExam = useCallback(() => {
+    // If it was a 25-question official simulation, generate a fresh one; otherwise restart same questions
+    if (activeExamQuestions.length === 25) {
+      const freshQuestions = generateOfficialExam(questions);
+      setActiveExamQuestions(freshQuestions);
+    }
+    setActiveExamResult(null);
+    setTestView('exam');
+  }, [activeExamQuestions.length, questions]);
+
+  // Exam Result: Practice Missed Questions
+  const handlePracticeMissed = useCallback((missedQuestions: Question[]) => {
+    setActiveExamQuestions(missedQuestions);
+    setActiveExamTitle('Practice Missed Questions');
+    setActiveExamDuration(Math.max(300, missedQuestions.length * 72));
+    setActiveExamResult(null);
+    setTestView('exam');
+  }, []);
+
+  // Exam Result: Back to Dashboard
+  const handleBackToDashboard = useCallback(() => {
+    setTestView('home');
+    setActiveExamResult(null);
+    setActiveExamQuestions([]);
+  }, []);
+
+  // Practice Bookmarked Questions
+  const handlePracticeBookmarks = useCallback((bookmarkedQuestions: Question[]) => {
+    setActiveExamQuestions(bookmarkedQuestions);
+    setActiveExamTitle('Bookmarked Questions Practice');
+    setActiveExamDuration(Math.max(300, bookmarkedQuestions.length * 72));
+    setActiveExamResult(null);
+    setTestView('exam');
+    setActiveTab('test');
+  }, []);
+
+  // Loading State
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Loading exam question bank...</p>
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+            Loading 500-question exam database...
+          </p>
         </div>
       </div>
     );
   }
 
+  // Error State
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4">
-        <div className="max-w-md w-full bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-xl p-6 text-center space-y-3">
+        <div className="max-w-md w-full bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-2xl p-6 text-center space-y-3">
           <AlertCircle className="w-10 h-10 text-red-500 mx-auto" />
           <h2 className="text-lg font-semibold text-red-800 dark:text-red-300">Failed to Load Questions</h2>
           <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
@@ -29,104 +192,134 @@ export function App(): React.JSX.Element {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-100 selection:text-blue-900">
-      <header className="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/20">
-              <BookOpen className="w-5 h-5" />
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-100 selection:text-blue-900">
+      {/* Header Navigation */}
+      <Navbar
+        activeTab={activeTab}
+        onSelectTab={handleTabChange}
+        bookmarkCount={bookmarks.length}
+        onOpenGuidelines={() => setIsGuidelinesOpen(true)}
+      />
+
+      {/* Main View Container */}
+      <main className="flex-1">
+        {activeTab === 'learn' && (
+          <LearnView questions={questions} categories={categories} />
+        )}
+
+        {activeTab === 'test' && (
+          <div>
+            {testView === 'home' && (
+              <TestHome
+                categories={categories}
+                onStartOfficialExam={handleStartOfficialExam}
+                onStartCategoryExam={handleStartCategoryExam}
+              />
+            )}
+
+            {testView === 'exam' && (
+              <ExamEngine
+                questions={activeExamQuestions}
+                title={activeExamTitle}
+                durationSeconds={activeExamDuration}
+                onSubmit={handleExamSubmit}
+                onExit={handleExamExit}
+              />
+            )}
+
+            {testView === 'result' && activeExamResult && (
+              <ExamResultView
+                result={activeExamResult}
+                questions={activeExamQuestions}
+                categories={categories}
+                onRetakeExam={handleRetakeExam}
+                onPracticeMissed={handlePracticeMissed}
+                onBackToDashboard={handleBackToDashboard}
+              />
+            )}
+          </div>
+        )}
+
+        {activeTab === 'bookmarks' && (
+          <BookmarksView
+            questions={questions}
+            categories={categories}
+            bookmarks={bookmarks}
+            onToggleBookmark={toggleBookmark}
+            onClearBookmarks={clearBookmarks}
+            onPracticeBookmarks={handlePracticeBookmarks}
+            onExploreQuestions={() => setActiveTab('learn')}
+          />
+        )}
+      </main>
+
+      {/* Minimal Footer */}
+      <Footer />
+
+      {/* Official Guidelines Modal */}
+      <GuidelinesModal
+        isOpen={isGuidelinesOpen}
+        onClose={() => setIsGuidelinesOpen(false)}
+      />
+
+      {/* Leave Exam Confirmation Safeguard Dialog */}
+      {showLeaveExamModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="leave-exam-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCancelLeaveExam();
+            }
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div className="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <AlertTriangle className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="font-bold text-slate-900 dark:text-white text-base sm:text-lg leading-tight">
-                Nepal Driving License Exam Prep
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Category A &amp; K • {metadata?.version || '2082/2083'}
+              <h3
+                id="leave-exam-title"
+                className="text-lg font-bold text-slate-900 dark:text-white"
+              >
+                Leave Exam in Progress?
+              </h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                Your test is currently active. If you navigate away now, your current test progress and answers will be lost.
               </p>
             </div>
-          </div>
-          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 rounded-full text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Ready</span>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-            <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 mb-1">
-              <BookOpen className="w-4 h-4" />
-              <span className="text-xs font-medium uppercase tracking-wider">Total Questions</span>
-            </div>
-            <div className="text-2xl font-bold text-slate-900 dark:text-white">
-              {questions.length}
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-            <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 mb-1">
-              <Clock className="w-4 h-4" />
-              <span className="text-xs font-medium uppercase tracking-wider">Exam Duration</span>
-            </div>
-            <div className="text-2xl font-bold text-slate-900 dark:text-white">
-              {metadata?.examDurationMinutes ?? 30} mins
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-            <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 mb-1">
-              <CheckCircle2 className="w-4 h-4" />
-              <span className="text-xs font-medium uppercase tracking-wider">Exam Questions</span>
-            </div>
-            <div className="text-2xl font-bold text-slate-900 dark:text-white">
-              {metadata?.questionsPerExam ?? 25}
-            </div>
-          </div>
-
-          <div className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
-            <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 mb-1">
-              <Award className="w-4 h-4" />
-              <span className="text-xs font-medium uppercase tracking-wider">Pass Mark</span>
-            </div>
-            <div className="text-2xl font-bold text-slate-900 dark:text-white">
-              {metadata?.passMark ?? 60} / {metadata?.totalMarks ?? 100}
-            </div>
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-            Syllabus Categories ({categories.length})
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {categories.map((cat) => (
-              <div
-                key={cat.id}
-                className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-start justify-between space-x-4"
+            <div className="flex items-center justify-end space-x-3 pt-2">
+              <button
+                type="button"
+                onClick={handleCancelLeaveExam}
+                data-testid="cancel-leave-exam-btn"
+                className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 text-sm font-medium transition-colors"
               >
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-bold">
-                      {cat.id}
-                    </span>
-                    <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
-                      {cat.name}
-                    </h3>
-                  </div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
-                    Exam weight: <span className="font-semibold text-slate-700 dark:text-slate-300">{cat.examWeight} questions</span> ({cat.examWeight * 4} marks)
-                  </p>
-                </div>
-                <span className="shrink-0 text-xs px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">
-                  {cat.poolCount} questions
-                </span>
-              </div>
-            ))}
+                Continue Exam
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmLeaveExam}
+                data-testid="confirm-leave-exam-btn"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-colors"
+              >
+                Yes, Leave Exam
+              </button>
+            </div>
           </div>
         </div>
-      </main>
+      )}
     </div>
+  );
+}
+
+export function App(): React.JSX.Element {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 
