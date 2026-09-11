@@ -1,0 +1,36 @@
+name: Bug report
+description: Report something broken or incorrect
+labels: [bug]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Where?
+      description: e.g. Learn mode, Mock exam, Flashcards, Bookmarks — and question number if content is wrong (e.g. Q12)
+      placeholder: Mock exam, Q12
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you see vs. what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: How can we see the problem?
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: Browser/OS, phone model if mobile, light or dark mode
+      placeholder: Chrome 126 on Android, dark mode

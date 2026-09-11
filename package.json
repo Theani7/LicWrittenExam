@@ -1,8 +1,31 @@
 {
   "name": "nepal-license-written-prep",
-  "private": true,
   "version": "1.0.0",
+  "description": "Nepal driving license (DoTM Category A & K, FY 2082/83) written exam preparation — official 500-question bank with learn mode, flashcards, bookmarks and timed mock exams. React + Vite + Tailwind, 100% client-side.",
   "type": "module",
+  "license": "MIT",
+  "author": "Theani7",
+  "homepage": "https://github.com/Theani7/LicWrittenExam#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Theani7/LicWrittenExam.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Theani7/LicWrittenExam/issues"
+  },
+  "keywords": [
+    "nepal",
+    "driving-license",
+    "dotm",
+    "exam-prep",
+    "react",
+    "vite",
+    "tailwindcss",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
