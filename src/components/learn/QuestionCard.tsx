@@ -68,8 +68,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           ? isCorrect
             ? 'ring-1 ring-emerald-500/40'
             : 'ring-1 ring-crimson-500/30'
-          : 'hover:shadow-card-hover'
-      } ${compact ? 'p-4' : 'p-5 sm:p-6'}`}
+          : ''
+      } ${compact ? 'p-3.5 sm:p-4' : 'p-4 sm:p-6'}`}
     >
       {/* top accent */}
       <div
@@ -79,19 +79,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       />
 
       {/* Header */}
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
-          <span className="inline-flex items-center rounded-xl bg-zinc-900 px-2.5 py-1 font-mono text-[12px] font-bold tracking-tight text-white dark:bg-white dark:text-zinc-900">
+      <div className="mb-3 flex items-start justify-between gap-2.5 sm:mb-4 sm:gap-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-2">
+          <span className="inline-flex min-h-[28px] items-center rounded-lg bg-zinc-900 px-2.5 py-1 font-mono text-[12px] font-bold tracking-tight text-white dark:bg-white dark:text-zinc-900 sm:rounded-xl">
             Q{question.id}
           </span>
           {categoryName && (
-            <span className={`inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-bold ${catTheme.badge}`}>
+            <span className={`inline-flex max-w-[52vw] items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-bold sm:max-w-full ${catTheme.badge}`}>
               <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${catTheme.dotBg}`} />
               <span className="truncate">{categoryName}</span>
             </span>
           )}
           {question.image && (
-            <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900/60">
+            <span className="inline-flex min-h-[28px] items-center rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-700 ring-1 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900/60">
               Diagram
             </span>
           )}
@@ -102,36 +102,36 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           onClick={() => onToggleBookmark(question.id)}
           aria-label={isBookmarked ? `Remove bookmark for question ${question.id}` : `Bookmark question ${question.id}`}
           title={isBookmarked ? 'Remove bookmark' : 'Save for revision'}
-          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-all active:scale-95 ${
+          className={`flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-xl border transition-all active:scale-90 ${
             isBookmarked
               ? 'border-transparent bg-gradient-to-br from-crimson-600 to-rose-500 text-white shadow-glow-crimson'
-              : 'border-zinc-200 bg-zinc-50 text-zinc-400 hover:-translate-y-px hover:border-crimson-300 hover:bg-crimson-50 hover:text-crimson-600 dark:border-white/10 dark:bg-white/5 dark:hover:border-crimson-800'
+              : 'border-zinc-200 bg-zinc-50 text-zinc-400 dark:border-white/10 dark:bg-white/5 dark:hover:border-crimson-800'
           }`}
         >
-          <Bookmark className={`h-4 w-4 ${isBookmarked ? 'fill-current' : ''}`} />
+          <Bookmark className={`h-[18px] w-[18px] ${isBookmarked ? 'fill-current' : ''}`} />
         </button>
       </div>
 
       {/* Prompt */}
-      <h3 className="mb-4 text-balance text-[15px] font-bold leading-relaxed tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-[17px]">
+      <h3 className="mb-3 text-balance text-[15px] font-bold leading-snug tracking-tight text-zinc-900 dark:text-zinc-50 sm:mb-4 sm:text-[17px] sm:leading-relaxed">
         {question.question}
       </h3>
 
       {/* Image */}
       {question.image && (
-        <div className="mb-5">
+        <div className="mb-4 sm:mb-5">
           <button
             type="button"
             onClick={() => setIsImageModalOpen(true)}
-            className="group/img relative flex items-center justify-center overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-b from-zinc-50 to-white p-4 transition-all hover:border-navy-400 hover:shadow-card-hover dark:border-white/10 dark:from-white/5 dark:to-transparent"
+            className="group/img relative flex min-h-[120px] w-full touch-manipulation items-center justify-center overflow-hidden rounded-2xl border border-zinc-200 bg-gradient-to-b from-zinc-50 to-white p-4 transition-all dark:border-white/10 dark:from-white/5 dark:to-transparent"
           >
             <img
               src={question.image}
               alt={`Traffic sign for question ${question.id}`}
-              className="max-h-40 w-auto object-contain transition-transform duration-300 group-hover/img:scale-[1.04] sm:max-h-48"
+              className="max-h-40 w-auto max-w-full object-contain sm:max-h-48"
               loading="lazy"
             />
-            <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-zinc-900/85 px-2.5 py-1 font-mono text-[10px] font-bold text-white opacity-0 backdrop-blur transition-opacity group-hover/img:opacity-100">
+            <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-zinc-900/85 px-2.5 py-1 font-mono text-[10px] font-bold text-white backdrop-blur">
               <ZoomIn className="h-3 w-3" /> ENLARGE
             </span>
           </button>
@@ -139,7 +139,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       )}
 
       {/* Options */}
-      <div className="mb-4 space-y-2.5" role="radiogroup" aria-label={`Options for question ${question.id}`}>
+      <div className="mb-3 space-y-2 sm:mb-4 sm:space-y-2.5" role="radiogroup" aria-label={`Options for question ${question.id}`}>
         {question.options.map((opt) => {
           const isSelected = selectedOption === opt.key;
           const isCorrectAnswer = opt.key === question.correctAnswer;
@@ -185,15 +185,15 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               role="radio"
               aria-checked={isSelected}
               onClick={() => handleSelectOption(opt.key)}
-              className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-3 text-left transition-all active:scale-[0.995] sm:p-3.5 ${optionStyle}`}
+              className={`flex min-h-[56px] w-full touch-manipulation items-center justify-between gap-3 rounded-2xl border p-3 text-left transition-all active:scale-[0.99] sm:p-3.5 ${optionStyle}`}
             >
-              <span className="flex min-w-0 flex-1 items-center gap-3">
+              <span className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
                 <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border font-mono text-[13px] font-bold transition-colors ${badgeStyle}`}
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border font-mono text-[13px] font-bold transition-colors ${badgeStyle}`}
                 >
                   {opt.key}
                 </span>
-                <span className="min-w-0 flex-1 break-words text-sm font-medium leading-relaxed sm:text-[15px]">
+                <span className="min-w-0 flex-1 break-words text-[15px] font-medium leading-snug sm:leading-relaxed">
                   {opt.text}
                 </span>
               </span>
@@ -205,19 +205,19 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
       {/* Footer */}
       {(!hideShowAnswerButton || isAnswered || isRevealed) && (
-        <div className="flex flex-wrap items-center justify-between gap-2.5 border-t border-zinc-100 pt-4 dark:border-white/10">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-zinc-100 pt-3.5 dark:border-white/10 sm:pt-4">
+          <div className="flex flex-wrap items-center gap-2">
             {!hideShowAnswerButton && (
               <button
                 type="button"
                 onClick={handleToggleShowAnswer}
-                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[13px] font-bold transition-all active:scale-[0.97] ${
+                className={`inline-flex min-h-[44px] touch-manipulation items-center gap-1.5 rounded-xl border px-3.5 py-2 text-[13px] font-bold transition-all active:scale-[0.97] ${
                   showAnswer
                     ? 'border-navy-200 bg-blue-50 text-navy-700 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300'
-                    : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300 dark:hover:bg-white/10'
+                    : 'border-zinc-200 bg-white text-zinc-700 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
                 }`}
               >
-                {showAnswer ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                {showAnswer ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 {showAnswer ? 'Hide Answer' : 'Show Answer'}
               </button>
             )}
@@ -225,9 +225,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-transparent px-3 py-2 text-[13px] font-bold text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
+                className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-transparent px-3 py-2 text-[13px] font-bold text-zinc-500 transition active:scale-[0.97] dark:text-zinc-400"
               >
-                <RotateCcw className="h-3.5 w-3.5" />
+                <RotateCcw className="h-4 w-4" />
                 Reset
               </button>
             )}
@@ -235,7 +235,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
           {isAnswered && (
             <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[12px] font-bold ${
+              className={`inline-flex min-h-[32px] items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[12px] font-bold ${
                 isCorrect
                   ? 'bg-emerald-600 text-white shadow-[0_4px_14px_-4px_rgb(16_185_129/0.6)]'
                   : 'bg-crimson-600 text-white shadow-glow-crimson'
@@ -246,43 +246,44 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                   <Check className="h-3.5 w-3.5" strokeWidth={3} /> Correct! ✓
                 </>
               ) : (
-                <>Incorrect (Correct: {question.correctAnswer})</>
+                <span className="whitespace-nowrap">Incorrect (Correct: {question.correctAnswer})</span>
               )}
             </span>
           )}
         </div>
       )}
 
-      {/* Image modal */}
+      {/* Image modal — bottom sheet on mobile */}
       {isImageModalOpen && question.image && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`Enlarged image for question ${question.id}`}
           onClick={() => setIsImageModalOpen(false)}
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/80 p-4 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-[70] flex items-end justify-center bg-zinc-950/80 backdrop-blur-md sm:items-center sm:p-4 animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-lg overflow-hidden rounded-3xl border border-white/10 bg-white shadow-float dark:bg-ink-900 animate-scale-in"
+            className="max-h-[92dvh] w-full overflow-y-auto overscroll-contain-y rounded-t-3xl border border-white/10 bg-white shadow-float dark:bg-ink-900 sm:w-full sm:max-w-lg sm:rounded-3xl animate-slide-up sm:animate-scale-in"
           >
-            <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-3.5 dark:border-white/10">
-              <p className="font-mono text-[12px] font-bold text-zinc-600 dark:text-zinc-300">
+            <div className="mx-auto mt-2.5 h-1 w-10 rounded-full bg-zinc-200 dark:bg-white/15 sm:hidden" aria-hidden="true" />
+            <div className="flex items-center justify-between gap-2 border-b border-zinc-100 px-4 py-3.5 dark:border-white/10 sm:px-5">
+              <p className="truncate font-mono text-[12px] font-bold text-zinc-600 dark:text-zinc-300">
                 Question #{question.id} — Sign Detail
               </p>
               <button
                 type="button"
                 onClick={() => setIsImageModalOpen(false)}
                 aria-label="Close enlarged image"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900 dark:bg-white/10 dark:hover:text-white"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-zinc-500 transition active:scale-95 dark:bg-white/10"
               >
-                <X className="h-4 w-4" />
+                <X className="h-5 w-5" />
               </button>
             </div>
-            <div className="flex items-center justify-center bg-gradient-to-b from-zinc-50 to-white p-6 dark:from-white/5 dark:to-transparent">
-              <img src={question.image} alt={`Traffic sign for question ${question.id}`} className="max-h-72 w-auto object-contain" />
+            <div className="flex items-center justify-center bg-gradient-to-b from-zinc-50 to-white p-5 dark:from-white/5 dark:to-transparent sm:p-6">
+              <img src={question.image} alt={`Traffic sign for question ${question.id}`} className="max-h-[55dvh] w-auto max-w-full object-contain sm:max-h-72" />
             </div>
-            <p className="border-t border-zinc-100 px-5 py-3.5 text-center text-[13px] text-zinc-600 dark:border-white/10 dark:text-zinc-400">
+            <p className="border-t border-zinc-100 px-4 py-3.5 pb-safe-offset text-center text-[13px] leading-relaxed text-zinc-600 dark:border-white/10 dark:text-zinc-400 sm:px-5">
               {question.question}
             </p>
           </div>

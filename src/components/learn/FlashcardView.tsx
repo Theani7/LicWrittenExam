@@ -84,9 +84,23 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrev, handleToggleReveal]);
 
+  // Touch swipe navigation (mobile app feel)
+  const touchStartX = React.useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(dx) < 48) return;
+    if (dx < 0) handleNext();
+    else handlePrev();
+  };
+
   if (displayQuestions.length === 0) {
     return (
-      <div className="card-premium p-12 text-center">
+      <div className="card-premium p-8 text-center sm:p-12">
         <HelpCircle className="mx-auto h-8 w-8 text-zinc-300" />
         <h3 className="mt-3 font-extrabold">No cards in this deck</h3>
         <p className="mx-auto mt-1 max-w-sm text-sm text-zinc-500">Clear your search or pick another category to rebuild the deck.</p>
@@ -98,14 +112,14 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
   const progressPercent = Math.round(((currentIndex + 1) / displayQuestions.length) * 100);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-4">
+    <div className="mx-auto max-w-3xl space-y-3 sm:space-y-4">
       <div className="card-premium overflow-hidden">
         <div className="h-1 bg-gradient-to-r from-crimson-600 via-rose-400 to-navy-600" style={{ width: `${progressPercent}%` }} />
-        <div className="space-y-3 p-4 sm:p-5">
+        <div className="space-y-2.5 p-3.5 sm:space-y-3 sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-baseline gap-2">
+            <div className="flex min-w-0 flex-wrap items-baseline gap-1.5 sm:gap-2">
               <span className="text-[15px] font-extrabold tracking-tight">Flashcard {currentIndex + 1}</span>
-              <span className="font-mono text-sm text-zinc-400">of {displayQuestions.length} ({progressPercent}%)</span>
+              <span className="font-mono text-[13px] text-zinc-400 sm:text-sm">of {displayQuestions.length} ({progressPercent}%)</span>
               <span className="rounded-full bg-zinc-100 px-2 py-0.5 font-mono text-[11px] font-bold text-zinc-600 dark:bg-white/10 dark:text-zinc-300">
                 {progressPercent}%
               </span>
@@ -114,10 +128,11 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
               type="button"
               onClick={handleToggleShuffle}
               aria-label="Toggle shuffle mode"
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 font-mono text-[12px] font-bold transition active:scale-[0.97] ${
+              aria-pressed={isShuffled}
+              className={`inline-flex min-h-[40px] touch-manipulation items-center gap-1.5 rounded-xl border px-3 py-2 font-mono text-[12px] font-bold transition active:scale-[0.97] ${
                 isShuffled
                   ? 'border-crimson-300 bg-crimson-50 text-crimson-700 dark:border-crimson-800 dark:bg-crimson-950/40 dark:text-crimson-300'
-                  : 'border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
+                  : 'border-zinc-200 bg-white text-zinc-600 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
               }`}
             >
               <Shuffle className="h-3.5 w-3.5" /> {isShuffled ? 'Shuffle ON' : 'Shuffle OFF'}
@@ -131,10 +146,18 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
             <span>→ NEXT</span>
             <span>SPACE REVEAL</span>
           </p>
+          <p className="text-center font-mono text-[11px] font-semibold text-zinc-400 sm:hidden">
+            SWIPE ← → TO FLIP THROUGH CARDS
+          </p>
         </div>
       </div>
 
-      <div key={`flashcard-${currentQuestion.id}-${isShuffled ? 'shuffled' : 'normal'}`} className="animate-fade-up">
+      <div
+        key={`flashcard-${currentQuestion.id}-${isShuffled ? 'shuffled' : 'normal'}`}
+        className="animate-fade-up"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <QuestionCard
           question={currentQuestion}
           categoryName={categoryName}
@@ -145,34 +168,34 @@ export const FlashcardView: React.FC<FlashcardViewProps> = ({
         />
       </div>
 
-      <div className="card-premium flex items-center justify-between gap-2 p-3">
+      <div className="card-premium glass sticky bottom-[calc(84px+env(safe-area-inset-bottom))] z-20 flex items-center gap-1.5 bg-white/90 p-2 dark:bg-ink-900/90 sm:gap-2 sm:p-2.5 md:static md:bg-white dark:md:bg-ink-900">
         <button
           type="button"
           onClick={handlePrev}
           aria-label="Previous question"
-          className="btn-ghost flex-1 sm:flex-none sm:px-6"
+          className="btn-ghost min-h-[52px] flex-1 px-2 sm:flex-none sm:px-6"
         >
-          <ChevronLeft className="h-4 w-4" /> Prev
+          <ChevronLeft className="h-5 w-5 shrink-0" /> <span className="truncate">Prev</span>
         </button>
         <button
           type="button"
           onClick={handleToggleReveal}
           aria-label="Toggle answer reveal"
-          className={`inline-flex flex-[1.4] items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition active:scale-[0.98] ${
+          className={`inline-flex min-h-[52px] flex-[1.6] touch-manipulation items-center justify-center gap-1.5 rounded-2xl px-3 py-2.5 text-[13px] font-bold transition active:scale-[0.98] sm:rounded-xl sm:text-sm ${
             revealed
               ? 'border border-zinc-200 bg-zinc-100 text-zinc-900 dark:border-white/10 dark:bg-white/10 dark:text-white'
-              : 'bg-gradient-to-r from-crimson-700 to-rose-600 text-white shadow-glow-crimson hover:brightness-110'
+              : 'bg-gradient-to-r from-crimson-700 to-rose-600 text-white shadow-glow-crimson'
           }`}
         >
-          {revealed ? <><EyeOff className="h-4 w-4" /> Hide Answer</> : <><Eye className="h-4 w-4" /> Reveal Answer</>}
+          {revealed ? <><EyeOff className="h-4 w-4 shrink-0" /> <span className="truncate">Hide Answer</span></> : <><Eye className="h-4 w-4 shrink-0" /> <span className="truncate">Reveal Answer</span></>}
         </button>
         <button
           type="button"
           onClick={handleNext}
           aria-label="Next question"
-          className="btn-ghost flex-1 sm:flex-none sm:px-6"
+          className="btn-ghost min-h-[52px] flex-1 px-2 sm:flex-none sm:px-6"
         >
-          Next <ChevronRight className="h-4 w-4" />
+          <span className="truncate">Next</span> <ChevronRight className="h-5 w-5 shrink-0" />
         </button>
       </div>
     </div>

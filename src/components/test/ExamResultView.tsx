@@ -107,25 +107,25 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
   }, [categories]);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 pb-12 sm:px-6">
+    <div className="mx-auto max-w-4xl px-3 pb-4 sm:px-6 sm:pb-12">
       {/* Verdict hero */}
       <section
         data-testid="result-banner"
-        className={`relative mt-6 overflow-hidden rounded-[28px] border p-7 text-center shadow-float sm:p-9 ${
+        className={`relative mt-3 overflow-hidden rounded-3xl border p-5 text-center shadow-float sm:mt-6 sm:p-9 ${
           result.passed
             ? 'border-emerald-500/40 bg-gradient-to-b from-emerald-500/15 via-white to-white dark:from-emerald-500/20 dark:via-ink-900 dark:to-ink-900'
             : 'border-crimson-500/40 bg-gradient-to-b from-crimson-600/10 via-white to-white dark:from-crimson-600/20 dark:via-ink-900 dark:to-ink-900'
         }`}
       >
         <div className="bg-dot-grid-faint absolute inset-0 opacity-60" />
-        <div className="relative mx-auto max-w-xl space-y-5">
+        <div className="relative mx-auto max-w-xl space-y-4 sm:space-y-5">
           {result.passed ? (
-            <span data-testid="verdict-passed" className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-1.5 font-mono text-[12px] font-bold tracking-widest text-white shadow-lg shadow-emerald-600/30">
-              <PartyPopper className="h-4 w-4" /> PASSED · LICENSE READY
+            <span data-testid="verdict-passed" className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-1.5 font-mono text-[11px] font-bold tracking-widest text-white shadow-lg shadow-emerald-600/30 sm:text-[12px]">
+              <PartyPopper className="h-4 w-4 shrink-0" /> PASSED · LICENSE READY
             </span>
           ) : (
-            <span data-testid="verdict-failed" className="inline-flex items-center gap-1.5 rounded-full bg-crimson-600 px-4 py-1.5 font-mono text-[12px] font-bold tracking-widest text-white shadow-glow-crimson">
-              <XCircle className="h-4 w-4" /> NOT YET — KEEP PUSHING
+            <span data-testid="verdict-failed" className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-crimson-600 px-4 py-1.5 font-mono text-[11px] font-bold tracking-widest text-white shadow-glow-crimson sm:text-[12px]">
+              <XCircle className="h-4 w-4 shrink-0" /> NOT YET — KEEP PUSHING
             </span>
           )}
 
@@ -135,10 +135,10 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
               <p className="font-mono text-4xl font-extrabold tracking-tight sm:text-5xl">
                 {result.score}<span className="text-xl font-bold text-zinc-400">/{result.totalMarks}</span>
               </p>
-              <p className="mt-1 font-mono text-[13px] font-bold text-zinc-500">
+              <p className="mt-1 font-mono text-[12px] font-bold text-zinc-500 sm:text-[13px]">
                 {percentage}% Score · {result.correctCount}/{result.totalQuestions} correct · Pass 60%
               </p>
-              <p className="mt-2 max-w-sm text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <p className="mx-auto mt-2 max-w-sm text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400">
                 {result.passed
                   ? 'Badhai chha! You cleared the 60% DoTM threshold. Now repeat it twice more to lock it in.'
                   : 'You missed the 60% line this time. Drill the red categories below — most students pass within 3 focused retries.'}
@@ -146,19 +146,19 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          <div className="flex flex-col items-stretch justify-center gap-2 sm:flex-wrap sm:flex-row sm:items-center">
             {onRetakeExam && (
-              <button type="button" data-testid="retake-exam-top-btn" onClick={onRetakeExam} className="btn-primary">
+              <button type="button" data-testid="retake-exam-top-btn" onClick={onRetakeExam} className="btn-primary w-full sm:w-auto">
                 <RotateCcw className="h-4 w-4" /> Retake exam
               </button>
             )}
             {onPracticeMissed && missedQuestions.length > 0 && (
-              <button type="button" data-testid="practice-missed-top-btn" onClick={() => onPracticeMissed(missedQuestions)} className="btn-navy">
+              <button type="button" data-testid="practice-missed-top-btn" onClick={() => onPracticeMissed(missedQuestions)} className="btn-navy w-full sm:w-auto">
                 <Target className="h-4 w-4" /> Drill missed ({missedQuestions.length})
               </button>
             )}
             {onBackToDashboard && (
-              <button type="button" data-testid="back-dashboard-top-btn" onClick={onBackToDashboard} className="btn-ghost">
+              <button type="button" data-testid="back-dashboard-top-btn" onClick={onBackToDashboard} className="btn-ghost w-full sm:w-auto">
                 <ArrowLeft className="h-4 w-4" /> Dashboard
               </button>
             )}
@@ -167,21 +167,21 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
       </section>
 
       {/* Stats */}
-      <section className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <section className="mt-3 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3 sm:grid-cols-4">
         {[
           { icon: Award, label: 'SCORE', value: `${result.score}/${result.totalMarks}`, tint: 'text-crimson-600 bg-crimson-50 dark:bg-crimson-950/40', bar: 'from-crimson-600 to-rose-400' },
           { icon: Target, label: 'ACCURACY', value: `${accuracyPercentage}%`, tint: 'text-blue-700 bg-blue-50 dark:bg-blue-950/40 dark:text-blue-300', bar: 'from-navy-700 to-blue-500' },
           { icon: Clock, label: 'TIME', value: formatTime(result.timeTakenSeconds), tint: 'text-amber-600 bg-amber-50 dark:bg-amber-950/40', bar: 'from-amber-500 to-orange-400' },
           { icon: Sparkles, label: 'VERDICT', value: result.passed ? 'PASS' : 'FAIL', tint: result.passed ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/40' : 'text-crimson-600 bg-crimson-50 dark:bg-crimson-950/40', bar: result.passed ? 'from-emerald-500 to-teal-400' : 'from-zinc-400 to-zinc-500' },
         ].map((s) => (
-          <div key={s.label} className="card-premium card-lift overflow-hidden p-4">
+          <div key={s.label} className="card-premium card-lift overflow-hidden p-3.5 sm:p-4">
             <span className={`mb-2 inline-flex h-9 w-9 items-center justify-center rounded-xl ${s.tint}`}><s.icon className="h-4 w-4" /></span>
             <p className="font-mono text-[10px] font-bold tracking-widest text-zinc-400">{s.label}</p>
-            <p className="font-mono text-2xl font-extrabold tracking-tight">{s.value}</p>
+            <p className="truncate font-mono text-xl font-extrabold tracking-tight sm:text-2xl">{s.value}</p>
             <div className="mt-2 h-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-white/10"><div className={`h-full rounded-full bg-gradient-to-r ${s.bar}`} style={{ width: s.label === 'ACCURACY' ? `${accuracyPercentage}%` : s.label === 'SCORE' ? `${percentage}%` : '100%' }} /></div>
           </div>
         ))}
-        <div className="col-span-2 flex items-center justify-center gap-4 rounded-2xl border border-zinc-200/80 bg-white px-4 py-3 font-mono text-[13px] font-bold shadow-card dark:border-white/10 dark:bg-ink-900 sm:col-span-4">
+        <div className="col-span-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 rounded-2xl border border-zinc-200/80 bg-white px-4 py-3 font-mono text-[13px] font-bold shadow-card dark:border-white/10 dark:bg-ink-900 sm:col-span-4">
           <span className="text-emerald-600">{result.correctCount} ✓ right</span>
           <span className="text-zinc-300">·</span>
           <span className="text-crimson-600">{incorrectCount} ✗ wrong</span>
@@ -192,10 +192,10 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
 
       {/* Categories */}
       {result.categoryScores && result.categoryScores.length > 0 && (
-        <section className="card-premium mt-4 p-5 sm:p-6">
-          <div className="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-white/10">
-            <h2 className="flex items-center gap-2 text-[15px] font-extrabold tracking-tight"><BarChart3 className="h-4 w-4 text-navy-700 dark:text-blue-400" /> Category Performance Breakdown</h2>
-            <span className="font-mono text-[11px] font-bold text-zinc-400">{result.categoryScores.length} SECTIONS</span>
+        <section className="card-premium mt-3 p-4 sm:mt-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2 border-b border-zinc-100 pb-3 dark:border-white/10">
+            <h2 className="flex min-w-0 items-center gap-2 text-[14px] font-extrabold tracking-tight sm:text-[15px]"><BarChart3 className="h-4 w-4 shrink-0 text-navy-700 dark:text-blue-400" /> <span className="leading-tight">Category Performance Breakdown</span></h2>
+            <span className="shrink-0 font-mono text-[11px] font-bold text-zinc-400">{result.categoryScores.length} SECTIONS</span>
           </div>
           <div className="space-y-4 pt-4">
             {result.categoryScores.map((cat) => {
@@ -219,19 +219,21 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
       )}
 
       {/* Review */}
-      <section className="mt-6 space-y-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="text-lg font-extrabold tracking-tight">Answer review</h2>
+      <section className="mt-5 space-y-3 sm:mt-6 sm:space-y-4">
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="px-1 sm:px-0">
+            <h2 className="text-[17px] font-extrabold tracking-tight sm:text-lg">Answer review</h2>
             <p className="text-[13px] text-zinc-500">Compare your picks against the official DoTM key.</p>
           </div>
-          <div className="flex items-center gap-1 rounded-2xl border border-zinc-200 bg-white p-1 shadow-card dark:border-white/10 dark:bg-ink-900">
-            {([['all', `ALL ${result.totalQuestions}`], ['incorrect', `WRONG ${incorrectCount}`], ['correct', `RIGHT ${result.correctCount}`], ['unanswered', `LEFT ${unansweredCount}`]] as [FilterType, string][]).map(([id, label]) => (
-              <button key={id} type="button" data-testid={`filter-${id}-btn`} onClick={() => setFilter(id)}
-                className={`whitespace-nowrap rounded-xl px-3 py-2 font-mono text-[11px] font-bold transition ${filter === id ? (id === 'incorrect' ? 'bg-crimson-600 text-white' : id === 'correct' ? 'bg-emerald-600 text-white' : 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900') : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white'}`}>
-                {label}
-              </button>
-            ))}
+          <div className="no-scrollbar app-scroll -mx-3 px-3 sm:mx-0 sm:px-0">
+            <div className="flex min-w-max items-center gap-1 rounded-2xl border border-zinc-200 bg-white p-1 shadow-card dark:border-white/10 dark:bg-ink-900">
+              {([['all', `ALL ${result.totalQuestions}`], ['incorrect', `WRONG ${incorrectCount}`], ['correct', `RIGHT ${result.correctCount}`], ['unanswered', `LEFT ${unansweredCount}`]] as [FilterType, string][]).map(([id, label]) => (
+                <button key={id} type="button" data-testid={`filter-${id}-btn`} onClick={() => setFilter(id)}
+                  className={`whitespace-nowrap rounded-xl px-3 py-2.5 font-mono text-[11px] font-bold transition active:scale-[0.97] ${filter === id ? (id === 'incorrect' ? 'bg-crimson-600 text-white' : id === 'correct' ? 'bg-emerald-600 text-white' : 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900') : 'text-zinc-500 dark:hover:text-white'}`}>
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -250,20 +252,20 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
         )}
       </section>
 
-      <section className="mt-6 flex flex-col gap-2.5 border-t border-zinc-200 pt-5 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
+      <section className="mt-5 flex flex-col gap-2 border-t border-zinc-200 pt-4 dark:border-white/10 sm:mt-6 sm:flex-row sm:items-center sm:justify-between sm:pt-5">
         {onBackToDashboard && (
           <button type="button" data-testid="back-dashboard-bottom-btn" onClick={onBackToDashboard} className="btn-ghost w-full sm:w-auto">
             <ArrowLeft className="h-4 w-4" /> Dashboard
           </button>
         )}
-        <div className="flex w-full gap-2.5 sm:w-auto">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
           {onPracticeMissed && missedQuestions.length > 0 && (
-            <button type="button" data-testid="practice-missed-bottom-btn" onClick={() => onPracticeMissed(missedQuestions)} className="btn-navy flex-1 sm:flex-none">
+            <button type="button" data-testid="practice-missed-bottom-btn" onClick={() => onPracticeMissed(missedQuestions)} className="btn-navy w-full sm:w-auto sm:flex-none">
               <Target className="h-4 w-4" /> Drill missed
             </button>
           )}
           {onRetakeExam && (
-            <button type="button" data-testid="retake-exam-bottom-btn" onClick={onRetakeExam} className="btn-primary flex-1 sm:flex-none">
+            <button type="button" data-testid="retake-exam-bottom-btn" onClick={onRetakeExam} className="btn-primary w-full sm:w-auto sm:flex-none">
               <RotateCcw className="h-4 w-4" /> Retake
             </button>
           )}

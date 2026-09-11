@@ -55,36 +55,36 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
       role="dialog"
       aria-modal="true"
       aria-labelledby="guidelines-modal-title"
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-zinc-950/60 p-3 backdrop-blur-md animate-fade-in sm:p-4"
+      className="fixed inset-0 z-[70] flex items-end justify-center bg-zinc-950/60 backdrop-blur-md sm:items-center sm:p-4 animate-fade-in"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[28px] border border-zinc-200 bg-white shadow-float dark:border-white/10 dark:bg-ink-900 animate-scale-in">
+      <div className="flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl border border-zinc-200 bg-white shadow-float dark:border-white/10 dark:bg-ink-900 sm:max-w-3xl sm:rounded-[28px] animate-slide-up sm:animate-scale-in">
         <div className="h-1.5 shrink-0 bg-gradient-to-r from-crimson-700 via-rose-500 via-amber-400 to-navy-700" />
-        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-zinc-100 px-6 py-4 dark:border-white/10">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-crimson-700 to-rose-500 font-mono text-[12px] font-bold text-white shadow-glow-crimson">NP</span>
-            <div>
-              <h2 id="guidelines-modal-title" className="font-extrabold tracking-tight sm:text-lg">Official Examination Guidelines</h2>
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-zinc-100 px-4 py-3.5 dark:border-white/10 sm:px-6 sm:py-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-crimson-700 to-rose-500 font-mono text-[12px] font-bold text-white shadow-glow-crimson">NP</span>
+            <div className="min-w-0">
+              <h2 id="guidelines-modal-title" className="truncate text-[15px] font-extrabold tracking-tight sm:text-lg">Official Examination Guidelines</h2>
               <p className="font-mono text-[11px] font-semibold text-zinc-500">DOTM · CATEGORY A & K · 2082/83</p>
             </div>
           </div>
-          <button type="button" onClick={onClose} aria-label="Close guidelines" className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900 dark:bg-white/10 dark:hover:text-white">
-            <X className="h-4 w-4" />
+          <button type="button" onClick={onClose} aria-label="Close guidelines" className="flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 transition active:scale-95 dark:bg-white/10">
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="space-y-6 overflow-y-auto p-6">
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+        <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain-y p-4 sm:space-y-6 sm:p-6">
+          <div className="grid grid-cols-2 gap-2 sm:gap-2.5 sm:grid-cols-4">
             {[
               { icon: CheckCircle2, label: 'QUESTIONS', value: '25 Qs', sub: '4 marks each', tint: 'text-navy-700 bg-blue-50 ring-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-900/60' },
               { icon: Award, label: 'PASS MARK', value: '60 / 100', sub: 'Min 15 Correct', tint: 'text-crimson-700 bg-crimson-50 ring-crimson-200 dark:bg-crimson-950/40 dark:text-crimson-300 dark:ring-crimson-900/60' },
               { icon: Clock, label: 'TIME', value: '30 Mins', sub: '72s per Q', tint: 'text-amber-700 bg-amber-50 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900/60' },
               { icon: ShieldCheck, label: 'MARKING', value: 'No −ve', sub: 'attempt all', tint: 'text-emerald-700 bg-emerald-50 ring-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-900/60' },
             ].map((c) => (
-              <div key={c.label} className={`rounded-2xl p-4 text-center ring-1 ${c.tint}`}>
+              <div key={c.label} className={`rounded-2xl p-3 text-center ring-1 sm:p-4 ${c.tint}`}>
                 <c.icon className="mx-auto mb-1 h-4 w-4" />
                 <p className="font-mono text-[10px] font-bold tracking-widest opacity-70">{c.label}</p>
-                <p className="font-mono text-2xl font-extrabold tracking-tight">{c.value}</p>
+                <p className="font-mono text-lg font-extrabold tracking-tight sm:text-2xl">{c.value}</p>
                 <p className="font-mono text-[11px] font-semibold opacity-70">{c.sub}</p>
               </div>
             ))}
@@ -133,15 +133,15 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
           </div>
 
           <div className="space-y-3">
-            <h3 className="flex items-center gap-2 text-[15px] font-extrabold tracking-tight"><AlertCircle className="h-4 w-4 text-amber-500" /> Strategy that works</h3>
-            <div className="grid gap-2.5 sm:grid-cols-2">
+            <h3 className="flex items-center gap-2 text-[15px] font-extrabold tracking-tight"><AlertCircle className="h-4 w-4 shrink-0 text-amber-500" /> Strategy that works</h3>
+            <div className="grid gap-2 sm:gap-2.5 sm:grid-cols-2">
               {[
                 ['Win the big two first', 'Cat 1 + Cat 6 = 12 Qs / 48 marks. Own them and you are halfway to passing.'],
                 ['Never leave blanks', 'No negative marking — a guess is always better than a skip. Flag and return.'],
                 ['Pace at 72s per Q', '30 minutes for 25 Qs. If a Q takes over a minute, flag it and move on.'],
                 ['Trust the source', 'Every Q mirrors the DoTM 500Q curriculum, Ministry of Physical Infrastructure & Transport.'],
               ].map(([t, d]) => (
-                <div key={t} className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-white/10 dark:bg-white/[0.03]">
+                <div key={t} className="rounded-2xl border border-zinc-200 bg-zinc-50/60 p-3.5 dark:border-white/10 dark:bg-white/[0.03] sm:p-4">
                   <p className="flex items-center gap-1.5 text-[13px] font-bold"><CheckCircle2 className="h-4 w-4 shrink-0 text-crimson-600" />{t}</p>
                   <p className="mt-1 text-[13px] leading-relaxed text-zinc-500">{d}</p>
                 </div>
@@ -150,9 +150,9 @@ export const GuidelinesModal: React.FC<GuidelinesModalProps> = ({ isOpen, onClos
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-zinc-100 bg-zinc-50/70 px-6 py-4 dark:border-white/10 dark:bg-white/[0.02]">
-          <p className="flex items-center gap-1.5 font-mono text-[12px] font-semibold text-zinc-500"><HelpCircle className="h-4 w-4 text-navy-600" /> PASS = 15/25 CORRECT</p>
-          <button type="button" onClick={onClose} className="btn-primary !py-2.5">Got it</button>
+        <div className="flex shrink-0 items-center justify-between gap-3 border-t border-zinc-100 bg-zinc-50/70 px-4 py-3.5 pb-safe-offset dark:border-white/10 dark:bg-white/[0.02] sm:px-6 sm:py-4">
+          <p className="flex min-w-0 items-center gap-1.5 truncate font-mono text-[11px] font-semibold text-zinc-500 sm:text-[12px]"><HelpCircle className="h-4 w-4 shrink-0 text-navy-600" /> PASS = 15/25 CORRECT</p>
+          <button type="button" onClick={onClose} className="btn-primary min-h-[52px] shrink-0 !py-2.5 sm:min-h-[44px]">Got it</button>
         </div>
       </div>
     </div>

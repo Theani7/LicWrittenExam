@@ -65,42 +65,42 @@ export const TestHome: React.FC<TestHomeProps> = ({
   const passRate = history.length ? Math.round((history.filter((h) => h.passed).length / history.length) * 100) : null;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
+    <div className="mx-auto max-w-5xl px-3 pb-4 sm:px-6 sm:pb-12">
       {/* Hero */}
-      <section className="relative mt-6 overflow-hidden rounded-[28px] bg-zinc-950 text-white shadow-float">
+      <section className="relative mt-3 overflow-hidden rounded-3xl bg-zinc-950 text-white shadow-float sm:mt-6 sm:rounded-[28px]">
         <div className="absolute inset-0" aria-hidden="true">
           <div className="absolute inset-0 bg-gradient-to-br from-crimson-700 via-[#1a0b18] to-navy-900" />
           <div className="bg-diagonal-lines absolute inset-0 opacity-40" />
           <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-crimson-600/40 blur-[90px]" />
           <div className="absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-blue-600/40 blur-[90px]" />
         </div>
-        <div className="relative grid gap-6 p-6 sm:p-9 lg:grid-cols-[1.4fr_1fr] lg:items-center">
-          <div className="space-y-4">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 font-mono text-[11px] font-bold tracking-widest text-white ring-1 ring-white/20 backdrop-blur">
+        <div className="relative grid gap-5 p-5 sm:gap-6 sm:p-9 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+          <div className="space-y-3.5 sm:space-y-4">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 font-mono text-[10px] font-bold tracking-widest text-white ring-1 ring-white/20 backdrop-blur sm:text-[11px]">
               <Award className="h-3.5 w-3.5 text-amber-300" /> OFFICIAL DOTM FORMAT
             </span>
-            <h1 className="text-balance text-2xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+            <h1 className="text-balance text-[22px] font-extrabold leading-[1.15] tracking-tight xs:text-2xl sm:text-4xl sm:leading-tight">
               Walk into the likhit exam like you&apos;ve already passed it.
             </h1>
-            <p className="max-w-lg text-sm leading-relaxed text-white/70 sm:text-[15px]">
+            <p className="max-w-lg text-[13px] leading-relaxed text-white/70 sm:text-[15px]">
               A true 25-question, 30-minute simulation sampled by official weightage — plus focused drills for signs, laws and mechanics.
             </p>
-            <div className="flex flex-wrap gap-2 font-mono text-[11px] font-bold">
-              <span className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">25 QS · 4 PTS EACH</span>
-              <span className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">PASS 60/100</span>
-              <span className="rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">30 MIN · NO NEGATIVE</span>
+            <div className="no-scrollbar app-scroll -mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 font-mono text-[11px] font-bold sm:flex-wrap">
+              <span className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">25 QS · 4 PTS EACH</span>
+              <span className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">PASS 60/100</span>
+              <span className="shrink-0 rounded-full bg-white/10 px-3 py-1.5 ring-1 ring-white/15">30 MIN · NO NEGATIVE</span>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-2.5 lg:grid-cols-1 xl:grid-cols-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-2.5 lg:grid-cols-1 xl:grid-cols-3">
             {[
               { label: 'Attempts', value: String(history.length), icon: History },
               { label: 'Best score', value: bestScore !== null ? `${bestScore}%` : '—', icon: TrendingUp },
               { label: 'Pass rate', value: passRate !== null ? `${passRate}%` : '—', icon: Zap },
             ].map((s) => (
-              <div key={s.label} className="rounded-2xl bg-white/[0.07] p-3.5 text-center ring-1 ring-white/15 backdrop-blur">
+              <div key={s.label} className="rounded-2xl bg-white/[0.07] p-2.5 text-center ring-1 ring-white/15 backdrop-blur sm:p-3.5">
                 <s.icon className="mx-auto mb-1.5 h-4 w-4 text-white/60" />
-                <p className="font-mono text-xl font-extrabold">{s.value}</p>
-                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-white/50">{s.label}</p>
+                <p className="font-mono text-lg font-extrabold sm:text-xl">{s.value}</p>
+                <p className="font-mono text-[9px] font-bold uppercase tracking-wider text-white/50 sm:text-[10px]">{s.label}</p>
               </div>
             ))}
           </div>
@@ -108,33 +108,33 @@ export const TestHome: React.FC<TestHomeProps> = ({
       </section>
 
       {/* Mode cards */}
-      <section className="mt-5 grid gap-4 md:grid-cols-2">
+      <section className="mt-3 grid gap-3 sm:mt-5 sm:gap-4 md:grid-cols-2">
         {/* Official */}
-        <div data-testid="official-exam-card" className="card-premium card-lift relative overflow-hidden p-6 sm:p-7">
+        <div data-testid="official-exam-card" className="card-premium card-lift relative overflow-hidden p-5 sm:p-7">
           <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-crimson-700 via-rose-500 to-amber-400" />
           <div className="bg-dot-grid-faint absolute inset-0 opacity-60 [mask-image:radial-gradient(20rem_10rem_at_100%_0%,black,transparent)]" />
-          <div className="relative space-y-5">
-            <div className="flex items-center justify-between">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-crimson-700 to-rose-500 text-white shadow-glow-crimson">
+          <div className="relative space-y-4 sm:space-y-5">
+            <div className="flex items-center justify-between gap-2">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-crimson-700 to-rose-500 text-white shadow-glow-crimson">
                 <FileCheck2 className="h-5 w-5" />
               </span>
-              <span className="rounded-full bg-crimson-600 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white">OFFICIAL SIM</span>
+              <span className="shrink-0 rounded-full bg-crimson-600 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white">OFFICIAL SIM</span>
             </div>
             <div>
-              <h2 className="text-xl font-extrabold tracking-tight">Official DoTM Exam Simulation</h2>
-              <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <h2 className="text-lg font-extrabold tracking-tight sm:text-xl">Official DoTM Exam Simulation</h2>
+              <p className="mt-1 text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-sm">
                 Weighted sampling across all 6 categories — exactly like the DoTM paper. Timer, navigator, flagging and auto-submit included.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
               {[
                 { icon: HelpCircle, label: '25 Qs · 100 marks', tint: 'bg-blue-50 text-blue-700 ring-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:ring-blue-900/60' },
                 { icon: CheckCircle2, label: 'Pass at 60', tint: 'bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:ring-emerald-900/60' },
                 { icon: Clock, label: '30 min timer', tint: 'bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-950/40 dark:text-amber-300 dark:ring-amber-900/60' },
                 { icon: ShieldCheck, label: 'No negative', tint: 'bg-purple-50 text-purple-700 ring-purple-200 dark:bg-purple-950/40 dark:text-purple-300 dark:ring-purple-900/60' },
               ].map((b) => (
-                <div key={b.label} className={`flex items-center gap-2 rounded-xl px-3 py-2.5 font-mono text-[12px] font-bold ring-1 ${b.tint}`}>
-                  <b.icon className="h-4 w-4 shrink-0" /> {b.label}
+                <div key={b.label} className={`flex items-center gap-1.5 rounded-xl px-2.5 py-2.5 font-mono text-[11px] font-bold ring-1 sm:gap-2 sm:px-3 sm:text-[12px] ${b.tint}`}>
+                  <b.icon className="h-4 w-4 shrink-0" /> <span className="truncate">{b.label}</span>
                 </div>
               ))}
             </div>
@@ -145,18 +145,18 @@ export const TestHome: React.FC<TestHomeProps> = ({
         </div>
 
         {/* Drill */}
-        <div data-testid="category-drill-card" className="card-premium card-lift relative overflow-hidden p-6 sm:p-7">
+        <div data-testid="category-drill-card" className="card-premium card-lift relative overflow-hidden p-5 sm:p-7">
           <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-navy-800 via-blue-600 to-cyan-400" />
-          <div className="relative space-y-5">
-            <div className="flex items-center justify-between">
-              <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-navy-800 to-blue-600 text-white shadow-glow-navy">
+          <div className="relative space-y-4 sm:space-y-5">
+            <div className="flex items-center justify-between gap-2">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-navy-800 to-blue-600 text-white shadow-glow-navy">
                 <Target className="h-5 w-5" />
               </span>
-              <span className="rounded-full bg-navy-700 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white">FOCUSED DRILL</span>
+              <span className="shrink-0 rounded-full bg-navy-700 px-3 py-1 font-mono text-[10px] font-bold tracking-widest text-white">FOCUSED DRILL</span>
             </div>
             <div>
-              <h2 className="text-xl font-extrabold tracking-tight">Category Drill</h2>
-              <p className="mt-1 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <h2 className="text-lg font-extrabold tracking-tight sm:text-xl">Category Drill</h2>
+              <p className="mt-1 text-[13px] leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-sm">
                 Attack your weakest section — traffic signs alone carry 24 marks.
               </p>
             </div>
@@ -168,7 +168,7 @@ export const TestHome: React.FC<TestHomeProps> = ({
                   data-testid="category-select"
                   value={selectedCatId}
                   onChange={(e) => setSelectedCatId(Number(e.target.value))}
-                  className="w-full cursor-pointer rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-sm font-bold outline-none transition focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10 dark:border-white/10 dark:bg-white/5"
+                  className="min-h-[52px] w-full cursor-pointer rounded-2xl border border-zinc-200 bg-zinc-50 px-3.5 py-3.5 text-base font-bold outline-none transition focus:border-navy-600 focus:ring-4 focus:ring-navy-600/10 dark:border-white/10 dark:bg-white/5 sm:text-sm"
                 >
                   {activeCategoryList.map((cat) => (
                     <option key={cat.id} value={cat.id}>Cat 0{cat.id} · {cat.name} ({cat.poolCount})</option>
@@ -184,10 +184,11 @@ export const TestHome: React.FC<TestHomeProps> = ({
                       type="button"
                       data-testid={`count-option-${opt}`}
                       onClick={() => setSelectedCount(opt as number | 'all')}
-                      className={`rounded-xl border py-3 font-mono text-[13px] font-bold transition active:scale-[0.97] ${
+                      aria-pressed={selectedCount === opt}
+                      className={`min-h-[48px] touch-manipulation rounded-xl border py-3 font-mono text-[13px] font-bold transition active:scale-[0.97] ${
                         selectedCount === opt
                           ? 'border-navy-700 bg-navy-700 text-white shadow-glow-navy'
-                          : 'border-zinc-200 bg-white text-zinc-600 hover:border-navy-300 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
+                          : 'border-zinc-200 bg-white text-zinc-600 dark:border-white/10 dark:bg-white/5 dark:text-zinc-300'
                       }`}
                     >
                       {opt === 'all' ? 'ALL' : opt}
@@ -204,7 +205,7 @@ export const TestHome: React.FC<TestHomeProps> = ({
       </section>
 
       {/* History */}
-      <section className="card-premium mt-4 p-5 sm:p-6">
+      <section className="card-premium mt-3 p-4 sm:mt-4 sm:p-6">
         <div className="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-white/10">
           <h3 className="flex items-center gap-2 text-sm font-extrabold tracking-tight">
             <History className="h-4 w-4 text-zinc-400" /> Recent attempts ({history.length})

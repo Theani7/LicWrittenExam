@@ -5,6 +5,7 @@ import { useExamHistory } from './hooks/useExamHistory';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { Navbar, type NavigationTab } from './components/layout/Navbar';
+import { BottomNav } from './components/layout/BottomNav';
 import { Footer } from './components/layout/Footer';
 import { GuidelinesModal } from './components/guidelines/GuidelinesModal';
 import { LanguageModal } from './components/language/LanguageModal';
@@ -58,6 +59,7 @@ export function AppContent(): React.JSX.Element {
         return;
       }
       setActiveTab(newTab);
+      window.scrollTo({ top: 0 });
     },
     [activeTab, testView]
   );
@@ -175,10 +177,10 @@ export function AppContent(): React.JSX.Element {
   // Loading State
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fcfcfd] dark:bg-[#070d19] text-zinc-900 dark:text-zinc-100 p-4">
+      <div className="flex min-h-dvh items-center justify-center bg-[#fcfcfd] p-4 text-zinc-900 dark:bg-[#070d19] dark:text-zinc-100">
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-9 h-9 border-2 border-crimson-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="font-mono text-xs text-zinc-500 dark:text-zinc-400 tracking-wide">
+          <div className="h-9 w-9 animate-spin rounded-full border-2 border-crimson-600 border-t-transparent"></div>
+          <p className="font-mono text-xs tracking-wide text-zinc-500 dark:text-zinc-400">
             Loading 500-question exam database...
           </p>
         </div>
@@ -189,9 +191,9 @@ export function AppContent(): React.JSX.Element {
   // Error State
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fcfcfd] dark:bg-[#070d19] text-zinc-900 dark:text-zinc-100 p-4">
-        <div className="max-w-md w-full bg-crimson-50 dark:bg-crimson-950/40 border border-crimson-200 dark:border-crimson-900/60 rounded-md p-6 text-center space-y-3">
-          <AlertCircle className="w-9 h-9 text-crimson-600 mx-auto" />
+      <div className="flex min-h-dvh items-center justify-center bg-[#fcfcfd] p-4 text-zinc-900 dark:bg-[#070d19] dark:text-zinc-100">
+        <div className="w-full max-w-md space-y-3 rounded-2xl border border-crimson-200 bg-crimson-50 p-6 text-center dark:border-crimson-900/60 dark:bg-crimson-950/40">
+          <AlertCircle className="mx-auto h-9 w-9 text-crimson-600" />
           <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">Failed to Load Questions</h2>
           <p className="font-mono text-xs text-crimson-700 dark:text-crimson-300">{error}</p>
         </div>
@@ -199,8 +201,10 @@ export function AppContent(): React.JSX.Element {
     );
   }
 
+  const isExamActive = activeTab === 'test' && testView === 'exam';
+
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans text-zinc-900 antialiased transition-colors duration-200 dark:bg-[#060b16] dark:text-zinc-100">
+    <div className="flex min-h-dvh flex-col overflow-x-clip bg-zinc-50 font-sans text-zinc-900 antialiased transition-colors duration-200 dark:bg-[#060b16] dark:text-zinc-100">
       <Navbar
         activeTab={activeTab}
         onSelectTab={handleTabChange}
@@ -208,7 +212,7 @@ export function AppContent(): React.JSX.Element {
         onOpenGuidelines={() => setIsGuidelinesOpen(true)}
       />
 
-      <main className="flex-1">
+      <main className={`flex-1 ${isExamActive ? '' : 'pb-[calc(92px+env(safe-area-inset-bottom))] md:pb-0'}`}>
         {activeTab === 'learn' && (
           <LearnView questions={questions} categories={categories} />
         )}
@@ -259,7 +263,15 @@ export function AppContent(): React.JSX.Element {
         )}
       </main>
 
-      <Footer />
+      {!isExamActive && <Footer />}
+
+      {/* App-like bottom tab bar (mobile) — hidden during active exam */}
+      <BottomNav
+        activeTab={activeTab}
+        onSelectTab={handleTabChange}
+        bookmarkCount={bookmarks.length}
+        hidden={isExamActive}
+      />
 
       {/* First-time / user selectable Language Modal */}
       <LanguageModal />
@@ -270,39 +282,40 @@ export function AppContent(): React.JSX.Element {
         onClose={() => setIsGuidelinesOpen(false)}
       />
 
-      {/* Leave Exam Confirmation Modal */}
+      {/* Leave Exam Confirmation Modal — bottom sheet on mobile */}
       {showLeaveExamModal && (
         <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="leave-exam-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-6 animate-fade-in"
         >
           <div
             className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
             onClick={handleCancelLeaveExam}
           />
 
-          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-zinc-200/80 bg-white p-6 shadow-modal dark:border-white/10 dark:bg-[#0c1222] sm:p-7">
-            <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
-                <AlertTriangle className="h-6 w-6" />
+          <div className="relative max-h-[92dvh] w-full overflow-y-auto overscroll-contain-y rounded-t-3xl border border-zinc-200/80 bg-white p-5 pb-safe-offset shadow-float dark:border-white/10 dark:bg-[#0c1222] sm:max-w-md sm:rounded-3xl sm:p-7 animate-slide-up sm:animate-scale-in">
+            <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-zinc-200 dark:bg-white/15 sm:hidden" aria-hidden="true" />
+            <div className="flex items-start gap-3.5 sm:gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
+                <AlertTriangle className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <div className="space-y-4">
+              <div className="min-w-0 flex-1 space-y-4">
                 <div>
-                  <h3 id="leave-exam-title" className="text-lg font-extrabold tracking-tight">
+                  <h3 id="leave-exam-title" className="text-[17px] font-extrabold tracking-tight sm:text-lg">
                     {t('leaveExamConfirm', 'Leave Exam in Progress?')}
                   </h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                     {t('leaveExamWarning', 'Your timer is still running. Leaving now will discard all answers for this attempt.')}
                   </p>
                 </div>
-                <div className="flex items-center justify-end gap-2.5 pt-1">
+                <div className="flex flex-col-reverse gap-2 pt-1 sm:flex-row sm:items-center sm:justify-end sm:gap-2.5">
                   <button
                     type="button"
                     onClick={handleCancelLeaveExam}
                     data-testid="cancel-leave-exam-btn"
-                    className="btn-ghost"
+                    className="btn-ghost w-full sm:w-auto"
                   >
                     {t('cancelLeave', 'Continue Exam')}
                   </button>
@@ -310,7 +323,7 @@ export function AppContent(): React.JSX.Element {
                     type="button"
                     onClick={handleConfirmLeaveExam}
                     data-testid="confirm-leave-exam-btn"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-crimson-600 px-4 py-2.5 text-sm font-bold text-white shadow-glow-crimson transition hover:bg-crimson-700"
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl bg-crimson-600 px-4 py-2.5 text-sm font-bold text-white shadow-glow-crimson transition active:scale-[0.98] sm:rounded-xl sm:min-h-[44px] hover:bg-crimson-700"
                   >
                     {t('confirmLeave', 'Yes, Leave Exam')}
                   </button>
